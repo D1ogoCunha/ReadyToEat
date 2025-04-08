@@ -1,0 +1,78 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #e6e7e7;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #e6e7e7;
+    color: black;
+    padding: 10px 0;
+    width: 100%;
+    position: relative; /* Permite posicionar o logo à esquerda */
+}
+
+header .logo {
+    position: absolute;
+    top: 10px;
+    left: 10px; /* Posiciona o logo no canto superior esquerdo */
+}
+
+header .logo img {
+    height: 60px; /* Reduz o tamanho do logo */
+}
+
+header .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 50px 0 0; /* Adiciona espaço para o logo acima */
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+}
+
+.menu-card {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    width: 200px;
+}
+
+.menu-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.add-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    width: 200px;
+    height: 200px;
+    font-size: 50px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.add-menu:hover {
+    background-color: #f0f0f0;
+}

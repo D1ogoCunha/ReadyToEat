@@ -1,0 +1,272 @@
+/* Estilo geral */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f8f9fa; /* Cor de fundo clara */
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Garante que o conteúdo ocupe toda a altura da página */
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 18px;
+  color: #89898a;
+  margin-bottom: 20px;
+  margin-left: 10px;
+}
+
+/* Centralizar o formulário */
+.combined-box {
+  max-width: 800px; /* Largura máxima do formulário */
+  width: 100%; /* Largura total do contêiner */
+  margin: 0 auto; /* Centraliza horizontalmente */
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Barra de progresso */
+.progress-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.progress-bar .step {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e4e4e4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #89898a;
+}
+
+.progress-bar .step.active {
+  background-color: #b8382a;
+  color: #ffffff;
+}
+
+/* Separadores */
+.separator {
+  height: 2px;
+  background-color: #f8f9fa; /* Cor do fundo */
+  margin: 20px;
+  width: 200%;
+  position: relative;
+  left: -50%;
+}
+
+.separator2 {
+  height: 2px;
+  background-color: #f8f9fa; /* Cor do fundo */
+  margin: 20px;
+  width: 112%;
+  position: relative;
+  left: -2.5%;
+}
+
+/* Ocultar etapas */
+.hidden {
+  display: none;
+}
+
+/* Botões */
+.formButton {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.formButton button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.formButton .next {
+  background-color: #b8382a;
+  color: #ffffff;
+}
+
+.formButton .prev {
+  background-color: #89898a;
+  color: #ffffff;
+}
+
+/* -------------------- STEP 1 -------------------- */
+
+.dishName {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  width: 96%;
+}
+
+.dishDescription {
+  font-size: 16px;
+  color: #89898a;
+  width: 96%;
+}
+
+.row {
+  display: flex;
+  gap: 20px; /* Espaçamento entre as colunas */
+  margin-top: 20px; /* Espaçamento acima da linha */
+}
+
+.column {
+  flex: 1; /* Faz com que as colunas tenham o mesmo tamanho */
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 600;
+  color: #262728;
+  margin-bottom: 8px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #ffffff;
+}
+
+textarea {
+  resize: none;
+  height: 120px;
+}
+
+/* -------------------- STEP 2 -------------------- */
+
+.priceC {
+  max-width: 800px;
+  width: 96%;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #262728;
+}
+
+/* Grid para Nutritional Information */
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsivo */
+  gap: 12px; /* Espaçamento entre os itens */
+  margin-bottom: 20px; /* Espaçamento abaixo do grid */
+}
+
+.nutrition-item {
+  background-color: #f8f9fa; /* Fundo claro */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra leve */
+}
+
+.nutrition-item label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #262728;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.nutrition-item input {
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #ffffff;
+}
+
+/* -------------------- STEP 3 -------------------- */
+
+/* Estilo do contêiner de upload */
+.image-upload {
+  border: 2px dashed #e4e4e4;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  background-color: #f8f9fa;
+  margin-bottom: 20px;
+  position: relative;
+  width: 92%;
+}
+
+.image-upload input[type="file"] {
+  display: none; /* Esconde o input padrão */
+}
+
+.upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.upload-icon img {
+  width: 50px;
+  height: 50px;
+}
+
+.upload-area p {
+  font-size: 16px;
+  color: #89898a;
+  margin: 0;
+}
+
+.upload-area .browse {
+  color: #000000;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.upload-recommendation {
+  font-size: 14px;
+  color: #89898a;
+}
+
+.preview-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.preview-container img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.preview-container p {
+  font-size: 14px;
+  color: #89898a;
+}
