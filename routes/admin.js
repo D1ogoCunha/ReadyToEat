@@ -23,4 +23,33 @@ router.delete("/restaurants/:id", async (req, res) => {
   }
 });
 
+router.get("/restaurants/:id/edit", async (req, res) => {
+  try {
+    const restaurant = await User.findById(req.params.id);
+    if (!restaurant) {
+      return res.status(404).send("Restaurant not found.");
+    }
+    res.render("editRestaurant", { restaurant });
+  } catch (err) {
+    console.error("Error fetching restaurant:", err);
+    res.status(500).send("Failed to load edit form.");
+  }
+});
+
+router.post("/restaurants/:id/edit", async (req, res) => {
+  try {
+    const { restaurantName, address, phone, pricePerPerson } = req.body;
+    await User.findByIdAndUpdate(req.params.id, {
+      restaurantName,
+      address,
+      phone,
+      pricePerPerson,
+    });
+    res.redirect("/admin");
+  } catch (err) {
+    console.error("Error updating restaurant:", err);
+    res.status(500).send("Failed to update restaurant.");
+  }
+});
+
 module.exports = router;
