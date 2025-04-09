@@ -59,9 +59,9 @@ router.get("/dishes", async (req, res) => {
   const { menuId } = req.query;
 
   try {
-    const menu = await Menu.findById(menuId); // Busca o menu pelo ID
-    const dishes = await Dish.find({ menu: menuId }); // Busca os pratos relacionados ao menu
-    res.render("dishes", { pratos: dishes, menu }); // Passa o menu e os pratos para a view
+    const menu = await Menu.findById(menuId); 
+    const dishes = await Dish.find({ menu: menuId }); 
+    res.render("dishes", { pratos: dishes, menu });
   } catch (error) {
     console.error("Erro ao buscar os pratos:", error);
     res.status(500).send("Erro ao buscar os pratos.");

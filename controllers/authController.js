@@ -24,11 +24,18 @@ authController.submittedLogin = function (req, res, next) {
             bcrypt.compare(passwordInput, user.password)
                 .then(function (result) {
                     if (result === true) {
-                        const authToken = jwt.sign({ email: user.email }, config.secret, { expiresIn: 86400 });
+                        const authToken = jwt.sign({ email: user.email, role: user.role }, config.secret, { expiresIn: 86400 });
                         res.cookie("auth-token", authToken, { maxAge: 82000 });
-                        res.redirect("/menus");
+
+                        if (user.role === "restaurant") {
+                            res.redirect("/menus");
+                        } else if (user.role === "customer") {
+                            res.redirect("/index");
+                        } else {
+                            res.redirect("/admin");
+                        }
                     } else {
-                        console.log("Wrong password :", emailInput);
+                        console.log("Wrong password:", emailInput);
                         res.redirect("/login");
                     }
                 });
@@ -46,7 +53,22 @@ authController.createLoginSubmitted = function (req, res, next) {
     const hashedPassword = bcrypt.hashSync(req.body.password, 8);
     req.body.password = hashedPassword;
 
-    User.create(req.body)
+    const userData = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: hashedPassword,
+        role: req.body.role,
+    };
+
+    if (req.body.role === "restaurant") {
+        userData.restaurantName = req.body.restaurantName;
+        userData.address = req.body.address;
+        userData.phone = req.body.phone;
+        userData.pricePerPerson = req.body.pricePerPerson;
+    }
+
+    User.create(userData)
         .then(function () {
             res.redirect("/login");
         })
@@ -64,7 +86,7 @@ authController.verifyLoginUser = function (req, res, next) {
                 return res.redirect("/login");
             }
             req.userEmail = decoded.email;
-            next();
+            req.userRole = decoded.role;
         });
     } else {
         res.redirect("/login");
