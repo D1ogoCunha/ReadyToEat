@@ -2,16 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
-const Menu = require("../models/menu");
-const Dish = require("../models/dish");
-
-
-const menus = []; // Lista temporária para armazenar os menus
-
-// Rota para exibir o formulário de criação de um novo menu
-router.get("/new", (req, res) => {
-  res.render("newMenu"); // Renderiza a página newMenu.ejs
-});
+const menuController = require("../controllers/menuController");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -23,48 +14,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-router.post("/", upload.single("image"), async (req, res) => {
-  console.log("Arquivo recebido:", req.file); // Verifica o arquivo recebido
-  console.log("Dados do formulário:", req.body); // Verifica os dados do formulário
+router.get("/new", menuController.renderNewMenuForm);
+router.post("/", upload.single("image"), menuController.createMenu);
+router.get("/", menuController.getAllMenus);
+router.get("/dishes", menuController.getMenuDishes);
 
-  const { name } = req.body;
+router.get("/:id/edit", menuController.renderEditMenuForm);
+router.post("/:id/edit", upload.single("image"), menuController.updateMenu);
 
-  // Caminho relativo correto para o navegador
-  const image = `/uploads/${req.file.filename}`;
-
-  try {
-    await Menu.create({ name, image });
-    console.log("Menu salvo com sucesso:", { name, image });
-    res.redirect("/menus");
-  } catch (error) {
-    console.error("Erro ao salvar o menu:", error);
-    res.status(500).send("Erro ao salvar o menu.");
-  }
-});
-
-// Rota para exibir os menus
-router.get("/", async (req, res) => {
-  try {
-    const menus = await Menu.find(); // Busca os menus no banco de dados
-    res.render("menus", { menus });
-  } catch (error) {
-    console.error("Erro ao buscar os menus:", error);
-    res.status(500).send("Erro ao buscar os menus.");
-  }
-});
-
-// Rota para exibir os pratos de um menu
-
-router.get("/dishes", async (req, res) => {
-  const { menuId } = req.query;
-
-  try {
-    const menu = await Menu.findById(menuId); 
-    const dishes = await Dish.find({ menu: menuId }); 
-    res.render("dishes", { pratos: dishes, menu });
-  } catch (error) {
-    console.error("Erro ao buscar os pratos:", error);
-    res.status(500).send("Erro ao buscar os pratos.");
-  }
-});
 module.exports = router;

@@ -1,14 +1,14 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Inter", sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
     padding: 20px;
     background-color: #e6e7e7;
-}
-
-header {
+  }
+  
+  header {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,49 +16,49 @@ header {
     color: black;
     padding: 10px 0;
     width: 100%;
-    position: relative; /* Permite posicionar o logo à esquerda */
-}
-
-header .logo {
+    position: relative;
+  }
+  
+  header .logo {
     position: absolute;
-    top: 10px;
-    left: 10px; /* Posiciona o logo no canto superior esquerdo */
-}
-
-header .logo img {
-    height: 60px; /* Reduz o tamanho do logo */
-}
-
-header .title {
+    top: 5px;
+    left: 5px;
+  }
+  
+  header .logo img {
+    height: 60px;
+  }
+  
+  header .title {
     font-size: 24px;
     font-weight: bold;
-    margin: 50px 0 0; /* Adiciona espaço para o logo acima */
+    margin: 50px 0 0;
     text-align: center;
-}
-
-main {
+  }
+  
+  main {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
     width: 100%;
-}
-
-.menu-card {
+  }
+  
+  .menu-card {
     border: 2px solid #ccc;
     border-radius: 8px;
     padding: 10px;
     text-align: center;
     width: 200px;
-}
-
-.menu-card img {
+  }
+  
+  .menu-card img {
     max-width: 100%;
     height: auto;
     border-radius: 4px;
-}
-
-.add-menu {
+  }
+  
+  .add-menu {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -71,8 +71,85 @@ main {
     color: #555;
     cursor: pointer;
     text-decoration: none;
-}
-
-.add-menu:hover {
+  }
+  
+  .add-menu:hover {
     background-color: #f0f0f0;
-}
+  }
+  
+  .menu-card-container {
+    position: relative;
+    display: inline-block;
+    margin: 1rem;
+  }
+  
+  .menu-card {
+    width: 200px;
+    height: 250px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .menu-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .menu-card p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333; 
+  }
+  
+  .menu-card a.menu-link {
+    text-decoration: none; 
+    color: inherit; 
+  }
+  
+  
+  .edit-button {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #ff5722;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+  }
+  
+  .edit-button:hover {
+    background-color: #e64a19;
+  }
+  
+  .add-menu {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-color: #ff5722;
+    color: #fff;
+    font-size: 2rem;
+    text-align: center;
+    line-height: 50px;
+    border-radius: 50%;
+    text-decoration: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border: none;
+  }
+  
+  .add-menu:hover {
+    background-color: #e64a19;
+  }
+  

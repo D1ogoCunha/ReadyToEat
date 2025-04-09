@@ -15,12 +15,15 @@
     </header>
     <main>
       <% menus.forEach(menu => { %>
+      <div class="menu-card-container">
         <a href="/menus/dishes?menuId=<%= menu._id %>" class="menu-link">
           <div class="menu-card">
             <img src="<%= menu.image %>" alt="<%= menu.name %>" />
-            <h3><%= menu.name %></h3>
+            <p><%= menu.name %></p>
+            <a href="/menus/<%= menu._id %>/edit" class="edit-button">Edit</a>
           </div>
         </a>
+      </div>
       <% }) %>
       <a href="/menus/new" class="add-menu">+</a>
     </main>

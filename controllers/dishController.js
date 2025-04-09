@@ -28,7 +28,7 @@ dishController.list = async function (req, res) {
         const dishes = await Dish.find({ menu: menuId });
 
         // Renderiza a página dishes.ejs com os pratos e o menu
-        res.render("dishes", { pratos: dishes, menu });
+        res.render("menu/dishes", { pratos: dishes, menu });
     } catch (err) {
         console.log("Error listing dishes:", err);
         res.status(500).send("Error listing dishes.");
@@ -38,7 +38,7 @@ dishController.list = async function (req, res) {
 // Método para exibir o formulário de adicionar prato
 dishController.addForm = function (req, res) {
     const menuId = req.query.menuId; 
-    res.render("add", { menuId });
+    res.render("menu/add", { menuId });
 };
 
 // Método para salvar um prato
