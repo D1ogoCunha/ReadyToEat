@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -27,16 +27,20 @@
               <th class="column-header">Name</th>
               <th class="column-header">Address</th>
               <th class="column-header">Phone</th>
-              <th class="column-header">Price per Person</th> <!-- Moved here -->
-              <th class="column-header">Actions</th> <!-- Moved here -->
+              <th class="column-header">Price per Person</th>
+              <th class="column-header">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="table-row">
-              <td class="table-cell">Pronto a Comer</td>
-              <td class="table-cell">Rua dos Pobres</td>
-              <td class="table-cell">933756231</td>
-              <td class="table-cell">€15.00</td> <!-- Moved here -->
+            <% if (restaurants && restaurants.length > 0) { %> <%
+            restaurants.forEach(function(restaurant) { %>
+            <tr class="table-row" data-id="<%= restaurant._id %>">
+              <td class="table-cell"><%= restaurant.restaurantName %></td>
+              <td class="table-cell"><%= restaurant.address %></td>
+              <td class="table-cell"><%= restaurant.phone %></td>
+              <td class="table-cell">
+                €<%= restaurant.pricePerPerson.toFixed(2) %>
+              </td>
               <td class="table-cell">
                 <div class="action-buttons">
                   <button class="btn btn-edit">Edit</button>
@@ -44,33 +48,24 @@
                 </div>
               </td>
             </tr>
-            <tr class="table-row">
-              <td class="table-cell">Ready to Eat</td>
-              <td class="table-cell">Rua dos Ricos</td>
-              <td class="table-cell">919191944</td>
-              <td class="table-cell">€25.00</td> <!-- Moved here -->
-              <td class="table-cell">
-                <div class="action-buttons">
-                  <button class="btn btn-edit">Edit</button>
-                  <button class="btn btn-delete">Delete</button>
-                </div>
-              </td>
+            <% }); %> <% } else { %>
+            <tr>
+              <td colspan="5" class="table-cell">No restaurants found.</td>
             </tr>
-            <tr class="table-row">
-              <td class="table-cell">Taco Corner</td>
-              <td class="table-cell">Rua do Tomas</td>
-              <td class="table-cell">912345678</td>
-              <td class="table-cell">€18.50</td> <!-- Moved here -->
-              <td class="table-cell">
-                <div class="action-buttons">
-                  <button class="btn btn-edit">Edit</button>
-                  <button class="btn btn-delete">Delete</button>
-                </div>
-              </td>
-            </tr>
+            <% } %>
           </tbody>
         </table>
       </section>
+      <div id="delete-modal" class="modal hidden">
+        <div class="modal-content">
+          <p id="delete-message" class="modal-message"></p>
+          <div class="modal-actions">
+            <button id="confirm-delete" class="btn btn-danger">Yes</button>
+            <button id="cancel-delete" class="btn btn-secondary">No</button>
+          </div>
+        </div>
+      </div>
     </main>
   </body>
+  <script src="/javascripts/adminDashboard.js" defer></script>
 </html>
