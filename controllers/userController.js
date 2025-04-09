@@ -2,19 +2,19 @@ var mongoose = require("mongoose");
 var User = require("../models/user");
 const bcrypt = require("bcrypt");
 
-var userController = {}
+var userController = {};
 
 userController.show = function (req, res) {
-    user.findOne({ _id: req.params.id }).exec(function (err, user) {
+    User.findOne({ _id: req.params.id }).exec(function (err, user) {
         if (err) {
             console.log("Error retrieving user:", err);
         } else {
-            res.render("../views/user/show", {user: user});
+            res.render("../views/user/show", { user: user });
         }
     });
 };
 
-userController.save = async function (req, res) {
+/*userController.save = async function (req, res) {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
@@ -32,19 +32,19 @@ userController.save = async function (req, res) {
         res.status(500).send("Erro ao registrar. Tente novamente.");
     }
 };
-
+*/
 userController.edit = function (req, res) {
-    user.findOne({ _id: req.params.id }).exec(function (err, user) {
+    User.findOne({ _id: req.params.id }).exec(function (err, user) {
         if (err) {
             console.log("Error retrieving user:", err);
         } else {
-            res.render("../views/user/edit", {user: user});
+            res.render("../views/user/edit", { user: user });
         }
     });
 };
 
 userController.update = function (req, res) {
-    user.findOne({ _id: req.params.id }).exec(function (err, user) {
+    User.findOne({ _id: req.params.id }).exec(function (err, user) {
         if (err) {
             console.log("Error retrieving user:", err);
         } else {
@@ -61,10 +61,10 @@ userController.update = function (req, res) {
             });
         }
     });
-}
+};
 
 userController.delete = function (req, res) {
-    user.findOneAndDelete({ _id: req.params.id }).exec(function (err, user) {
+    User.findOneAndDelete({ _id: req.params.id }).exec(function (err, user) {
         if (err) {
             console.log("Error deleting user:", err);
         } else {
@@ -72,33 +72,5 @@ userController.delete = function (req, res) {
         }
     });
 };
-
-userController.login = async function (req, res) {
-    const { email, password } = req.body;
-
-    try {
-        const user = await user.findOne({ email: email });
-
-        if (!user) {
-            console.log("usere não encontrado:", email);
-            return res.status(401).send("Email ou senha inválidos.");
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordValid) {
-            console.log("Senha incorreta para o user:", email);
-            return res.status(401).send("Email ou senha inválidos.");
-        }
-
-        console.log("Login realizado com sucesso:", user);
-        res.redirect("/index");
-    } catch (error) {
-        console.error("Erro ao processar login:", error);
-        res.status(500).send("Erro ao processar login. Tente novamente.");
-    }
-};
-
-
 
 module.exports = userController;
