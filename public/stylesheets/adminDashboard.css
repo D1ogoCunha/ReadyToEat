@@ -54,6 +54,7 @@ body {
   }
   
   .btn-edit {
+    text-decoration: none;
     background-color: #56ccf2;
     padding: 8px 16px;
     border-radius: 4px;
@@ -63,6 +64,14 @@ body {
     background-color: #f44;
     padding: 8px 16px;
     border-radius: 4px;
+  }
+
+  .btn-confirmDelete {
+    background-color: #f44;
+    color: #fff;
+    padding: 18px 24px;
+    border-radius: 4px;
+ 
   }
   
   /* Table Container */
