@@ -16,7 +16,12 @@
         <h1 class="page-title">Restaurant Management</h1>
         <div class="header-actions">
           <button class="btn btn-primary">Pending Requests</button>
-          <button class="btn btn-secondary">Add New Restaurant</button>
+          <button
+            class="btn btn-secondary"
+            onclick="window.location.href='/register?role=restaurant'"
+          >
+            Add New Restaurant
+          </button>
         </div>
       </header>
 
@@ -64,8 +69,12 @@
         <div class="modal-content">
           <p id="delete-message" class="modal-message"></p>
           <div class="modal-actions">
-            <button id="confirm-delete" class="btn btn-confirmDelete">Delete</button>
-            <button id="cancel-delete" class="btn btn-secondary">Cancel</button>
+            <button id="confirm-delete" class="btn btn-confirmDelete">
+              Delete
+            </button>
+            <button id="cancel-delete" class="btn btn-cancelDelete">
+              Cancel
+            </button>
           </div>
         </div>
       </div>

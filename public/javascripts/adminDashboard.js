@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const restaurantName = restaurantRow.querySelector(".table-cell").textContent;
       restaurantIdToDelete = restaurantRow.dataset.id;
 
-      deleteMessage.textContent = `Are you sure you want to delete the restaurant "${restaurantName}"?`;
+      deleteMessage.textContent = `Are you sure you want to delete the "${restaurantName}" restaurant?`;
       modal.classList.remove("hidden");
     });
   });

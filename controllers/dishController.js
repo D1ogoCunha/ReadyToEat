@@ -1,11 +1,11 @@
-var Dish = require("../models/dish");
-var multer = require("multer");
-var path = require("path");
+const Dish = require("../models/dish");
+const multer = require("multer");
+const path = require("path");
 
 // Configuração do multer
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/uploads"); // Pasta onde as imagens serão salvas
+    cb(null, "public/uploads"); 
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname)); // Nome único para cada arquivo

@@ -68,10 +68,12 @@ body {
 
   .btn-confirmDelete {
     background-color: #f44;
-    color: #fff;
-    padding: 18px 24px;
-    border-radius: 4px;
- 
+    color: #ffffff;
+  }
+
+  .btn-cancelDelete {
+    background-color: #e9cccc;
+    color: #333;
   }
   
   /* Table Container */
