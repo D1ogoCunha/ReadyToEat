@@ -151,4 +151,9 @@ dishController.update = async function (req, res) {
   }
 };
 
+dishController.addForm = function (req, res) {
+  const menuId = req.query.menuId;
+  res.render("menu/add", { menuId, dish: null }); // Passa dish como null
+};
+
 module.exports = { ...dishController, upload };
