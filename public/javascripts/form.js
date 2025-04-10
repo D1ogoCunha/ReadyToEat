@@ -3,11 +3,22 @@ document.addEventListener("DOMContentLoaded", function () {
   const indicators = document.querySelectorAll(".step");
   let currentStep = 0;
 
+  // Verifica se estamos no modo de edição (se existe um prato carregado)
+  const isEditMode = document.querySelector("#dishForm").action.includes("/dishes/") && document.querySelector("#dishForm").action.includes("edit");
+
   function showStep(step) {
     steps.forEach((s, index) => {
       s.classList.toggle("hidden", index !== step);
       indicators[index].classList.toggle("active", index === step);
     });
+  }
+
+  // Exibe todos os steps no modo de edição
+  if (isEditMode) {
+    steps.forEach((s) => s.classList.remove("hidden"));
+    indicators.forEach((indicator) => indicator.classList.add("active"));
+  } else {
+    showStep(currentStep);
   }
 
   document.querySelectorAll(".next").forEach((btn) => {
@@ -28,7 +39,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  showStep(currentStep);
+  document.querySelector("#dishForm").addEventListener("submit", (e) => {
+    console.log("Form submitted");
+  });
 
   // Image upload functionality
   const uploadArea = document.getElementById("uploadArea");

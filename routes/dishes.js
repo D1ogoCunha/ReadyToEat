@@ -8,4 +8,7 @@ router.get("/add", dishController.addForm);
 
 router.post("/add", dishController.upload.single("imagem"), dishController.save);
 
+router.get("/:id/edit", dishController.editForm);
+router.post("/:id", dishController.upload.single("image"), dishController.update);
+
 module.exports = router;

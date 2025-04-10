@@ -4,72 +4,151 @@ var path = require("path");
 
 // Configuração do multer
 var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "public/uploads"); // Pasta onde as imagens serão salvas
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname)); // Nome único para cada arquivo
-    },
+  destination: function (req, file, cb) {
+    cb(null, "public/uploads"); // Pasta onde as imagens serão salvas
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Nome único para cada arquivo
+  },
 });
 
 var upload = multer({ storage: storage });
 
 var dishController = {};
 
-// Método para listar os pratos
 dishController.list = async function (req, res) {
-    const { menuId } = req.query; // Captura o menuId da query string
+  const { menuId } = req.query; // Captura o menuId da query string
 
-    try {
-        // Busca o menu pelo ID
-        const menu = await Menu.findById(menuId);
+  try {
+    const menu = await Menu.findById(menuId);
 
-        // Busca os pratos relacionados ao menu
-        const dishes = await Dish.find({ menu: menuId });
+    const dishes = await Dish.find({ menu: menuId });
 
-        // Renderiza a página dishes.ejs com os pratos e o menu
-        res.render("menu/dishes", { pratos: dishes, menu });
-    } catch (err) {
-        console.log("Error listing dishes:", err);
-        res.status(500).send("Error listing dishes.");
-    }
+    res.render("menu/dishes", { pratos: dishes, menu });
+  } catch (err) {
+    console.log("Error listing dishes:", err);
+    res.status(500).send("Error listing dishes.");
+  }
 };
 
-// Método para exibir o formulário de adicionar prato
 dishController.addForm = function (req, res) {
-    const menuId = req.query.menuId; 
-    res.render("menu/add", { menuId });
+  const menuId = req.query.menuId;
+  res.render("menu/add", { menuId });
 };
 
-// Método para salvar um prato
 dishController.save = async function (req, res) {
-    try {
-        console.log("Menu ID recebido:", req.body.menuId); // Adicione este log
-        const dish = new Dish({
-            nome: req.body.dishName, // Nome do prato
-            descricao: req.body.description, // Descrição do prato
-            categoria: req.body.category, // Categoria do prato
-            tempoPreparo: req.body.prepTime, // Tempo de preparo
-            preco: req.body.price, // Preço do prato
-            tamanhoPorcao: req.body.portionSize, // Tamanho da porção
-            informacaoNutricional: {
-                calorias: req.body.calories || 0,
-                proteinas: req.body.protein || 0,
-                carboidratos: req.body.carbs || 0,
-                gorduras: req.body.fat || 0,
-                sodio: req.body.sodium || 0,
-            },
-            imagem: req.file ? `/uploads/${req.file.filename}` : null, // Caminho da imagem
-            menu: req.body.menuId, // ID do menu relacionado
-        });
+  const { id } = req.params;
 
-        await dish.save();
-        console.log("Dish saved successfully:", dish);
-        res.redirect(`/menus/dishes?menuId=${req.body.menuId}`);
-    } catch (err) {
-        console.log("Error saving dish:", err);
-        res.status(500).send("Error saving dish.");
+  try {
+    let dish;
+    if (id) {
+      // Atualização
+      dish = await Dish.findById(id);
+      if (!dish) {
+        return res.status(404).send("Dish not found.");
+      }
+
+      dish.nome = req.body.dishName;
+      dish.descricao = req.body.description;
+      dish.categoria = req.body.category;
+      dish.tempoPreparo = req.body.prepTime;
+      dish.preco = req.body.price;
+      dish.tamanhoPorcao = req.body.portionSize;
+      dish.informacaoNutricional = {
+        calorias: req.body.calories || 0,
+        proteinas: req.body.protein || 0,
+        carboidratos: req.body.carbs || 0,
+        gorduras: req.body.fat || 0,
+        sodio: req.body.sodium || 0,
+      };
+
+      if (req.file) {
+        dish.imagem = `/uploads/${req.file.filename}`;
+      }
+
+      await dish.save();
+    } else {
+      // Adição
+      dish = new Dish({
+        nome: req.body.dishName,
+        descricao: req.body.description,
+        categoria: req.body.category,
+        tempoPreparo: req.body.prepTime,
+        preco: req.body.price,
+        tamanhoPorcao: req.body.portionSize,
+        informacaoNutricional: {
+          calorias: req.body.calories || 0,
+          proteinas: req.body.protein || 0,
+          carboidratos: req.body.carbs || 0,
+          gorduras: req.body.fat || 0,
+          sodio: req.body.sodium || 0,
+        },
+        imagem: req.file ? `/uploads/${req.file.filename}` : null,
+        menu: req.body.menuId,
+      });
+
+      await dish.save();
     }
+
+    res.redirect(`/menus/dishes?menuId=${dish.menu}`);
+  } catch (err) {
+    console.log("Error saving dish:", err);
+    res.status(500).send("Error saving dish.");
+  }
+};
+
+dishController.editForm = async function (req, res) {
+  const { id } = req.params;
+
+  try {
+    const dish = await Dish.findById(id);
+    if (!dish) {
+      return res.status(404).send("Dish not found.");
+    }
+
+    // Passa o menuId associado ao prato para a view
+    res.render("menu/add", { dish, menuId: dish.menu });
+  } catch (err) {
+    console.log("Error fetching dish for editing:", err);
+    res.status(500).send("Error fetching dish.");
+  }
+};
+
+dishController.update = async function (req, res) {
+  const { id } = req.params;
+
+  try {
+    const dish = await Dish.findById(id);
+    if (!dish) {
+      return res.status(404).send("Dish not found.");
+    }
+
+    // Atualiza os campos do prato
+    dish.nome = req.body.dishName;
+    dish.descricao = req.body.description;
+    dish.categoria = req.body.category;
+    dish.tempoPreparo = req.body.prepTime;
+    dish.preco = req.body.price;
+    dish.tamanhoPorcao = req.body.portionSize;
+    dish.informacaoNutricional = {
+      calorias: req.body.calories || 0,
+      proteinas: req.body.protein || 0,
+      carboidratos: req.body.carbs || 0,
+      gorduras: req.body.fat || 0,
+      sodio: req.body.sodium || 0,
+    };
+
+    // Atualiza a imagem, se uma nova foi enviada
+    if (req.file) {
+      dish.imagem = `/uploads/${req.file.filename}`;
+    }
+
+    await dish.save(); // Salva as alterações no banco de dados
+    res.redirect(`/menus/dishes?menuId=${dish.menu}`);
+  } catch (err) {
+    console.log("Error updating dish:", err);
+    res.status(500).send("Error updating dish.");
+  }
 };
 
 module.exports = { ...dishController, upload };

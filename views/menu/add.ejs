@@ -24,15 +24,14 @@
       <!-- Separator -->
       <div class="separator"></div>
 
-      <!-- Form Content -->
       <form
         id="dishForm"
-        action="/dishes/add"
+        action="<%= dish ? `/dishes/${dish._id}` : '/dishes/add' %>"
         method="POST"
         enctype="multipart/form-data"
       >
-
-      <input type="hidden" name="menuId" value="<%= menuId %>" />
+        <input type="hidden" name="menuId" value="<%= menuId || (dish ? dish.menu : '') %>" />
+      
         <!-- Step 1 -->
         <div class="form-step step-1">
           <div class="dishName">
@@ -42,6 +41,7 @@
               id="dishName"
               name="dishName"
               placeholder="Enter dish name"
+              value="<%= dish ? dish.nome : '' %>"
               required
             />
           </div>
@@ -52,27 +52,27 @@
               name="description"
               placeholder="Enter description"
               required
-            ></textarea>
+            ><%= dish ? dish.descricao : '' %></textarea>
           </div>
-
+      
           <div class="row">
             <div class="column">
               <label for="category">Category*</label>
               <select id="category" name="category" required>
                 <option value="">Select category</option>
-                <option value="starter">Starter</option>
-                <option value="main">Main</option>
-                <option value="dessert">Dessert</option>
+                <option value="starter" <%= dish && dish.categoria === 'starter' ? 'selected' : '' %>>Starter</option>
+                <option value="main" <%= dish && dish.categoria === 'main' ? 'selected' : '' %>>Main</option>
+                <option value="dessert" <%= dish && dish.categoria === 'dessert' ? 'selected' : '' %>>Dessert</option>
               </select>
             </div>
             <div class="column">
               <label for="prepTime">Preparation Time*</label>
               <select id="prepTime" name="prepTime" required>
                 <option value="">Select time</option>
-                <option value="15">15 minutes</option>
-                <option value="30">30 minutes</option>
-                <option value="45">45 minutes</option>
-                <option value="60">1 hour</option>
+                <option value="15" <%= dish && dish.tempoPreparo === '15' ? 'selected' : '' %>>15 minutes</option>
+                <option value="30" <%= dish && dish.tempoPreparo === '30' ? 'selected' : '' %>>30 minutes</option>
+                <option value="45" <%= dish && dish.tempoPreparo === '45' ? 'selected' : '' %>>45 minutes</option>
+                <option value="60" <%= dish && dish.tempoPreparo === '60' ? 'selected' : '' %>>1 hour</option>
               </select>
             </div>
           </div>
@@ -83,7 +83,7 @@
             <button type="button" class="next">Next Step</button>
           </div>
         </div>
-
+      
         <!-- Step 2 -->
         <div class="form-step step-2 hidden">
           <div class="priceC">
@@ -94,7 +94,7 @@
               name="price"
               step="0.01"
               min="0"
-              value="0.00"
+              value="<%= dish ? dish.preco : '0.00' %>"
               required
             />
           </div>
@@ -103,55 +103,18 @@
               <label for="portionSize">Portion Size</label>
               <select id="portionSize" name="portionSize" required>
                 <option value="">Select portion size</option>
-                <option value="small">Individual (1 Person)</option>
-                <option value="medium">Medium (2 Persons)</option>
-                <option value="large">Familiar (4 Persons)</option>
+                <option value="small" <%= dish && dish.tamanhoPorcao === 'small' ? 'selected' : '' %>>Individual (1 Person)</option>
+                <option value="medium" <%= dish && dish.tamanhoPorcao === 'medium' ? 'selected' : '' %>>Medium (2 Persons)</option>
+                <option value="large" <%= dish && dish.tamanhoPorcao === 'large' ? 'selected' : '' %>>Familiar (4 Persons)</option>
               </select>
             </div>
           </div>
-
-          <h3>Nutritional Information</h3>
-          <div class="nutrition-grid">
-            <div class="nutrition-item">
-              <label for="calories">Calories</label>
-              <input
-                type="number"
-                id="calories"
-                name="calories"
-                placeholder="0"
-              />
-            </div>
-            <div class="nutrition-item">
-              <label for="protein">Protein (g)</label>
-              <input
-                type="number"
-                id="protein"
-                name="protein"
-                placeholder="0"
-              />
-            </div>
-            <div class="nutrition-item">
-              <label for="carbs">Carbs (g)</label>
-              <input type="number" id="carbs" name="carbs" placeholder="0" />
-            </div>
-            <div class="nutrition-item">
-              <label for="fat">Fat (g)</label>
-              <input type="number" id="fat" name="fat" placeholder="0" />
-            </div>
-            <div class="nutrition-item">
-              <label for="sodium">Sodium (mg)</label>
-              <input type="number" id="sodium" name="sodium" placeholder="0" />
-            </div>
-          </div>
-
-          <div class="separator2"></div>
-
           <div class="formButton">
             <button type="button" class="prev">Previous Step</button>
             <button type="button" class="next">Next Step</button>
           </div>
         </div>
-
+      
         <!-- Step 3 -->
         <div class="form-step step-3 hidden">
           <label for="image">Dish Image*</label>
@@ -159,9 +122,9 @@
             <input
               type="file"
               id="image"
-              name="imagem"
+              name="image"
               accept="image/png, image/jpeg"
-              required
+              <%= dish ? '' : 'required' %>
             />
             <div class="upload-area" id="uploadArea">
               <div class="upload-icon">
@@ -178,19 +141,15 @@
             <div class="preview-container" id="previewContainer">
               <img id="previewImage" src="" alt="Preview" class="hidden" />
               <p id="previewText">No image selected</p>
-            </div>
+            </div>       
+            <div class="separator2"></div>
           </div>
-
-          <div class="separator2"></div>
-
-          <div class="formButton">
-            <button type="button" class="prev">Previous Step</button>
-            <button type="submit">Submit</button>
-          </div>
+          <button type="button" class="prev">Previous</button>
+          <button type="submit">Submit</button>
         </div>
       </form>
+      </form>
     </div>
-    
     <script src="/javascripts/form.js"></script>
   </body>
 </html>

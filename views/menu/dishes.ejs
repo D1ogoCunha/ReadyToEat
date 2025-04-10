@@ -28,6 +28,7 @@
             <li><strong>Carboidratos:</strong> <%= prato.informacaoNutricional.carboidratos %> g</li>
             <li><strong>Gorduras:</strong> <%= prato.informacaoNutricional.gorduras %> g</li>
           </ul>
+          <a href="/dishes/<%= prato._id %>/edit" class="btn-editar">Editar</a>
         </li>
         <% }); %>
       </ul>

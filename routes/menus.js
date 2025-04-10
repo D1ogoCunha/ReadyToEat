@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const menuController = require("../controllers/menuController");
+const dishController = require("../controllers/dishController");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
