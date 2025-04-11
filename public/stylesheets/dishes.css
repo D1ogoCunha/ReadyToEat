@@ -2,31 +2,31 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #e6e7e7; /* Cor de fundo igual à do login */
-  color: #333; /* Cor do texto */
+  background-color: #e6e7e7; 
+  color: #333;
 }
 
 header {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Mantém a imagem no canto esquerdo */
-  background-color: #e6e7e7; /* Cor do cabeçalho */
+  justify-content: flex-start; 
+  background-color: #e6e7e7; 
   color: black;
   padding: 10px 10px;
-  position: relative; /* Necessário para posicionar o título */
+  position: relative;
 }
 
 header .logo img {
-  height: 100px;
+  height: 70px;
   margin-right: 20px;
 }
 
 header h1 {
-  position: absolute; /* Permite centralizar o título */
-  left: 50%; /* Move o título para o centro horizontal */
+  position: absolute;
+  left: 50%; 
   transform: translateX(
     -50%
-  ); /* Ajusta para que o centro do título seja o ponto de referência */
+  );
   margin: 0;
   text-align: center;
 }
@@ -35,18 +35,16 @@ main {
   padding: 20px;
 }
 
-/* Estilo para a lista de pratos */
 .pratos-lista {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px; /* Espaçamento entre os itens */
+  gap: 20px;
   padding: 0;
   list-style: none;
-  max-width: 1200px; /* Limita a largura total */
-  margin: 0 auto; /* Centraliza a lista na página */
+  max-width: 1200px;
+  margin: 0 auto; 
 }
 
-/* Estilo para cada prato */
 .prato-item {
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -113,7 +111,7 @@ main {
   display: inline-block;
   margin-top: 10px;
   padding: 8px 15px;
-  background-color: #28a745;
+  background-color: #ff5722;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -126,5 +124,5 @@ main {
 
 .btn-editar:hover {
   text-decoration: none;
-  background-color: #218838;
+  background-color: #e64a19;
 }
