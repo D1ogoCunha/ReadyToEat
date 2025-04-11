@@ -48,3 +48,32 @@ exports.postEditRestaurant = async (req, res) => {
     res.status(500).send("Failed to update restaurant.");
   }
 };
+
+exports.getAddNewRestaurant = (req, res) => {
+  res.render("addNewRestaurant");
+};
+
+exports.postAddNewRestaurant = async (req, res) => {
+  try {
+    const { firstName, lastName, email, password, restaurantName, address, phone, pricePerPerson } = req.body;
+
+    // Cria um novo restaurante no banco de dados
+    const newRestaurant = new User({
+      firstName,
+      lastName,
+      email,
+      password,
+      role: "restaurant",
+      restaurantName,
+      address,
+      phone,
+      pricePerPerson,
+    });
+
+    await newRestaurant.save();
+    res.redirect("/admin"); // Redireciona para o dashboard do admin
+  } catch (err) {
+    console.error("Error creating new restaurant:", err);
+    res.status(500).send("Failed to create new restaurant.");
+  }
+};
