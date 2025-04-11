@@ -3,7 +3,7 @@ const User = require("../models/user");
 exports.getAdminDashboard = async (req, res) => {
   try {
     const restaurants = await User.find({ role: "restaurant" });
-    res.render("adminDashboard", { restaurants }); 
+    res.render("admin/adminDashboard", { restaurants }); 
   } catch (err) {
     console.error("Erro ao buscar restaurantes:", err);
     res.status(500).send("Erro ao carregar a página.");
@@ -26,7 +26,7 @@ exports.getEditRestaurant = async (req, res) => {
     if (!restaurant) {
       return res.status(404).send("Restaurant not found.");
     }
-    res.render("editRestaurant", { restaurant });
+    res.render("admin/editRestaurant", { restaurant });
   } catch (err) {
     console.error("Error fetching restaurant:", err);
     res.status(500).send("Failed to load edit form.");
@@ -50,7 +50,7 @@ exports.postEditRestaurant = async (req, res) => {
 };
 
 exports.getAddNewRestaurant = (req, res) => {
-  res.render("addNewRestaurant");
+  res.render("admin/addNewRestaurant");
 };
 
 exports.postAddNewRestaurant = async (req, res) => {
