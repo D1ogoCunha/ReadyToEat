@@ -28,7 +28,7 @@ exports.createMenu = async (req, res) => {
 exports.getAllMenus = async (req, res) => {
   try {
     const menus = await Menu.find(); // Busca os menus no banco de dados
-    res.render("menu/menus", { menus });
+    res.render("menu/menus", { menus, user: { firstName: "John", lastName: "Doe" } });
   } catch (error) {
     console.error("Erro ao buscar os menus:", error);
     res.status(500).send("Erro ao buscar os menus.");

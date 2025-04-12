@@ -42,6 +42,7 @@ body {
     gap: 20px;
     justify-content: center;
     width: 100%;
+    padding: 60px;
   }
   
   .menu-card {
@@ -152,4 +153,44 @@ body {
   .add-menu:hover {
     background-color: #e64a19;
   }
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    background-color: #24242c; 
+    color: #fff; 
+    padding: 10px 20px;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%; 
+    z-index: 1000; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .navbar-logo img {
+    height: 60px; 
+  }
+  
+  .navbar-links {
+    display: flex;
+    gap: 30px; 
+    font-size: 25px;
+  }
+  
+  .navbar-links a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .navbar-links a:hover {
+    text-decoration: underline;
+  }
+  
+  .navbar-user {
+    font-size: 1rem;
+    margin-right: 40px;
+  }
+  
   
