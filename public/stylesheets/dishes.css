@@ -6,22 +6,7 @@ body {
   color: #333;
 }
 
-header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; 
-  background-color: #e6e7e7; 
-  color: black;
-  padding: 10px 10px;
-  position: relative;
-}
-
-header .logo img {
-  height: 70px;
-  margin-right: 20px;
-}
-
-header h1 {
+h1 {
   position: absolute;
   left: 50%; 
   transform: translateX(
@@ -29,10 +14,11 @@ header h1 {
   );
   margin: 0;
   text-align: center;
+  margin-bottom: 30px;
 }
 
 main {
-  padding: 20px;
+  padding: 100px 20px;
 }
 
 .pratos-lista {
@@ -43,6 +29,7 @@ main {
   list-style: none;
   max-width: 1200px;
   margin: 0 auto; 
+  margin-top: 50px;
 }
 
 .prato-item {
@@ -125,4 +112,43 @@ main {
 .btn-editar:hover {
   text-decoration: none;
   background-color: #e64a19;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  background-color: #24242c; 
+  color: #fff; 
+  padding: 10px 20px;
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100%; 
+  z-index: 1000; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.navbar-logo img {
+  height: 60px; 
+}
+
+.navbar-links {
+  display: flex;
+  gap: 30px; 
+  font-size: 25px;
+}
+
+.navbar-links a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar-links a:hover {
+  text-decoration: underline;
+}
+
+.navbar-user {
+  font-size: 1rem;
+  margin-right: 40px;
 }

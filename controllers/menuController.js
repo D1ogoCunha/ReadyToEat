@@ -42,7 +42,7 @@ exports.getMenuDishes = async (req, res) => {
   try {
     const menu = await Menu.findById(menuId);
     const dishes = await Dish.find({ menu: menuId });
-    res.render("menu/dishes", { pratos: dishes, menu });
+    res.render("menu/dishes", { pratos: dishes, menu, user: { firstName: "John", lastName: "Doe" } });
   } catch (error) {
     console.error("Erro ao buscar os pratos:", error);
     res.status(500).send("Erro ao buscar os pratos.");
