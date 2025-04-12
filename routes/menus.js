@@ -4,6 +4,7 @@ const multer = require("multer");
 const path = require("path");
 const menuController = require("../controllers/menuController");
 const dishController = require("../controllers/dishController");
+const authController = require("../controllers/authController");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -15,10 +16,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-router.get("/new", menuController.renderNewMenuForm);
-router.post("/", upload.single("image"), menuController.createMenu);
-router.get("/", menuController.getAllMenus);
-router.get("/dishes", menuController.getMenuDishes);
+
+router.get('/', authController.verifyLoginUser, menuController.getAllMenus);
+
+router.get('/new', authController.verifyLoginUser, menuController.renderNewMenuForm);
+router.post('/new', authController.verifyLoginUser, upload.single('image'), menuController.createMenu);
+
+router.get("/dishes", authController.verifyLoginUser ,menuController.getMenuDishes);
 
 router.get("/:id/edit", menuController.renderEditMenuForm);
 router.post("/:id/edit", upload.single("image"), menuController.updateMenu);

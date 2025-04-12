@@ -8,6 +8,9 @@
     <a href="/help">Help</a>
   </div>
   <div class="navbar-user">
-    <span><%= user.lastName %>, <%= user.firstName %></span>
+    <span>
+      <%= user && user.lastName ? user.lastName : "LastName" %>, 
+      <%= user && user.firstName ? user.firstName : "FirstName" %>
+    </span>
   </div>
 </nav>

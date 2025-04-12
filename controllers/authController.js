@@ -24,8 +24,13 @@ authController.submittedLogin = function (req, res, next) {
             bcrypt.compare(passwordInput, user.password)
                 .then(function (result) {
                     if (result === true) {
-                        const authToken = jwt.sign({ email: user.email, role: user.role }, config.secret, { expiresIn: 86400 });
-                        res.cookie("auth-token", authToken, { maxAge: 82000 });
+                        const authToken = jwt.sign(
+                            { email: user.email, role: user.role },
+                            config.secret,
+                            { expiresIn: 86400 }
+                        );
+                        console.log("Generated Token:", authToken); // Log para verificar o token
+                        res.cookie("auth-token", authToken, { maxAge: 86400000, httpOnly: true });
 
                         if (user.role === "restaurant") {
                             res.redirect("/menus");
@@ -78,20 +83,29 @@ authController.createLoginSubmitted = function (req, res, next) {
 };
 
 authController.verifyLoginUser = function (req, res, next) {
-    const authToken = req.cookies["auth-token"];
+    const authToken = req.cookies['auth-token'];
     if (authToken) {
-        jwt.verify(authToken, config.secret, function (err, decoded) {
-            if (err) {
-                console.log("Error verifying token:", err);
-                return res.redirect("/login");
-            }
-            req.userEmail = decoded.email;
-            req.userRole = decoded.role;
-        });
+      jwt.verify(authToken, config.secret, async function (err, decoded) {
+        if (err) {
+          console.log('Error verifying token:', err);
+          return res.redirect('/login');
+        }
+        try {
+          const user = await User.findOne({ email: decoded.email });
+          if (!user) {
+            return res.redirect('/login');
+          }
+          req.user = user; 
+          next();
+        } catch (error) {
+          console.error('Erro ao buscar o usuário:', error);
+          res.redirect('/login');
+        }
+      });
     } else {
-        res.redirect("/login");
+      res.redirect('/login');
     }
-};
+  };
 
 authController.logout = function (req, res, next) {
     res.clearCookie("auth-token");
