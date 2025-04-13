@@ -5,8 +5,29 @@ exports.getAdminDashboard = async (req, res) => {
     const restaurants = await User.find({ role: "restaurant" });
     res.render("admin/adminDashboard", { restaurants }); 
   } catch (err) {
-    console.error("Erro ao buscar restaurantes:", err);
-    res.status(500).send("Erro ao carregar a página.");
+    console.error("Error searching for restaurants:", err);
+    res.status(500).send("Error loading page.");
+  }
+};
+
+exports.getPendingRestaurants = async (req, res) => {
+  try {
+    const pendingRestaurants = await User.find({ role: "restaurant", status: "in validation" });
+    res.render("admin/pendingRequests", { pendingRestaurants });
+  } catch (err) {
+    console.error("All restaurants are valid:", err);
+    res.status(500).send("Error loading page.");
+  }
+};
+
+exports.validateRestaurant = async (req, res) => {
+  try {
+    const restaurantId = req.params.id;
+    await User.findByIdAndUpdate(restaurantId, { status: "valid" });
+    res.redirect("/admin/pending");
+  } catch (err) {
+    console.error("Error validating restaurant:", err);
+    res.status(500).send("Failed to validate restaurant.");
   }
 };
 
@@ -57,7 +78,6 @@ exports.postAddNewRestaurant = async (req, res) => {
   try {
     const { firstName, lastName, email, password, restaurantName, address, phone, pricePerPerson } = req.body;
 
-    // Cria um novo restaurante no banco de dados
     const newRestaurant = new User({
       firstName,
       lastName,
@@ -71,7 +91,7 @@ exports.postAddNewRestaurant = async (req, res) => {
     });
 
     await newRestaurant.save();
-    res.redirect("/admin"); // Redireciona para o dashboard do admin
+    res.redirect("/admin"); 
   } catch (err) {
     console.error("Error creating new restaurant:", err);
     res.status(500).send("Failed to create new restaurant.");

@@ -14,6 +14,11 @@ var UserSchema = new mongoose.Schema({
     address: { type: String, required: function() { return this.role === 'restaurant'; } },
     phone: { type: String, required: function() { return this.role === 'restaurant'; } },
     pricePerPerson: { type: Number, required: function() { return this.role === 'restaurant'; } },
+    status: { 
+        type: String, 
+        enum: ['in validation', 'valid'], 
+        default: 'in validation' 
+    }
 });
 
 module.exports = mongoose.model('User', UserSchema);
