@@ -10,6 +10,7 @@ var authRouter = require("./routes/auth");
 var dishesRouter = require("./routes/dishes");
 var menusRouter = require("./routes/menus");
 var adminRouter = require("./routes/admin");
+var usersRouter = require("./routes/users");
 
 var app = express();
 
@@ -43,6 +44,7 @@ app.use("/", authRouter);
 app.use("/dishes", dishesRouter);
 app.use("/menus", menusRouter);
 app.use("/", adminRouter);
+app.use("/users", usersRouter);
 
 app.use(function (req, res, next) {
   next(createError(404));

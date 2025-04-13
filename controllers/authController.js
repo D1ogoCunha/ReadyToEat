@@ -98,7 +98,6 @@ authController.verifyLoginUser = function (req, res, next) {
           req.user = user; 
           next();
         } catch (error) {
-          console.error('Erro ao buscar o usuário:', error);
           res.redirect('/login');
         }
       });
