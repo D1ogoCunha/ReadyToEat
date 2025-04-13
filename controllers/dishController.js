@@ -2,13 +2,12 @@ const Dish = require("../models/dish");
 const multer = require("multer");
 const path = require("path");
 
-// Configuração do multer
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/uploads"); 
+    cb(null, "public/uploads");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Nome único para cada arquivo
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 
@@ -17,7 +16,7 @@ var upload = multer({ storage: storage });
 var dishController = {};
 
 dishController.list = async function (req, res) {
-  const { menuId } = req.query; // Captura o menuId da query string
+  const { menuId } = req.query;
 
   try {
     const menu = await Menu.findById(menuId);
@@ -42,7 +41,6 @@ dishController.save = async function (req, res) {
   try {
     let dish;
     if (id) {
-      // Atualização
       dish = await Dish.findById(id);
       if (!dish) {
         return res.status(404).send("Dish not found.");
@@ -68,7 +66,6 @@ dishController.save = async function (req, res) {
 
       await dish.save();
     } else {
-      // Adição
       dish = new Dish({
         nome: req.body.dishName,
         descricao: req.body.description,
@@ -105,8 +102,6 @@ dishController.editForm = async function (req, res) {
     if (!dish) {
       return res.status(404).send("Dish not found.");
     }
-
-    // Passa o menuId associado ao prato para a view
     res.render("menu/add", { dish, menuId: dish.menu });
   } catch (err) {
     console.log("Error fetching dish for editing:", err);
@@ -123,7 +118,6 @@ dishController.update = async function (req, res) {
       return res.status(404).send("Dish not found.");
     }
 
-    // Atualiza os campos do prato
     dish.nome = req.body.dishName;
     dish.descricao = req.body.description;
     dish.categoria = req.body.category;
@@ -138,12 +132,11 @@ dishController.update = async function (req, res) {
       sodio: req.body.sodium || 0,
     };
 
-    // Atualiza a imagem, se uma nova foi enviada
     if (req.file) {
       dish.imagem = `/uploads/${req.file.filename}`;
     }
 
-    await dish.save(); // Salva as alterações no banco de dados
+    await dish.save();
     res.redirect(`/menus/dishes?menuId=${dish.menu}`);
   } catch (err) {
     console.log("Error updating dish:", err);
@@ -153,7 +146,7 @@ dishController.update = async function (req, res) {
 
 dishController.addForm = function (req, res) {
   const menuId = req.query.menuId;
-  res.render("menu/add", { menuId, dish: null }); // Passa dish como null
+  res.render("menu/add", { menuId, dish: null });
 };
 
 module.exports = { ...dishController, upload };

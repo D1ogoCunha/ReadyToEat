@@ -19,8 +19,8 @@ exports.createMenu = async (req, res) => {
     await menu.save();
     res.redirect("/menus");
   } catch (error) {
-    console.error("Erro ao criar o menu:", error);
-    res.status(500).send("Erro ao criar o menu.");
+    console.error("Error creating menu", error);
+    res.status(500).send("Error creating menu.");
   }
 };
 
@@ -30,8 +30,8 @@ exports.getAllMenus = async (req, res) => {
 
     res.render("menu/menus", { menus, user: req.user });
   } catch (error) {
-    console.error("Erro ao buscar os menus:", error);
-    res.status(500).send("Erro ao buscar os menus.");
+    console.error("Error searching for menus:", error);
+    res.status(500).send("Error searching for menus.");
   }
 };
 
@@ -44,8 +44,8 @@ exports.getMenuDishes = async (req, res) => {
 
     res.render("menu/dishes", { pratos: dishes, menu, user: req.user });
   } catch (error) {
-    console.error("Erro ao buscar os pratos:", error);
-    res.status(500).send("Erro ao buscar os pratos.");
+    console.error("Error searching for dishes:", error);
+    res.status(500).send("Error searching for dishes.");
   }
 };
 
@@ -53,12 +53,12 @@ exports.renderEditMenuForm = async (req, res) => {
   try {
     const menu = await Menu.findById(req.params.id);
     if (!menu) {
-      return res.status(404).send("Menu não encontrado.");
+      return res.status(404).send("Menu not found.");
     }
     res.render("menu/editMenu", { menu });
   } catch (error) {
-    console.error("Erro ao buscar o menu:", error);
-    res.status(500).send("Erro ao buscar o menu.");
+    console.error("Error searching for menu:", error);
+    res.status(500).send("Error searching for menu.");
   }
 };
 
@@ -75,13 +75,13 @@ exports.updateMenu = async (req, res) => {
       new: true,
     });
     if (!menu) {
-      return res.status(404).send("Menu não encontrado.");
+      return res.status(404).send("Menu not found.");
     }
 
     res.redirect("/menus");
   } catch (error) {
-    console.error("Erro ao atualizar o menu:", error);
-    res.status(500).send("Erro ao atualizar o menu.");
+    console.error("Error updating menu:", error);
+    res.status(500).send("Error updating menu:.");
   }
 };
 
@@ -101,7 +101,7 @@ exports.authenticate = async (req, res, next) => {
     req.user = user; 
     next();
   } catch (error) {
-    console.error("Erro na autenticação:", error);
+    console.error("Authentication error:", error);
     res.redirect("/login");
   }
 };
