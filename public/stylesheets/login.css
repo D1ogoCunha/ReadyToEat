@@ -81,3 +81,9 @@ p a {
   font-weight: bold;
   transition: color 0.3s;
 }
+
+.error-message {
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}

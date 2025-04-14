@@ -18,30 +18,35 @@ authController.submittedLogin = function (req, res, next) {
         .then(function (user) {
             if (!user) {
                 console.log("User not found:", emailInput);
-                return res.redirect("/login");
+                return res.render("login", { errorMessage: "Invalid email or password." });
             }
 
             bcrypt.compare(passwordInput, user.password)
                 .then(function (result) {
-                    if (result === true) {
-                        const authToken = jwt.sign(
-                            { email: user.email, role: user.role },
-                            config.secret,
-                            { expiresIn: 86400 }
-                        );
-                        console.log("Generated Token:", authToken); // Log para verificar o token
-                        res.cookie("auth-token", authToken, { maxAge: 86400000, httpOnly: true });
-
-                        if (user.role === "restaurant") {
-                            res.redirect("/menus");
-                        } else if (user.role === "customer") {
-                            res.redirect("/index");
-                        } else {
-                            res.redirect("/admin");
-                        }
-                    } else {
+                    if (!result) {
                         console.log("Wrong password:", emailInput);
-                        res.redirect("/login");
+                        return res.render("login", { errorMessage: "Invalid email or password." });
+                    }
+
+                    if (user.role === "restaurant" && user.status === "in validation") {
+                        console.log("Restaurant not validated:", emailInput);
+                        return res.render("login", { errorMessage: "Your account is under validation. Please wait for approval." });
+                    }
+
+                    const authToken = jwt.sign(
+                        { email: user.email, role: user.role },
+                        config.secret,
+                        { expiresIn: 86400 }
+                    );
+                    console.log("Generated Token:", authToken);
+                    res.cookie("auth-token", authToken, { maxAge: 86400000, httpOnly: true });
+
+                    if (user.role === "restaurant") {
+                        res.redirect("/menus");
+                    } else if (user.role === "customer") {
+                        res.redirect("/index");
+                    } else {
+                        res.redirect("/admin");
                     }
                 });
         })
