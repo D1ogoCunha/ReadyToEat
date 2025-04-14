@@ -5,6 +5,7 @@ const userController = require("../controllers/userController");
 
 router.get("/profile/edit", authController.verifyLoginUser, userController.renderProfilePage);
 router.get("/profile/security", authController.verifyLoginUser, userController.renderSecurityProfilePage);
+router.get("/profile/orderHistory", authController.verifyLoginUser, userController.renderOrderHistoryPage);
 router.post("/profile/update", authController.verifyLoginUser, userController.updateProfile);
 
 

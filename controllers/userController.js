@@ -81,6 +81,10 @@ userController.renderSecurityProfilePage = (req, res) => {
   res.render("user/security", { user: req.user });
 };
 
+userController.renderOrderHistoryPage = (req, res) => {
+  res.render("user/orderhistory", { user: req.user });
+}
+
 userController.updateProfile = async (req, res) => {
     try {
       const { firstName, lastName } = req.body;
