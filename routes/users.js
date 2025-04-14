@@ -3,8 +3,8 @@ var router = express.Router();
 const authController = require("../controllers/authController");
 const userController = require("../controllers/userController");
 
-router.get("/profile", authController.verifyLoginUser, userController.renderProfilePage);
-router.get("/profile/edit", authController.verifyLoginUser, userController.renderEditProfilePage);
+router.get("/profile/edit", authController.verifyLoginUser, userController.renderProfilePage);
+router.get("/profile/security", authController.verifyLoginUser, userController.renderSecurityProfilePage);
 router.post("/profile/update", authController.verifyLoginUser, userController.updateProfile);
 
 

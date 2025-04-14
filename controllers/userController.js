@@ -77,8 +77,8 @@ userController.renderProfilePage = (req, res) => {
   res.render("user/profile", { user: req.user });
 };
 
-userController.renderEditProfilePage = (req, res) => {
-  res.render("user/editProfile", { user: req.user });
+userController.renderSecurityProfilePage = (req, res) => {
+  res.render("user/security", { user: req.user });
 };
 
 userController.updateProfile = async (req, res) => {
