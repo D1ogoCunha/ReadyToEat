@@ -87,10 +87,10 @@ userController.renderOrderHistoryPage = (req, res) => {
 
 userController.updateProfile = async (req, res) => {
     try {
-      const { firstName, lastName } = req.body;
+      const { firstName, lastName, email, restaurantName, address, phone, pricePerPerson } = req.body;
       const updatedUser = await User.findByIdAndUpdate(
         req.user._id,
-        { firstName, lastName },
+        { firstName, lastName, email, restaurantName, address, phone, pricePerPerson },
         { new: true, runValidators: true }
       );
   
@@ -100,7 +100,7 @@ userController.updateProfile = async (req, res) => {
       }
   
       console.log("User profile updated successfully.");
-      res.redirect("/users/profile"); 
+      res.redirect("/users/profile/edit"); 
     } catch (error) {
       console.error("Erro ao atualizar o perfil:", error);
       res.status(500).send("Erro ao atualizar o perfil.");
