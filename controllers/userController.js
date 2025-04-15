@@ -85,6 +85,50 @@ userController.renderOrderHistoryPage = (req, res) => {
   res.render("user/orderhistory", { user: req.user });
 }
 
+userController.updatePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    if (newPassword !== confirmPassword) {
+      return res.render("user/security", {
+        user: req.user,
+        errorMessage: "New password and confirmation do not match.",
+      });
+    }
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.render("user/security", {
+        user: req.user,
+        errorMessage: "User not found.",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.render("user/security", {
+        user: req.user,
+        errorMessage: "Current password is incorrect.",
+      });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    return res.render("user/security", {
+      user: req.user,
+      successMessage: "Password updated successfully.",
+    });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    return res.render("user/security", {
+      user: req.user,
+      errorMessage: "An error occurred while updating the password.",
+    });
+  }
+};
+
 userController.updateProfile = async (req, res) => {
     try {
       const { firstName, lastName, email, restaurantName, address, phone, pricePerPerson } = req.body;
