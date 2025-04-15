@@ -43,7 +43,7 @@ app.use("/", indexRouter);
 app.use("/", authRouter);
 app.use("/dishes", dishesRouter);
 app.use("/menus", menusRouter);
-app.use("/", adminRouter);
+app.use("/admin", adminRouter);
 app.use("/users", usersRouter);
 
 app.use(function (req, res, next) {

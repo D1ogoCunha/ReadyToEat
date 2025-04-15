@@ -3,87 +3,103 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Restaurant Management</title>
+    <title>Admin Dashboard</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/stylesheets/adminDashboard.css" />
+    <link rel="stylesheet" href="/stylesheets/adminDashboard2.css" />
   </head>
   <body>
-    <main class="page-container">
-      <header class="page-header">
-        <h1 class="page-title">Restaurant Management</h1>
-        <div class="header-actions">
+    <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+      <div class="container bootstrap snippets bootdey">
+        <div class="navbar-header">
           <button
-            class="btn btn-primary"
-            onclick="window.location.href='/admin/pending'"
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
           >
-            Pending Requests
+            <span class="icon-toggle"></span>
           </button>
-          <button
-            class="btn btn-secondary"
-            onclick="window.location.href='/admin/addNewRestaurant'"
-          >
-            Add New Restaurant
-          </button>
+          <a class="navbar-brand" href="#">Application</a>
         </div>
-      </header>
-
-      <section class="table-container">
-        <table class="restaurant-table">
-          <thead>
-            <tr class="table-header">
-              <th class="column-header">Name</th>
-              <th class="column-header">Address</th>
-              <th class="column-header">Phone</th>
-              <th class="column-header">Price per Person</th>
-              <th class="column-header">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if (restaurants && restaurants.length > 0) { %> <%
-            restaurants.forEach(function(restaurant) { %>
-            <tr class="table-row" data-id="<%= restaurant._id %>">
-              <td class="table-cell"><%= restaurant.restaurantName %></td>
-              <td class="table-cell"><%= restaurant.address %></td>
-              <td class="table-cell"><%= restaurant.phone %></td>
-              <td class="table-cell">
-                €<%= restaurant.pricePerPerson.toFixed(2) %>
-              </td>
-              <td class="table-cell">
-                <div class="action-buttons">
-                  <a
-                    href="/restaurants/<%= restaurant._id %>/edit"
-                    class="btn btn-edit"
-                    >Edit</a
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a
+                class="dropdown-toggle"
+                role="button"
+                data-toggle="dropdown"
+                href="#"
+              >
+                <i class="glyphicon glyphicon-user"></i> Admin
+                <span class="caret"></span
+              ></a>
+              <ul id="g-account-menu" class="dropdown-menu" role="menu">
+                <li><a href="#">My Profile</a></li>
+                <li>
+                  <a href="#"
+                    ><i class="glyphicon glyphicon-lock"></i> Logout</a
                   >
-                  <button class="btn btn-delete">Delete</button>
-                </div>
-              </td>
-            </tr>
-            <% }); %> <% } else { %>
-            <tr>
-              <td colspan="5" class="table-cell">No restaurants found.</td>
-            </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </section>
-      <div id="delete-modal" class="modal hidden">
-        <div class="modal-content">
-          <p id="delete-message" class="modal-message"></p>
-          <div class="modal-actions">
-            <button id="confirm-delete" class="btn btn-confirmDelete">
-              Delete
-            </button>
-            <button id="cancel-delete" class="btn btn-cancelDelete">
-              Cancel
-            </button>
-          </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
       </div>
-    </main>
+    </div>
+    <div class="container bootstrap snippets bootdey">
+      <div class="row">
+        <div class="col-md-3">
+          <a href="#"
+            ><strong
+              ><i class="glyphicon glyphicon-briefcase"></i> Toolbox</strong
+            ></a
+          >
+          <hr />
+
+          <ul class="nav nav-pills nav-stacked">
+            <li>
+              <a href="#"><i class="glyphicon glyphicon-flash"></i> Alerts</a>
+            </li>
+            <li>
+              <a href="#"><i class="glyphicon glyphicon-link"></i> Links</a>
+            </li>
+            <li>
+              <a href="#"
+                ><i class="glyphicon glyphicon-list-alt"></i> Reports</a
+              >
+            </li>
+            <li>
+              <a href="#"><i class="glyphicon glyphicon-book"></i> Books</a>
+            </li>
+            <li>
+              <a href="#"
+                ><i class="glyphicon glyphicon-briefcase"></i> Tools</a
+              >
+            </li>
+            <li>
+              <a href="#"><i class="glyphicon glyphicon-time"></i> Real-time</a>
+            </li>
+            <li>
+              <a href="#"
+                ><i class="glyphicon glyphicon-plus"></i> Advanced..</a
+              >
+            </li>
+          </ul>
+
+          <hr />
+        </div>
+        <div class="col-md-9">
+          <a href="#"
+            ><strong
+              ><i class="glyphicon glyphicon-dashboard"></i> My
+              Dashboard</strong
+            ></a
+          >
+          <hr />            
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   </body>
-  <script src="/javascripts/adminDashboard.js" defer></script>
 </html>

@@ -1,6 +1,7 @@
 const User = require("../models/user");
+const adminController = {};
 
-exports.getAdminDashboard = async (req, res) => {
+adminController. getAdminDashboard = async (req, res) => {
   try {
     const restaurants = await User.find({ role: "restaurant" });
     res.render("admin/adminDashboard", { restaurants }); 
@@ -10,7 +11,18 @@ exports.getAdminDashboard = async (req, res) => {
   }
 };
 
-exports.getPendingRestaurants = async (req, res) => {
+adminController.getRestaurantManagement = async (req, res) => {
+  try {
+    const restaurants = await User.find({ role: "restaurant" });
+    res.render("admin/adminRestaurantManagement", { restaurants });
+  } catch (err) {
+    console.error("Error fetching restaurants:", err);
+    res.status(500).send("Error loading restaurant management page.");
+  }
+};
+
+
+adminController.getPendingRestaurants = async (req, res) => {
   try {
     const pendingRestaurants = await User.find({ role: "restaurant", status: "in validation" });
     res.render("admin/pendingRequests", { pendingRestaurants });
@@ -20,7 +32,7 @@ exports.getPendingRestaurants = async (req, res) => {
   }
 };
 
-exports.validateRestaurant = async (req, res) => {
+adminController.validateRestaurant = async (req, res) => {
   try {
     const restaurantId = req.params.id;
     await User.findByIdAndUpdate(restaurantId, { status: "valid" });
@@ -31,7 +43,7 @@ exports.validateRestaurant = async (req, res) => {
   }
 };
 
-exports.deleteRestaurant = async (req, res) => {
+adminController.deleteRestaurant = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
     res.status(200).send("Restaurant deleted successfully.");
@@ -41,7 +53,7 @@ exports.deleteRestaurant = async (req, res) => {
   }
 };
 
-exports.getEditRestaurant = async (req, res) => {
+adminController.getEditRestaurant = async (req, res) => {
   try {
     const restaurant = await User.findById(req.params.id);
     if (!restaurant) {
@@ -54,7 +66,7 @@ exports.getEditRestaurant = async (req, res) => {
   }
 };
 
-exports.postEditRestaurant = async (req, res) => {
+adminController.postEditRestaurant = async (req, res) => {
   try {
     const { restaurantName, address, phone, pricePerPerson } = req.body;
     await User.findByIdAndUpdate(req.params.id, {
@@ -70,11 +82,11 @@ exports.postEditRestaurant = async (req, res) => {
   }
 };
 
-exports.getAddNewRestaurant = (req, res) => {
+adminController.getAddNewRestaurant = (req, res) => {
   res.render("admin/addNewRestaurant");
 };
 
-exports.postAddNewRestaurant = async (req, res) => {
+adminController.postAddNewRestaurant = async (req, res) => {
   try {
     const { firstName, lastName, email, password, restaurantName, address, phone, pricePerPerson } = req.body;
 
@@ -97,3 +109,5 @@ exports.postAddNewRestaurant = async (req, res) => {
     res.status(500).send("Failed to create new restaurant.");
   }
 };
+
+module.exports = adminController;

@@ -3,8 +3,9 @@ const router = express.Router();
 const adminController = require("../controllers/adminController");
 const authController = require("../controllers/authController");
 
-// Protege todas as rotas do admin
-router.get("/admin", authController.verifyAdmin, adminController.getAdminDashboard);
+router.get("/", authController.verifyAdmin, adminController.getAdminDashboard);
+
+router.get("/restaurant-management", authController.verifyAdmin,adminController.getRestaurantManagement);
 
 router.delete("/restaurants/:id", authController.verifyAdmin, adminController.deleteRestaurant);
 
