@@ -90,30 +90,42 @@ authController.createLoginSubmitted = function (req, res, next) {
 authController.verifyLoginUser = function (req, res, next) {
     const authToken = req.cookies['auth-token'];
     if (authToken) {
-      jwt.verify(authToken, config.secret, async function (err, decoded) {
-        if (err) {
-          console.log('Error verifying token:', err);
-          return res.redirect('/login');
-        }
-        try {
-          const user = await User.findOne({ email: decoded.email });
-          if (!user) {
-            return res.redirect('/login');
-          }
-          req.user = user; 
-          next();
-        } catch (error) {
-          res.redirect('/login');
-        }
-      });
+        jwt.verify(authToken, config.secret, async function (err, decoded) {
+            if (err) {
+                console.log('Error verifying token:', err);
+                return res.redirect('/login');
+            }
+            try {
+                const user = await User.findOne({ email: decoded.email });
+                if (!user) {
+                    return res.redirect('/login');
+                }
+                req.user = user; // Atribui o utilizador autenticado ao req.user
+                next();
+            } catch (error) {
+                res.redirect('/login');
+            }
+        });
     } else {
-      res.redirect('/login');
+        res.redirect('/login');
     }
-  };
+};
 
 authController.logout = function (req, res, next) {
     res.clearCookie("auth-token");
     res.redirect("/");
 };
 
+authController.verifyAdmin = function (req, res, next) {
+    authController.verifyLoginUser(req, res, function () {
+        if (req.user && req.user.role === "admin") {
+            return next(); // Permite o acesso se o utilizador for admin
+        }
+        console.log("Access denied. User is not an admin:", req.user.email);
+        res.status(403).render("error", { 
+            message: "Access denied. Admins only.", 
+            error: { status: 403, stack: "" } 
+        }); // Renderiza a página de erro
+    });
+};
 module.exports = authController;
