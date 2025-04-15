@@ -8,10 +8,15 @@
     <a href="/help">Help</a>
   </div>
   <div class="navbar-user">
-    <span>
-      <%= user && user.lastName ? user.lastName : "LastName" %>, 
-      <%= user && user.firstName ? user.firstName : "FirstName" %>
-    </span>
-    <a href="/users/profile/edit" class="profile-link">Profile</a>
+    <span> <%= user.lastName %>, <%= user.firstName %></span>
+    <div class="dropdown">
+      <button class="dropdown-toggle">
+        ▼
+      </button>
+      <div class="dropdown-menu">
+        <a href="/users/profile/edit" class="dropdown-item">Edit Profile</a>
+        <a href="/logout" class="dropdown-item">Logout</a>
+      </div>
+    </div>
   </div>
 </nav>
