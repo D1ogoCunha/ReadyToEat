@@ -27,4 +27,9 @@ router.get("/dishes", authController.verifyLoginUser ,menuController.getMenuDish
 router.get("/:id/edit", menuController.renderEditMenuForm);
 router.post("/:id/edit", upload.single("image"), menuController.updateMenu);
 
+router.get("/order", authController.verifyLoginUser, menuController.renderOrderPage);
+
+router.get("/order/phone", authController.verifyLoginUser, menuController.renderPhoneOrderPage);
+router.post("/order/phone", authController.verifyLoginUser, menuController.createPhoneOrder);
+
 module.exports = router;

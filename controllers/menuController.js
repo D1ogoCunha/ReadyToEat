@@ -1,11 +1,15 @@
 const Menu = require("../models/menu");
 const Dish = require("../models/dish");
+const Order = require("../models/order");
+const User = require("../models/user");
 
-exports.renderNewMenuForm = (req, res) => {
+var menuController = {};
+
+menuController.renderNewMenuForm = (req, res) => {
   res.render("menu/newMenu");
 };
 
-exports.createMenu = async (req, res) => {
+menuController.createMenu = async (req, res) => {
   try {
     const { name } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
@@ -24,7 +28,7 @@ exports.createMenu = async (req, res) => {
   }
 };
 
-exports.getAllMenus = async (req, res) => {
+menuController.getAllMenus = async (req, res) => {
   try {
     const menus = await Menu.find({ createdBy: req.user._id });
 
@@ -35,7 +39,7 @@ exports.getAllMenus = async (req, res) => {
   }
 };
 
-exports.getMenuDishes = async (req, res) => {
+menuController.getMenuDishes = async (req, res) => {
   const { menuId } = req.query;
 
   try {
@@ -49,7 +53,7 @@ exports.getMenuDishes = async (req, res) => {
   }
 };
 
-exports.renderEditMenuForm = async (req, res) => {
+menuController.renderEditMenuForm = async (req, res) => {
   try {
     const menu = await Menu.findById(req.params.id);
     if (!menu) {
@@ -62,7 +66,7 @@ exports.renderEditMenuForm = async (req, res) => {
   }
 };
 
-exports.updateMenu = async (req, res) => {
+menuController.updateMenu = async (req, res) => {
   try {
     const { name } = req.body;
     const updateData = { name };
@@ -85,7 +89,7 @@ exports.updateMenu = async (req, res) => {
   }
 };
 
-exports.authenticate = async (req, res, next) => {
+menuController.authenticate = async (req, res, next) => {
   try {
     const token = req.cookies.token; 
     if (!token) {
@@ -105,3 +109,61 @@ exports.authenticate = async (req, res, next) => {
     res.redirect("/login");
   }
 };
+
+menuController.renderOrderPage = async (req, res) => {
+  try {
+    const orders = await Order.find({ restaurantId: req.user._id })
+      .populate("customerId", "firstName lastName") // Popula os dados do cliente
+      .populate("dishes", "nome", "preco") // Popula os dados dos pratos
+      .sort({ date: -1 }); // Ordena por data (mais recente primeiro)
+
+    res.render("menu/orderHistory", { orders, user: req.user });
+  } catch (error) {
+    console.error("Error fetching order history:", error);
+    res.status(500).send("Error fetching order history.");
+  }
+};
+
+menuController.renderPhoneOrderPage = async (req, res) => {
+  try {
+    // Buscar todos os clientes e pratos disponíveis
+    const customers = await User.find({ role: "customer" }); // Supondo que o campo `role` identifica clientes
+    const dishes = await Dish.find();
+
+    res.render("menu/phoneOrder", { customers, dishes, user: req.user });
+  } catch (error) {
+    console.error("Error rendering phone order page:", error);
+    res.status(500).send("Error rendering phone order page.");
+  }
+};
+
+menuController.createPhoneOrder = async (req, res) => {
+  try {
+    const { customerId, selectedDishes } = req.body;
+
+    const dishes = await Dish.find({ _id: { $in: selectedDishes } });
+
+    const totalAmount = dishes.reduce((sum, dish) => {
+      return sum + (dish.preco || 0);
+    }, 0);
+
+    // Criar a encomenda
+    const order = new Order({
+      restaurantId: req.user._id,
+      customerId,
+      date: new Date(),
+      amount: totalAmount,
+      status: "Pending",
+      dishes: selectedDishes,
+    });
+
+    await order.save();
+
+    res.redirect("/menus/order");
+  } catch (error) {
+    console.error("Error creating phone order:", error);
+    res.status(500).send("Error creating phone order.");
+  }
+};
+
+module.exports = menuController;

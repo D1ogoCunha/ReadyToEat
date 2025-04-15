@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Phone Order</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h1>Create Phone Order</h1>
+      <form action="/menus/order/phone" method="POST">
+        <!-- Select Customer -->
+        <div class="mb-3">
+          <label for="customerId" class="form-label">Select Customer</label>
+          <select
+            class="form-select"
+            id="customerId"
+            name="customerId"
+            required
+          >
+            <% customers.forEach(customer => { %>
+            <option value="<%= customer._id %>">
+              <%= customer.firstName %> <%= customer.lastName %>
+            </option>
+            <% }) %>
+          </select>
+        </div>
+
+        <!-- Select Dishes -->
+               <div class="mb-3">
+          <label for="selectedDishes" class="form-label">Select Dishes</label>
+          <div id="selectedDishes">
+            <% dishes.forEach(dish => { %>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="dish-<%= dish._id %>"
+                  name="selectedDishes"
+                  value="<%= dish._id %>"
+                />
+                <label class="form-check-label" for="dish-<%= dish._id %>">
+                  <%= dish.nome %> - $<%= dish.preco ? dish.preco.toFixed(2) : "0.00" %>
+                </label>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Create Order</button>
+      </form>
+    </div>
+  </body>
+</html>

@@ -100,7 +100,7 @@ authController.verifyLoginUser = function (req, res, next) {
                 if (!user) {
                     return res.redirect('/login');
                 }
-                req.user = user; // Atribui o utilizador autenticado ao req.user
+                req.user = user; 
                 next();
             } catch (error) {
                 res.redirect('/login');

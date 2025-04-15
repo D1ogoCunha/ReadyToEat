@@ -7,8 +7,6 @@ const userController = require("../controllers/userController");
 router.get("/profile/security", authController.verifyLoginUser, userController.renderSecurityProfilePage);
 router.post("/profile/security", authController.verifyLoginUser, userController.updatePassword);
 
-router.get("/profile/orderHistory", authController.verifyLoginUser, userController.renderOrderHistoryPage);
-
 router.get("/profile/edit", authController.verifyLoginUser, userController.renderProfilePage);
 router.post("/profile/edit", authController.verifyLoginUser, userController.updateProfile);
 
