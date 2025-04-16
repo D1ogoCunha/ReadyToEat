@@ -126,4 +126,53 @@ adminController.postAddNewRestaurant = async (req, res) => {
   }
 };
 
+adminController.getAnalytics = async (req, res) => {
+  try {
+    
+    const topRestaurants = await User.aggregate([
+      { $match: { role: "restaurant" } },
+      {
+        $lookup: {
+          from: "orders",
+          localField: "_id",
+          foreignField: "restaurantId",
+          as: "orders",
+        },
+      },
+      {
+        $project: {
+          name: "$restaurantName",
+          orders: { $size: "$orders" },
+        },
+      },
+      { $sort: { orders: -1 } },
+      { $limit: 5 },
+    ]);
+
+    const revenueByRestaurant = await User.aggregate([
+      { $match: { role: "restaurant" } },
+      {
+        $lookup: {
+          from: "orders",
+          localField: "_id",
+          foreignField: "restaurantId",
+          as: "orders",
+        },
+      },
+      {
+        $project: {
+          name: "$restaurantName",
+          revenue: { $sum: "$orders.amount" },
+        },
+      },
+      { $sort: { revenue: -1 } },
+    ]);
+
+    res.json({ topRestaurants, revenueByRestaurant });
+  } catch (err) {
+    console.error("Error fetching analytics data:", err);
+    res.status(500).send("Failed to load analytics data.");
+  }
+};
+
 module.exports = adminController;

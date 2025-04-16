@@ -21,4 +21,6 @@ router.get("/pending", authController.verifyAdmin, adminController.getPendingRes
 
 router.post("/validate/:id", authController.verifyAdmin, adminController.validateRestaurant);
 
+router.get("/analytics", authController.verifyAdmin, adminController.getAnalytics);
+
 module.exports = router;
