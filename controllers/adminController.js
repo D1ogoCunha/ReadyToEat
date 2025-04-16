@@ -58,29 +58,43 @@ adminController.deleteRestaurant = async (req, res) => {
 adminController.getEditRestaurant = async (req, res) => {
   try {
     const restaurant = await User.findById(req.params.id);
-    if (!restaurant) {
-      return res.status(404).send("Restaurant not found.");
+
+    if (!restaurant || restaurant.role !== "restaurant") {
+      return res.status(404).render("error", {
+        message: "Restaurant not found.",
+        error: { status: 404, stack: "" },
+      });
     }
+
     res.render("admin/editRestaurant", { restaurant });
   } catch (err) {
-    console.error("Error fetching restaurant:", err);
-    res.status(500).send("Failed to load edit form.");
+    console.error("Error fetching restaurant for editing:", err);
+    res.status(500).render("error", {
+      message: "An error occurred while fetching the restaurant.",
+      error: { status: 500, stack: err.stack },
+    });
   }
 };
 
 adminController.postEditRestaurant = async (req, res) => {
   try {
     const { restaurantName, address, phone, pricePerPerson } = req.body;
-    await User.findByIdAndUpdate(req.params.id, {
+    const restaurantId = req.params.id;
+
+    await User.findByIdAndUpdate(restaurantId, {
       restaurantName,
       address,
       phone,
       pricePerPerson,
     });
-    res.redirect("/admin");
+
+    res.redirect("/admin/restaurantManagement");
   } catch (err) {
     console.error("Error updating restaurant:", err);
-    res.status(500).send("Failed to update restaurant.");
+    res.status(500).render("error", {
+      message: "Failed to update restaurant.",
+      error: { status: 500, stack: err.stack },
+    });
   }
 };
 

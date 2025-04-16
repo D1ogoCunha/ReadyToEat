@@ -119,13 +119,13 @@ authController.logout = function (req, res, next) {
 authController.verifyAdmin = function (req, res, next) {
     authController.verifyLoginUser(req, res, function () {
         if (req.user && req.user.role === "admin") {
-            return next(); // Permite o acesso se o utilizador for admin
+            return next(); 
         }
         console.log("Access denied. User is not an admin:", req.user.email);
         res.status(403).render("error", { 
             message: "Access denied. Admins only.", 
             error: { status: 403, stack: "" } 
-        }); // Renderiza a página de erro
+        }); 
     });
 };
 module.exports = authController;
