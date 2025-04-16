@@ -113,7 +113,7 @@ authController.verifyLoginUser = function (req, res, next) {
 
 authController.logout = function (req, res, next) {
     res.clearCookie("auth-token");
-    res.redirect("/");
+    res.redirect("/login");
 };
 
 authController.verifyAdmin = function (req, res, next) {

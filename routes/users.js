@@ -10,7 +10,6 @@ router.post("/profile/security", authController.verifyLoginUser, userController.
 router.get("/profile/edit", authController.verifyLoginUser, userController.renderProfilePage);
 router.post("/profile/edit", authController.verifyLoginUser, userController.updateProfile);
 
-
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });

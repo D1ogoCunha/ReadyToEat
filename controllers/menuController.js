@@ -112,29 +112,17 @@ menuController.authenticate = async (req, res, next) => {
 
 menuController.renderOrderPage = async (req, res) => {
   try {
-    // Adicionar log para verificar o ID do restaurante
-    console.log("Restaurant ID:", req.user._id);
-    
-    // Buscar encomendas com verificação de existência
     const orders = await Order.find({ restaurantId: req.user._id });
-    
-    // Verificar se existem encomendas antes de popular
-    console.log("Orders found (before populate):", orders.length);
     
     if (orders.length === 0) {
       return res.render("menu/orderHistory", { orders: [], user: req.user });
     }
     
-    // Popular com a sintaxe correta
     const populatedOrders = await Order.find({ restaurantId: req.user._id })
-      .populate("customerId", "firstName lastName") // Popula os dados do cliente
-      .populate("dishes") // Popula todos os campos dos pratos
+      .populate("customerId", "firstName lastName")
+      .populate("dishes")
       .sort({ date: -1 });
     
-    // Log dos resultados para depuração
-    console.log("Populated orders:", JSON.stringify(populatedOrders, null, 2));
-    
-    // Renderizar com verificação adicional
     res.render("menu/orderHistory", { 
       orders: populatedOrders || [], 
       user: req.user 
@@ -148,9 +136,9 @@ menuController.renderOrderPage = async (req, res) => {
 
 menuController.renderPhoneOrderPage = async (req, res) => {
   try {
-    // Buscar todos os clientes e pratos disponíveis
-    const customers = await User.find({ role: "customer" }); // Supondo que o campo `role` identifica clientes
-    const dishes = await Dish.find();
+    const customers = await User.find({ role: "customer" });
+    const menus = await Menu.find({ createdBy: req.user._id });
+    const dishes = await Dish.find({ menu: { $in: menus.map(menu => menu._id) } });
 
     res.render("menu/phoneOrder", { customers, dishes, user: req.user });
   } catch (error) {
@@ -158,6 +146,7 @@ menuController.renderPhoneOrderPage = async (req, res) => {
     res.status(500).send("Error rendering phone order page.");
   }
 };
+
 
 menuController.createPhoneOrder = async (req, res) => {
   try {
