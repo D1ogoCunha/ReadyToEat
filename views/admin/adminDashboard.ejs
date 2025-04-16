@@ -8,7 +8,7 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/stylesheets/adminDashboard2.css" />
+    <link rel="stylesheet" href="/stylesheets/adminDashboard.css" />
   </head>
   <body>
     <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
@@ -72,11 +72,8 @@
               >
             </li>
             <li>
-              <a href="#"><i class="glyphicon glyphicon-book"></i> Books</a>
-            </li>
-            <li>
-              <a href="#"
-                ><i class="glyphicon glyphicon-briefcase"></i> Tools</a
+              <a href="javascript:void(0)" id="restaurant-management-link"
+                ><i class="glyphicon glyphicon-cutlery"></i> Restaurant Management</a
               >
             </li>
             <li>
@@ -98,8 +95,14 @@
               Dashboard</strong
             ></a
           >
-          <hr />            
+          <hr />
+          <div id="dynamic-content">
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="/javascripts/adminDashboard.js"></script>
   </body>
 </html>

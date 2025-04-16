@@ -5,7 +5,7 @@ const authController = require("../controllers/authController");
 
 router.get("/", authController.verifyAdmin, adminController.getAdminDashboard);
 
-router.get("/restaurant-management", authController.verifyAdmin,adminController.getRestaurantManagement);
+router.get("/restaurantManagement", adminController.getRestaurantManagement);
 
 router.delete("/restaurants/:id", authController.verifyAdmin, adminController.deleteRestaurant);
 
@@ -13,10 +13,12 @@ router.get("/restaurants/:id/edit", authController.verifyAdmin, adminController.
 
 router.post("/restaurants/:id/edit", authController.verifyAdmin, adminController.postEditRestaurant);
 
-router.get("/admin/addNewRestaurant", authController.verifyAdmin, adminController.getAddNewRestaurant);
+router.get("/addNewRestaurant", authController.verifyAdmin, adminController.getAddNewRestaurant);
 
-router.post("/admin/addNewRestaurant", authController.verifyAdmin, adminController.postAddNewRestaurant);
+router.post("/addNewRestaurant", authController.verifyAdmin, adminController.postAddNewRestaurant);
 
-router.get("/admin/pending", authController.verifyAdmin, adminController.getPendingRestaurants);
+router.get("/pending", authController.verifyAdmin, adminController.getPendingRestaurants);
+
+router.post("/validate/:id", authController.verifyAdmin, adminController.validateRestaurant);
 
 module.exports = router;
