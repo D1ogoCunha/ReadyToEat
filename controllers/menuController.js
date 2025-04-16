@@ -112,17 +112,39 @@ menuController.authenticate = async (req, res, next) => {
 
 menuController.renderOrderPage = async (req, res) => {
   try {
-    const orders = await Order.find({ restaurantId: req.user._id })
+    // Adicionar log para verificar o ID do restaurante
+    console.log("Restaurant ID:", req.user._id);
+    
+    // Buscar encomendas com verificação de existência
+    const orders = await Order.find({ restaurantId: req.user._id });
+    
+    // Verificar se existem encomendas antes de popular
+    console.log("Orders found (before populate):", orders.length);
+    
+    if (orders.length === 0) {
+      return res.render("menu/orderHistory", { orders: [], user: req.user });
+    }
+    
+    // Popular com a sintaxe correta
+    const populatedOrders = await Order.find({ restaurantId: req.user._id })
       .populate("customerId", "firstName lastName") // Popula os dados do cliente
-      .populate("dishes", "nome", "preco") // Popula os dados dos pratos
-      .sort({ date: -1 }); // Ordena por data (mais recente primeiro)
-
-    res.render("menu/orderHistory", { orders, user: req.user });
+      .populate("dishes") // Popula todos os campos dos pratos
+      .sort({ date: -1 });
+    
+    // Log dos resultados para depuração
+    console.log("Populated orders:", JSON.stringify(populatedOrders, null, 2));
+    
+    // Renderizar com verificação adicional
+    res.render("menu/orderHistory", { 
+      orders: populatedOrders || [], 
+      user: req.user 
+    });
   } catch (error) {
-    console.error("Error fetching order history:", error);
-    res.status(500).send("Error fetching order history.");
+    console.error("Error fetching order history:", error.stack);
+    res.status(500).send("Error fetching order history: " + error.message);
   }
 };
+
 
 menuController.renderPhoneOrderPage = async (req, res) => {
   try {
@@ -140,30 +162,43 @@ menuController.renderPhoneOrderPage = async (req, res) => {
 menuController.createPhoneOrder = async (req, res) => {
   try {
     const { customerId, selectedDishes } = req.body;
-
-    const dishes = await Dish.find({ _id: { $in: selectedDishes } });
-
-    const totalAmount = dishes.reduce((sum, dish) => {
-      return sum + (dish.preco || 0);
-    }, 0);
-
-    // Criar a encomenda
+    
+    // Garantir que selectedDishes seja sempre um array
+    const dishIds = Array.isArray(selectedDishes) ? selectedDishes : [selectedDishes];
+    
+    if (dishIds.length === 0) {
+      return res.status(400).send("No dishes selected for the order.");
+    }
+    
+    // Buscar os pratos para calcular o valor total
+    const dishes = await Dish.find({ _id: { $in: dishIds } });
+    console.log("Found dishes:", dishes.length);
+    
+    if (dishes.length === 0) {
+      return res.status(404).send("No dishes found with the provided IDs.");
+    }
+    
+    const totalAmount = dishes.reduce((sum, dish) => sum + (dish.preco || 0), 0);
+    
+    // Criar a encomenda com dados válidos
     const order = new Order({
       restaurantId: req.user._id,
       customerId,
       date: new Date(),
       amount: totalAmount,
       status: "Pending",
-      dishes: selectedDishes,
+      dishes: dishIds,
     });
-
-    await order.save();
-
+    
+    const savedOrder = await order.save();
+    console.log("Order created successfully:", savedOrder._id);
+    
     res.redirect("/menus/order");
   } catch (error) {
-    console.error("Error creating phone order:", error);
-    res.status(500).send("Error creating phone order.");
+    console.error("Error creating phone order:", error.stack);
+    res.status(500).send("Error creating phone order: " + error.message);
   }
 };
+
 
 module.exports = menuController;
