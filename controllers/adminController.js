@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Order = require("../models/order");
 const adminController = {};
 
 adminController. getAdminDashboard = async (req, res) => {
@@ -172,6 +173,30 @@ adminController.getAnalytics = async (req, res) => {
   } catch (err) {
     console.error("Error fetching analytics data:", err);
     res.status(500).send("Failed to load analytics data.");
+  }
+};
+
+adminController.getAnalytics2 = async (req, res) => {
+  try {
+    const ordersByDate = await Order.aggregate([
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$date" }, 
+          },
+          count: { $sum: 1 }, 
+        },
+      },
+      { $sort: { _id: 1 } }, 
+    ]);
+
+    const labels = ordersByDate.map((order) => order._id); 
+    const orders = ordersByDate.map((order) => order.count); 
+
+    res.json({ labels, orders });
+  } catch (err) {
+    console.error("Error fetching analytics 2 data:", err);
+    res.status(500).send("Failed to load analytics 2 data.");
   }
 };
 

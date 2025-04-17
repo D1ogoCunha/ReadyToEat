@@ -23,4 +23,6 @@ router.post("/validate/:id", authController.verifyAdmin, adminController.validat
 
 router.get("/analytics", authController.verifyAdmin, adminController.getAnalytics);
 
+router.get("/analytics2", authController.verifyAdmin, adminController.getAnalytics2);
+
 module.exports = router;

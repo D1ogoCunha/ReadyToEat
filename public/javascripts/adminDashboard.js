@@ -143,3 +143,54 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const analytics2Link = document.getElementById("analytics2-link");
+  const dynamicContent = document.getElementById("dynamic-content");
+
+  analytics2Link.addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch("/admin/analytics2");
+      if (response.ok) {
+        const data = await response.json();
+
+        dynamicContent.innerHTML = `
+          <h2>Analytics 2: Orders Over Time</h2>
+          <canvas id="ordersOverTimeChart" width="400" height="200"></canvas>
+        `;
+
+        const ctx = document.getElementById("ordersOverTimeChart").getContext("2d");
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: data.labels, 
+            datasets: [
+              {
+                label: "Orders",
+                data: data.orders, 
+                backgroundColor: "rgba(54, 162, 235, 0.2)",
+                borderColor: "rgba(54, 162, 235, 1)",
+                borderWidth: 1,
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      } else {
+        dynamicContent.innerHTML = "<p>Failed to load analytics 2. Please try again.</p>";
+      }
+    } catch (error) {
+      console.error("Error loading Analytics 2:", error);
+      dynamicContent.innerHTML = "<p>An error occurred. Please try again later.</p>";
+    }
+  });
+});
