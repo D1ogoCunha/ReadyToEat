@@ -27,6 +27,8 @@ router.get("/dishes", authController.verifyLoginUser ,menuController.getMenuDish
 router.get("/:id/edit", menuController.renderEditMenuForm);
 router.post("/:id/edit", upload.single("image"), menuController.updateMenu);
 
+router.post("/:id", menuController.deleteMenu);
+
 router.get("/order", authController.verifyLoginUser, menuController.renderOrderPage);
 
 router.get("/order/phone", authController.verifyLoginUser, menuController.renderPhoneOrderPage);

@@ -28,6 +28,9 @@
             <li><strong>Gorduras:</strong> <%= prato.informacaoNutricional.gorduras %> g</li>
           </ul>
           <a href="/dishes/<%= prato._id %>/edit" class="btn-editar">Edit</a>
+          <form action="/dishes/<%= prato._id %>/delete?menuId=<%= menu._id %>" method="POST" style="display:inline;">
+            <button type="submit" class="btn-editar">Delete</button>
+          </form>
         </li>
         <% }); %>
       </ul>

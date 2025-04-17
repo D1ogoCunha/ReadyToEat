@@ -2,6 +2,8 @@ const Menu = require("../models/menu");
 const Dish = require("../models/dish");
 const Order = require("../models/order");
 const User = require("../models/user");
+const fs = require("fs");
+const path = require("path");
 
 var menuController = {};
 
@@ -186,6 +188,36 @@ menuController.createPhoneOrder = async (req, res) => {
   } catch (error) {
     console.error("Error creating phone order:", error.stack);
     res.status(500).send("Error creating phone order: " + error.message);
+  }
+};
+
+menuController.deleteMenu = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const dishes = await Dish.find({ menu: id });
+
+    for (const dish of dishes) {
+      if (dish.imagem) {
+        const imagePath = path.join(__dirname, '..', 'public', dish.imagem);
+        try {
+          await fs.unlink(imagePath);
+          console.log(`Imagem deletada: ${imagePath}`);
+        } catch (err) {
+          console.error(`Erro ao deletar imagem ${imagePath}:`, err);
+        }
+      }
+    }
+
+    await Dish.deleteMany({ menu: id });
+
+    await Menu.findByIdAndDelete(id);
+
+    console.log(`Menu e pratos associados deletados com sucesso (ID: ${id})`);
+    res.redirect("/menus");
+  } catch (error) {
+    console.error("Erro ao deletar o menu:", error);
+    res.status(500).send("Erro ao deletar o menu.");
   }
 };
 

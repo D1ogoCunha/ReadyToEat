@@ -17,6 +17,9 @@
             <img src="<%= menu.image %>" alt="<%= menu.name %>" />
             <p><%= menu.name %></p>
             <a href="/menus/<%= menu._id %>/edit" class="edit-button">Edit</a>
+            <form action="/menus/<%= menu._id %>" method="POST" style="display:inline;">
+              <button type="submit" class="edit-button">Delete</button>
+            </form>            
           </div>
         </a>
       </div>

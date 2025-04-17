@@ -1,6 +1,7 @@
 const Dish = require("../models/dish");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -147,6 +148,44 @@ dishController.update = async function (req, res) {
 dishController.addForm = function (req, res) {
   const menuId = req.query.menuId;
   res.render("menu/add", { menuId, dish: null });
+};
+
+dishController.deleteDish = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { menuId } = req.query;
+
+    const dish = await Dish.findById(id);
+    
+    if (!dish) {
+      return res.status(404).send("Prato não encontrado.");
+    }
+    
+    if (dish.imagem) {
+      const imagePath = path.join(
+        __dirname, 
+        "..", 
+        "public",
+        dish.imagem
+      );
+      
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error("Erro ao deletar imagem:", err);
+        } else {
+          console.log("Imagem deletada com sucesso:", imagePath);
+        }
+      });
+    }
+
+    await Dish.findByIdAndDelete(id);
+    
+    console.log("Prato deletado com sucesso:", id);
+    res.redirect(`/menus/dishes?menuId=${menuId}`);
+  } catch (error) {
+    console.error("Erro ao deletar o prato:", error);
+    res.status(500).send("Erro ao deletar o prato.");
+  }
 };
 
 module.exports = { ...dishController, upload };
