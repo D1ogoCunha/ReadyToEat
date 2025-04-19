@@ -1,15 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
   const steps = document.querySelectorAll(".form-step");
-  const indicators = document.querySelectorAll(".step");
+  const indicators = document.querySelectorAll(".step-indicator");
+  const labels = document.querySelectorAll(".step-label");
   let currentStep = 0;
 
   // Verifica se estamos no modo de edição (se existe um prato carregado)
-  const isEditMode = document.querySelector("#dishForm").action.includes("/dishes/") && document.querySelector("#dishForm").action.includes("edit");
+  const isEditMode = document.querySelector("#dishForm").action.includes("/dishes/") && !document.querySelector("#dishForm").action.includes("edit");
 
   function showStep(step) {
     steps.forEach((s, index) => {
       s.classList.toggle("hidden", index !== step);
-      indicators[index].classList.toggle("active", index === step);
+      if (indicators[index]) {
+        indicators[index].classList.toggle("active", index === step);
+      }
+      if (labels[index]) {
+        labels[index].classList.toggle("active", index === step);
+      }
     });
   }
 
@@ -21,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
     showStep(currentStep);
   }
 
-  document.querySelectorAll(".next").forEach((btn) => {
+  document.querySelectorAll(".next-button.next").forEach((btn) => {
     btn.addEventListener("click", () => {
       if (currentStep < steps.length - 1) {
         currentStep++;
@@ -30,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  document.querySelectorAll(".prev").forEach((btn) => {
+  document.querySelectorAll(".back-button.prev").forEach((btn) => {
     btn.addEventListener("click", () => {
       if (currentStep > 0) {
         currentStep--;

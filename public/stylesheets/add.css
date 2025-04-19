@@ -1,191 +1,173 @@
-/* Estilo geral */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
-
 body {
   font-family: "Inter", sans-serif;
-  background-color: #f8f9fa; /* Cor de fundo clara */
+  background-color: #e6e7e7;
   margin: 0;
-  padding: 0;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh; /* Garante que o conteúdo ocupe toda a altura da página */
 }
 
-h1 {
-  font-size: 32px;
-  font-weight: 700;
-  margin-left: 10px;
-  margin-bottom: 10px;
-}
-
-p {
-  font-size: 18px;
-  color: #89898a;
-  margin-bottom: 20px;
-  margin-left: 10px;
-}
-
-/* Centralizar o formulário */
-.combined-box {
-  max-width: 800px; /* Largura máxima do formulário */
-  width: 100%; /* Largura total do contêiner */
-  margin: 0 auto; /* Centraliza horizontalmente */
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Barra de progresso */
-.progress-bar {
+.add-dish-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.progress-bar .step {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #e4e4e4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  color: #89898a;
-}
-
-.progress-bar .step.active {
-  background-color: #b8382a;
-  color: #ffffff;
-}
-
-/* Separadores */
-.separator {
-  height: 2px;
-  background-color: #f8f9fa; /* Cor do fundo */
-  margin: 20px;
-  width: 200%;
-  position: relative;
-  left: -50%;
-}
-
-.separator2 {
-  height: 2px;
-  background-color: #f8f9fa; /* Cor do fundo */
-  margin: 20px;
-  width: 112%;
-  position: relative;
-  left: -2.5%;
-}
-
-/* Ocultar etapas */
-.hidden {
-  display: none;
-}
-
-/* Botões */
-.formButton {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.formButton button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.formButton .next {
-  background-color: #b8382a;
-  color: #ffffff;
-}
-
-.formButton .prev {
-  background-color: #89898a;
-  color: #ffffff;
-}
-
-/* -------------------- STEP 1 -------------------- */
-
-.dishName {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  width: 96%;
-}
-
-.dishDescription {
-  font-size: 16px;
-  color: #89898a;
-  width: 96%;
-}
-
-.row {
-  display: flex;
-  gap: 20px; /* Espaçamento entre as colunas */
-  margin-top: 20px; /* Espaçamento acima da linha */
-}
-
-.column {
-  flex: 1; /* Faz com que as colunas tenham o mesmo tamanho */
-  display: flex;
+  font-family: "Inter", sans-serif;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #e6e7e7;
+  font-size: 16px;
+  margin: 0;
 }
 
-label {
-  font-weight: 600;
-  color: #262728;
-  margin-bottom: 8px;
-}
-
-input,
-textarea,
-select {
+.add-dish-wrapper {
+  max-width: 650px;
   width: 100%;
-  padding: 15px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0px 4px 24px rgba(0,0,0,0.04);
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.add-dish-form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.form-select {
+  width: 100%; /* Garante que a largura ocupe todo o espaço disponível */
+  padding: 12px; /* Aumenta o espaço interno */
+  font-size: 16px; /* Aumenta o tamanho do texto */
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 16px;
   background-color: #ffffff;
+  box-sizing: border-box; /* Inclui padding no cálculo da largura */
 }
 
-textarea {
-  resize: none;
-  height: 120px;
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
-/* -------------------- STEP 2 -------------------- */
 
-.priceC {
-  max-width: 800px;
-  width: 96%;
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
 }
 
-h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: #262728;
+.form-row {
+  display: flex;
+  gap: 1.5rem;
 }
 
-/* Grid para Nutritional Information */
+.form-row .form-group {
+  flex: 1; 
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.next-button, .back-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.next-button {
+  background-color: #ff5722;
+  border: none;
+  color: #fff;
+}
+
+.back-button {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  color: #ff5722;
+}
+
+.progress-bar {
+  display: flex;
+  align-items: center;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.step-indicator {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #e4e4e4;
+  color: #666;
+  font-weight: 500;
+}
+
+.step-indicator.active {
+  background-color: #ff5722;
+  color: #ffffff;
+}
+
+.step-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.step-label.active {
+  color: #ff5722;
+}
+
+.progress-divider {
+  width: 3rem;
+  height: 2px;
+  background-color: #ccc;
+  margin: 0 2rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
 .nutrition-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsivo */
-  gap: 12px; /* Espaçamento entre os itens */
-  margin-bottom: 20px; /* Espaçamento abaixo do grid */
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px; 
 }
 
 .nutrition-item {
-  background-color: #f8f9fa; /* Fundo claro */
+  background-color: #f8f9fa;
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra leve */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
 
 .nutrition-item label {
@@ -205,9 +187,7 @@ h3 {
   background-color: #ffffff;
 }
 
-/* -------------------- STEP 3 -------------------- */
 
-/* Estilo do contêiner de upload */
 .image-upload {
   border: 2px dashed #e4e4e4;
   border-radius: 12px;
@@ -269,4 +249,17 @@ h3 {
 .preview-container p {
   font-size: 14px;
   color: #89898a;
+}
+
+.edit-mode .form-step {
+  display: block; /* Exibe todos os passos */
+}
+
+.edit-mode .step-indicator {
+  background-color: #ff5722; /* Define a cor de fundo dos indicadores como ativa */
+  color: #fff;
+}
+
+.edit-mode .step-label {
+  color: #ff5722; /* Define a cor dos labels como ativa */
 }
