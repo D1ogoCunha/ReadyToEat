@@ -24,7 +24,9 @@
         </a>
       </div>
       <% }) %>
+      <% if (user.role === "restaurant" || user.role === "admin" ) { %>
       <a href="/menus/new" class="add-menu">+</a>
+      <% } %>
     </main>
   </body>
 </html>
