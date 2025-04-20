@@ -1,27 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 300px;
-  }
-  input, button {
-    padding: 10px;
-    font-size: 16px;
-  }
-  button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  button:hover {
-    background-color: #0056b3;
-  }
+  font-family: "Inter", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
+}
+
+input,
+button {
+  padding: 10px;
+  font-size: 16px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

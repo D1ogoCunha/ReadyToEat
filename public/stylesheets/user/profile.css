@@ -79,17 +79,6 @@ body {
   margin-right: 1rem;
 }
 
-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  padding: 10px 0;
-  font-size: 0.875rem;
-  color: #666;
-}
-
 .btn {
     color: #ffffff;
     background-color: #ff5722;

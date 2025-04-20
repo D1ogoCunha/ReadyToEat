@@ -196,7 +196,6 @@ main {
 .table-order-history td {
   padding: 0.75rem;
   vertical-align: top;
-  border-bottom: none; 
   padding-bottom: 0;
 }
 
@@ -218,7 +217,6 @@ main {
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: 0.25rem;
 }
 
 .table-order-history .bg-warning {
