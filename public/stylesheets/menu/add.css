@@ -252,14 +252,14 @@ body {
 }
 
 .edit-mode .form-step {
-  display: block; /* Exibe todos os passos */
+  display: block;
 }
 
 .edit-mode .step-indicator {
-  background-color: #ff5722; /* Define a cor de fundo dos indicadores como ativa */
+  background-color: #ff5722; 
   color: #fff;
 }
 
 .edit-mode .step-label {
-  color: #ff5722; /* Define a cor dos labels como ativa */
+  color: #ff5722;
 }

@@ -2,8 +2,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #e6e7e7; 
-  color: #333;
+  background-color: #e6e7e7;
 }
 
 h1 {
@@ -32,6 +31,9 @@ main {
   margin-top: 50px;
 }
 
+.prato-item a {
+  text-decoration: none; /* Remove o sublinhado dos links */
+}
 .prato-item {
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -39,6 +41,10 @@ main {
   background-color: #fff;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.prato-item:hover {
+  background-color: #ccccccc0;
 }
 
 .prato-imagem {
