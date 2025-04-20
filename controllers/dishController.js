@@ -188,4 +188,22 @@ dishController.deleteDish = async (req, res) => {
   }
 };
 
+dishController.getDishDetails = async (req, res) => {
+  try {
+    const prato = await Dish.findById(req.params.id);
+    if (!prato) {
+      return res.status(404).send("Prato não encontrado");
+    }
+
+    if (!req.user) {
+      return res.render("menu/dishInfo", { prato: prato, user: {} });
+    }
+
+    res.render("menu/dishInfo", { prato: prato, user: req.user });
+  } catch (error) {
+    console.error("Erro ao buscar detalhes do prato:", error);
+    res.status(500).send("Erro ao buscar detalhes do prato");
+  }
+};
+
 module.exports = { ...dishController, upload };

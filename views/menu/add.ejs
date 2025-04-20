@@ -21,7 +21,7 @@
           <!-- Progress Bar -->
           <div class="progress-bar">
             <div class="progress-step">
-              <div class="step-indicator active" id="step-1-indicator">1</div>
+              <div class="step-indicator" id="step-1-indicator">1</div>
               <span class="step-label">Dish Details</span>
             </div>
             <div class="progress-divider"></div>
@@ -84,7 +84,7 @@
             </div>
 
             <div class="form-actions">
-              <button type="button" class="next-button next">Next Step</button>
+              <button type="button" class="next-button" onclick="nextStep()">Next Step</button>
             </div>
           </div>
 
@@ -103,7 +103,6 @@
                 required
               />
             </div>
-
             <div class="form-group">
               <label class="form-label" for="portionSize">Portion Size</label>
               <select class="form-select" id="portionSize" name="portionSize" required>
@@ -169,8 +168,8 @@
             </div>
 
             <div class="form-actions">
-              <button type="button" class="back-button prev">Previous Step</button>
-              <button type="button" class="next-button next">Next Step</button>
+              <button type="button" class="back-button" onclick="previousStep()">Previous Step</button>
+              <button type="button" class="next-button" onclick="nextStep()">Next Step</button>
             </div>
           </div>
 
@@ -205,7 +204,7 @@
               </div>
             </div>
             <div class="form-actions">
-              <button type="button" class="back-button prev">Previous Step</button>
+              <button type="button" class="back-button" onclick="previousStep()">Previous Step</button>
               <button type="submit" class="next-button">Submit</button>
             </div>
           </div>

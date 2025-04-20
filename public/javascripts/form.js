@@ -1,53 +1,42 @@
 document.addEventListener("DOMContentLoaded", function () {
+  let currentStep = 1; // Define o passo inicial como 1
   const steps = document.querySelectorAll(".form-step");
   const indicators = document.querySelectorAll(".step-indicator");
-  const labels = document.querySelectorAll(".step-label");
-  let currentStep = 0;
-
-  // Verifica se estamos no modo de edição (se existe um prato carregado)
-  const isEditMode = document.querySelector("#dishForm").action.includes("/dishes/") && !document.querySelector("#dishForm").action.includes("edit");
 
   function showStep(step) {
-    steps.forEach((s, index) => {
-      s.classList.toggle("hidden", index !== step);
-      if (indicators[index]) {
-        indicators[index].classList.toggle("active", index === step);
+    steps.forEach((stepElement, index) => {
+      if (index + 1 === step) {
+        stepElement.classList.remove("hidden");
+      } else {
+        stepElement.classList.add("hidden");
       }
-      if (labels[index]) {
-        labels[index].classList.toggle("active", index === step);
+    });
+
+    indicators.forEach((indicator, index) => {
+      if (index + 1 === step) {
+        indicator.classList.add("active");
+      } else {
+        indicator.classList.remove("active");
       }
     });
   }
 
-  // Exibe todos os steps no modo de edição
-  if (isEditMode) {
-    steps.forEach((s) => s.classList.remove("hidden"));
-    indicators.forEach((indicator) => indicator.classList.add("active"));
-  } else {
-    showStep(currentStep);
-  }
+  window.nextStep = function () {
+    if (currentStep < steps.length) {
+      currentStep++;
+      showStep(currentStep);
+    }
+  };
 
-  document.querySelectorAll(".next-button.next").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      if (currentStep < steps.length - 1) {
-        currentStep++;
-        showStep(currentStep);
-      }
-    });
-  });
+  window.previousStep = function () {
+    if (currentStep > 1) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  };
 
-  document.querySelectorAll(".back-button.prev").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      if (currentStep > 0) {
-        currentStep--;
-        showStep(currentStep);
-      }
-    });
-  });
-
-  document.querySelector("#dishForm").addEventListener("submit", (e) => {
-    console.log("Form submitted");
-  });
+  // Mostrar o primeiro passo ao carregar a página
+  showStep(currentStep);
 
   // Image upload functionality
   const uploadArea = document.getElementById("uploadArea");
