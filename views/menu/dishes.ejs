@@ -62,12 +62,9 @@
         <% }); %>
       </ul>
 
-      <button
-        class="btn-adicionar"
-        onclick="window.location.href='/dishes/add?menuId=<%= menu._id %>'"
-      >
-        +
-      </button>
+      <a
+        href="/dishes/add?menuId=<%= menu._id %>"
+        class="btn-adicionar">+</a>
     </main>
   </body>
 </html>
