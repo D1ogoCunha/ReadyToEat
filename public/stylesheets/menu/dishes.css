@@ -34,8 +34,9 @@ main {
 }
 
 .prato-item a {
-  text-decoration: none; /* Remove o sublinhado dos links */
+  text-decoration: none;
 }
+
 .prato-item {
   border: 1px solid #ccc;
   border-radius: 8px;
