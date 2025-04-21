@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/user");
+const Order = require("../models/order");
+const Dish = require("../models/dish");
 const bcrypt = require("bcrypt");
 
 var userController = {};
@@ -145,6 +147,46 @@ userController.updateProfile = async (req, res) => {
     } catch (error) {
       console.error("Erro ao atualizar o perfil:", error);
       res.status(500).send("Erro ao atualizar o perfil.");
+    }
+  };
+
+  userController.renderChartPage = (req, res) => {
+    res.render("user/chart", { user: req.user});
+  };
+  
+  userController.getMostOrderedDishes = async (req, res) => {
+    try {
+      const dishes = await Order.aggregate([
+        { $unwind: "$dishes" }, 
+        {
+          $group: {
+            _id: "$dishes",
+            count: { $sum: 1 }, 
+          },
+        },
+        { $sort: { count: -1 } }, 
+        { $limit: 5 }, 
+      ]);
+  
+      const dishDetails = await Dish.find({ _id: { $in: dishes.map((d) => d._id) } });
+  
+      const chartData = dishes
+        .map((dish) => {
+          const dishDetail = dishDetails.find((d) => d._id.equals(dish._id));
+          if (dishDetail) {
+            return {
+              name: dishDetail.nome, 
+              count: dish.count, 
+            };
+          }
+          return null; 
+        })
+        .filter((dish) => dish !== null); 
+  
+      res.json(chartData); 
+    } catch (error) {
+      console.error("Error fetching most ordered dishes:", error);
+      res.status(500).send("Failed to load chart data.");
     }
   };
   
