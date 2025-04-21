@@ -88,3 +88,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 });
+
+function toggleNewCategoryInput() {
+  const categorySelect = document.getElementById('category');
+  const newCategoryGroup = document.getElementById('newCategoryGroup');
+  if (categorySelect.value === 'new') {
+    newCategoryGroup.classList.remove('hidden');
+    document.getElementById('newCategory').setAttribute('required', 'required');
+  } else {
+    newCategoryGroup.classList.add('hidden');
+    document.getElementById('newCategory').removeAttribute('required');
+  }
+}

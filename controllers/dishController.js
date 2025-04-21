@@ -1,4 +1,5 @@
 const Dish = require("../models/dish");
+const Category = require("../models/category");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -33,80 +34,91 @@ dishController.list = async function (req, res) {
 
 dishController.addForm = function (req, res) {
   const menuId = req.query.menuId;
-  res.render("menu/add", { menuId });
+  res.render("menu/add", { menuId, dish: null });
 };
 
 dishController.save = async function (req, res) {
   const { id } = req.params;
 
   try {
-    let dish;
-    if (id) {
-      dish = await Dish.findById(id);
-      if (!dish) {
-        return res.status(404).send("Dish not found.");
+      let category;
+      if (req.body.category === "new") {
+          category = await Category.findOneAndUpdate(
+              { name: req.body.newCategory },
+              { name: req.body.newCategory },
+              { upsert: true, new: true }
+          );
+      } else {
+          category = await Category.findOne({ name: req.body.category });
       }
 
-      dish.nome = req.body.dishName;
-      dish.descricao = req.body.description;
-      dish.categoria = req.body.category;
-      dish.tempoPreparo = req.body.prepTime;
-      dish.preco = req.body.price;
-      dish.tamanhoPorcao = req.body.portionSize;
-      dish.informacaoNutricional = {
-        calorias: req.body.calories || 0,
-        proteinas: req.body.protein || 0,
-        carboidratos: req.body.carbs || 0,
-        gorduras: req.body.fat || 0,
-        sodio: req.body.sodium || 0,
-      };
+      let dish;
+      if (id) {
+          dish = await Dish.findById(id);
+          if (!dish) {
+              return res.status(404).send("Dish not found.");
+          }
 
-      if (req.file) {
-        dish.imagem = `/uploads/${req.file.filename}`;
+          dish.nome = req.body.dishName;
+          dish.descricao = req.body.description;
+          dish.categoria = category.name;
+          dish.tempoPreparo = req.body.prepTime;
+          dish.preco = req.body.price;
+          dish.tamanhoPorcao = req.body.portionSize;
+          dish.informacaoNutricional = {
+              calorias: req.body.calories || 0,
+              proteinas: req.body.protein || 0,
+              carboidratos: req.body.carbs || 0,
+              gorduras: req.body.fat || 0,
+              sodio: req.body.sodium || 0,
+          };
+
+          if (req.file) {
+              dish.imagem = `/uploads/${req.file.filename}`;
+          }
+
+          await dish.save();
+      } else {
+          dish = new Dish({
+              nome: req.body.dishName,
+              descricao: req.body.description,
+              categoria: category.name,
+              tempoPreparo: req.body.prepTime,
+              preco: req.body.price,
+              tamanhoPorcao: req.body.portionSize,
+              informacaoNutricional: {
+                  calorias: req.body.calories || 0,
+                  proteinas: req.body.protein || 0,
+                  carboidratos: req.body.carbs || 0,
+                  gorduras: req.body.fat || 0,
+                  sodio: req.body.sodium || 0,
+              },
+              imagem: req.file ? `/uploads/${req.file.filename}` : null,
+              menu: req.body.menuId,
+          });
+
+          await dish.save();
       }
 
-      await dish.save();
-    } else {
-      dish = new Dish({
-        nome: req.body.dishName,
-        descricao: req.body.description,
-        categoria: req.body.category,
-        tempoPreparo: req.body.prepTime,
-        preco: req.body.price,
-        tamanhoPorcao: req.body.portionSize,
-        informacaoNutricional: {
-          calorias: req.body.calories || 0,
-          proteinas: req.body.protein || 0,
-          carboidratos: req.body.carbs || 0,
-          gorduras: req.body.fat || 0,
-          sodio: req.body.sodium || 0,
-        },
-        imagem: req.file ? `/uploads/${req.file.filename}` : null,
-        menu: req.body.menuId,
-      });
-
-      await dish.save();
-    }
-
-    res.redirect(`/menus/dishes?menuId=${dish.menu}`);
+      res.redirect(`/menus/dishes?menuId=${dish.menu}`);
   } catch (err) {
-    console.log("Error saving dish:", err);
-    res.status(500).send("Error saving dish.");
+      console.log("Error saving dish:", err);
+      res.status(500).send("Error saving dish.");
   }
 };
 
 dishController.editForm = async function (req, res) {
-  const { id } = req.params;
-
   try {
-    const dish = await Dish.findById(id);
-    if (!dish) {
-      return res.status(404).send("Dish not found.");
-    }
-    res.render("menu/add", { dish, menuId: dish.menu });
+      const { id } = req.params;
+      const dish = await Dish.findById(id);
+      if (!dish) {
+          return res.status(404).send("Dish not found.");
+      }
+      const categories = await Category.find();
+      res.render("menu/add", { dish, menuId: dish.menu, categories });
   } catch (err) {
-    console.log("Error fetching dish for editing:", err);
-    res.status(500).send("Error fetching dish.");
+      console.error("Error fetching dish for editing:", err);
+      res.status(500).send("Error fetching dish.");
   }
 };
 
