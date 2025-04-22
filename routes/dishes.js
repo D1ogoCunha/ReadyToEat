@@ -12,11 +12,7 @@ router.post("/add", dishController.upload.single("image"), dishController.save);
 
 router.get("/:id/edit", dishController.editForm);
 
-router.post(
-  "/:id",
-  dishController.upload.single("image"),
-  dishController.update
-);
+router.post("/:id", dishController.upload.single("image"), dishController.update);
 
 router.post("/:id/delete", dishController.deleteDish);
 

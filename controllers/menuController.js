@@ -42,17 +42,18 @@ menuController.getAllMenus = async (req, res) => {
 };
 
 menuController.getMenuDishes = async (req, res) => {
-  const { menuId } = req.query;
+    const { menuId } = req.query;
 
-  try {
-    const menu = await Menu.findById(menuId);
-    const dishes = await Dish.find({ menu: menuId });
+    try {
+        const menu = await Menu.findById(menuId);
+        const dishes = await Dish.find({ menu: menuId });
+        const dishCount = dishes.length;
 
-    res.render("menu/dishes", { pratos: dishes, menu, user: req.user });
-  } catch (error) {
-    console.error("Error searching for dishes:", error);
-    res.status(500).send("Error searching for dishes.");
-  }
+        res.render("menu/dishes", { pratos: dishes, menu, dishCount, maxDishes: 10, user: req.user });
+    } catch (error) {
+        console.error("Error searching for dishes:", error);
+        res.status(500).send("Error searching for dishes.");
+    }
 };
 
 menuController.renderEditMenuForm = async (req, res) => {

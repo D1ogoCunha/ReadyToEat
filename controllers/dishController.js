@@ -32,93 +32,91 @@ dishController.list = async function (req, res) {
   }
 };
 
-dishController.addForm = function (req, res) {
-  const menuId = req.query.menuId;
-  res.render("menu/add", { menuId, dish: null });
+dishController.addForm = async function (req, res) {
+  try {
+    const menuId = req.query.menuId;
+    const categories = await Category.find();
+    res.render("menu/add", {
+      menuId,
+      dish: null,
+      categories,
+    });
+  } catch (err) {
+    console.error("Error fetching categories:", err);
+    res.status(500).send("Error fetching categories.");
+  }
 };
 
 dishController.save = async function (req, res) {
-  const { id } = req.params;
-
   try {
-      let category;
-      if (req.body.category === "new") {
-          category = await Category.findOneAndUpdate(
-              { name: req.body.newCategory },
-              { name: req.body.newCategory },
-              { upsert: true, new: true }
-          );
-      } else {
-          category = await Category.findOne({ name: req.body.category });
-      }
+    const menuId = req.body.menuId;
 
-      let dish;
-      if (id) {
-          dish = await Dish.findById(id);
-          if (!dish) {
-              return res.status(404).send("Dish not found.");
-          }
+    const dishCount = await Dish.countDocuments({ menu: menuId });
+    if (dishCount >= 10) {
+      const categories = await Category.find(); // Buscar categorias
+      return res.status(400).render("menu/add", {
+        menuId: menuId,
+        dish: req.body,
+        categories: categories,
+        error: "This menu already has the maximum of 10 dishes."
+      });
+    }
 
-          dish.nome = req.body.dishName;
-          dish.descricao = req.body.description;
-          dish.categoria = category.name;
-          dish.tempoPreparo = req.body.prepTime;
-          dish.preco = req.body.price;
-          dish.tamanhoPorcao = req.body.portionSize;
-          dish.informacaoNutricional = {
-              calorias: req.body.calories || 0,
-              proteinas: req.body.protein || 0,
-              carboidratos: req.body.carbs || 0,
-              gorduras: req.body.fat || 0,
-              sodio: req.body.sodium || 0,
-          };
+    let category;
+    if (req.body.category === "new") {
+      category = await Category.findOneAndUpdate(
+        { name: req.body.newCategory },
+        { name: req.body.newCategory },
+        { upsert: true, new: true }
+      );
+    } else {
+      category = await Category.findOne({ name: req.body.category });
+    }
 
-          if (req.file) {
-              dish.imagem = `/uploads/${req.file.filename}`;
-          }
+    const dish = new Dish({
+      nome: req.body.dishName,
+      descricao: req.body.description,
+      categoria: category.name,
+      tempoPreparo: req.body.prepTime,
+      preco: req.body.price,
+      tamanhoPorcao: req.body.portionSize,
+      informacaoNutricional: {
+        calorias: req.body.calories || 0,
+        proteinas: req.body.protein || 0,
+        carboidratos: req.body.carbs || 0,
+        gorduras: req.body.fat || 0,
+        sodio: req.body.sodium || 0,
+      },
+      imagem: req.file ? `/uploads/${req.file.filename}` : null,
+      menu: menuId,
+    });
 
-          await dish.save();
-      } else {
-          dish = new Dish({
-              nome: req.body.dishName,
-              descricao: req.body.description,
-              categoria: category.name,
-              tempoPreparo: req.body.prepTime,
-              preco: req.body.price,
-              tamanhoPorcao: req.body.portionSize,
-              informacaoNutricional: {
-                  calorias: req.body.calories || 0,
-                  proteinas: req.body.protein || 0,
-                  carboidratos: req.body.carbs || 0,
-                  gorduras: req.body.fat || 0,
-                  sodio: req.body.sodium || 0,
-              },
-              imagem: req.file ? `/uploads/${req.file.filename}` : null,
-              menu: req.body.menuId,
-          });
-
-          await dish.save();
-      }
-
-      res.redirect(`/menus/dishes?menuId=${dish.menu}`);
+    await dish.save();
+    res.redirect(`/menus/dishes?menuId=${menuId}`);
   } catch (err) {
-      console.log("Error saving dish:", err);
-      res.status(500).send("Error saving dish.");
+    console.error("Error saving dish:", err);
+    const categories = await Category.find(); // Buscar categorias
+    res.status(500).render("menu/add", {
+      menuId: req.body.menuId,
+      dish: req.body, // Passar os dados do prato já preenchidos
+      categories: categories, // Passar as categorias
+      error: "Error saving dish."
+    });
   }
 };
 
 dishController.editForm = async function (req, res) {
   try {
-      const { id } = req.params;
-      const dish = await Dish.findById(id);
-      if (!dish) {
-          return res.status(404).send("Dish not found.");
-      }
-      const categories = await Category.find();
-      res.render("menu/add", { dish, menuId: dish.menu, categories });
+    const { id } = req.params;
+    const dish = await Dish.findById(id);
+    if (!dish) {
+      return res.status(404).send("Dish not found.");
+    }
+    const categories = await Category.find();
+    res.render("menu/add", { dish, menuId: dish.menu, categories });
   } catch (err) {
-      console.error("Error fetching dish for editing:", err);
-      res.status(500).send("Error fetching dish.");
+    console.error("Error fetching dish for editing:", err);
+    res.status(500).send("Error fetching dish.");
   }
 };
 
@@ -157,30 +155,20 @@ dishController.update = async function (req, res) {
   }
 };
 
-dishController.addForm = function (req, res) {
-  const menuId = req.query.menuId;
-  res.render("menu/add", { menuId, dish: null });
-};
-
 dishController.deleteDish = async (req, res) => {
   try {
     const { id } = req.params;
     const { menuId } = req.query;
 
     const dish = await Dish.findById(id);
-    
+
     if (!dish) {
       return res.status(404).send("Prato não encontrado.");
     }
-    
+
     if (dish.imagem) {
-      const imagePath = path.join(
-        __dirname, 
-        "..", 
-        "public",
-        dish.imagem
-      );
-      
+      const imagePath = path.join(__dirname, "..", "public", dish.imagem);
+
       fs.unlink(imagePath, (err) => {
         if (err) {
           console.error("Erro ao deletar imagem:", err);
@@ -191,7 +179,7 @@ dishController.deleteDish = async (req, res) => {
     }
 
     await Dish.findByIdAndDelete(id);
-    
+
     console.log("Prato deletado com sucesso:", id);
     res.redirect(`/menus/dishes?menuId=${menuId}`);
   } catch (error) {

@@ -16,7 +16,11 @@
           method="POST"
           enctype="multipart/form-data"
         >
-          <input type="hidden" name="menuId" value="<%= menuId || (dish ? dish.menu : '') %>" />
+          <input
+            type="hidden"
+            name="menuId"
+            value="<%= menuId || (dish ? dish.menu : '') %>"
+          />
 
           <!-- Progress Bar -->
           <div class="progress-bar">
@@ -64,7 +68,13 @@
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="category">Category*</label>
-                <select class="form-select" id="category" name="category" onchange="toggleNewCategoryInput()" required>
+                <select
+                  class="form-select"
+                  id="category"
+                  name="category"
+                  onchange="toggleNewCategoryInput()"
+                  required
+                >
                   <option value="">Select category</option>
                   <% if (typeof categories !== 'undefined' && categories.length > 0) { %>
                     <% categories.forEach(function(category) { %>
@@ -74,22 +84,26 @@
                     <% }); %>
                   <% } %>
                   <option value="new">Add New Category</option>
-                </select>                
-            </div>
-            
-            <div id="newCategoryGroup" class="form-group hidden">
-              <label class="form-label">New Category Name*</label>
-              <input 
-                type="text" 
-                class="form-input" 
-                id="newCategory" 
-                name="newCategory" 
-                placeholder="Enter new category name"
-              >
-            </div>            
+                </select>
+                <div id="newCategoryGroup" class="form-group hidden">
+                  <label class="form-label">New Category Name*</label>
+                  <input
+                    type="text"
+                    class="form-input"
+                    id="newCategory"
+                    name="newCategory"
+                    placeholder="Enter new category name"
+                  />
+                </div>
+              </div>
               <div class="form-group">
                 <label class="form-label" for="prepTime">Preparation Time*</label>
-                <select class="form-select" id="prepTime" name="prepTime" required>
+                <select
+                  class="form-select"
+                  id="prepTime"
+                  name="prepTime"
+                  required
+                >
                   <option value="">Select time</option>
                   <option value="15" <%= dish && dish.tempoPreparo === '15' ? 'selected' : '' %>>15 minutes</option>
                   <option value="30" <%= dish && dish.tempoPreparo === '30' ? 'selected' : '' %>>30 minutes</option>
@@ -121,7 +135,12 @@
             </div>
             <div class="form-group">
               <label class="form-label" for="portionSize">Portion Size</label>
-              <select class="form-select" id="portionSize" name="portionSize" required>
+              <select
+                class="form-select"
+                id="portionSize"
+                name="portionSize"
+                required
+              >
                 <option value="">Select portion size</option>
                 <option value="small" <%= dish && dish.tamanhoPorcao === 'small' ? 'selected' : '' %>>Individual (1 Person)</option>
                 <option value="medium" <%= dish && dish.tamanhoPorcao === 'medium' ? 'selected' : '' %>>Medium (2 Persons)</option>
@@ -139,6 +158,7 @@
                   id="calories"
                   name="calories"
                   placeholder="0"
+                  value="<%= dish && dish.informacaoNutricional ? dish.informacaoNutricional.calorias : '' %>"
                 />
               </div>
               <div class="nutrition-item">
@@ -149,6 +169,7 @@
                   id="protein"
                   name="protein"
                   placeholder="0"
+                  value="<%= dish && dish.informacaoNutricional ? dish.informacaoNutricional.proteinas : '' %>"
                 />
               </div>
               <div class="nutrition-item">
@@ -159,6 +180,7 @@
                   id="carbs"
                   name="carbs"
                   placeholder="0"
+                  value="<%= dish && dish.informacaoNutricional ? dish.informacaoNutricional.carboidratos : '' %>"
                 />
               </div>
               <div class="nutrition-item">
@@ -169,6 +191,7 @@
                   id="fat"
                   name="fat"
                   placeholder="0"
+                  value="<%= dish && dish.informacaoNutricional ? dish.informacaoNutricional.gorduras : '' %>"
                 />
               </div>
               <div class="nutrition-item">
@@ -179,6 +202,7 @@
                   id="sodium"
                   name="sodium"
                   placeholder="0"
+                  value="<%= dish && dish.informacaoNutricional ? dish.informacaoNutricional.sodio : '' %>"
                 />
               </div>
             </div>
