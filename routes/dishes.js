@@ -10,9 +10,9 @@ router.get("/add", dishController.addForm);
 
 router.post("/add", dishController.upload.single("image"), dishController.save);
 
-router.get("/:id/edit", dishController.editForm);
+router.get("/edit", authController.verifyLoginUser, dishController.editForm);
 
-router.post("/:id", dishController.upload.single("image"), dishController.update);
+router.post("/edit", dishController.upload.single("image"), dishController.update);
 
 router.post("/:id/delete", dishController.deleteDish);
 

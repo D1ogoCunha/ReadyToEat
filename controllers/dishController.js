@@ -34,7 +34,8 @@ dishController.list = async function (req, res) {
 
 dishController.addForm = async function (req, res) {
   try {
-    const menuId = req.query.menuId;
+    const menuId = req.cookies.menuId || req.query.menuId;
+    
     const categories = await Category.find();
     res.render("menu/add", {
       menuId,
@@ -107,11 +108,22 @@ dishController.save = async function (req, res) {
 
 dishController.editForm = async function (req, res) {
   try {
-    const { id } = req.params;
-    const dish = await Dish.findById(id);
+    const dishId = req.cookies.dishId || req.query.dishId;
+    
+    if (req.query.dishId) {
+      res.cookie("dishId", req.query.dishId, { httpOnly: true, secure: false });
+      return res.redirect("/dishes/edit");
+    }
+
+    if (!dishId) {
+      return res.status(400).send("Dish ID is required.");
+    }
+
+    const dish = await Dish.findById(dishId);
     if (!dish) {
       return res.status(404).send("Dish not found.");
     }
+
     const categories = await Category.find();
     res.render("menu/add", { dish, menuId: dish.menu, categories });
   } catch (err) {
@@ -121,10 +133,14 @@ dishController.editForm = async function (req, res) {
 };
 
 dishController.update = async function (req, res) {
-  const { id } = req.params;
-
   try {
-    const dish = await Dish.findById(id);
+    const dishId = req.cookies.dishId || req.query.dishId;
+
+    if (!dishId) {
+      return res.status(400).send("Dish ID is required.");
+    }
+
+    const dish = await Dish.findById(dishId);
     if (!dish) {
       return res.status(404).send("Dish not found.");
     }

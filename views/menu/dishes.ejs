@@ -52,7 +52,7 @@
               <strong>Gorduras:</strong> <%= prato.informacaoNutricional.gorduras %> g
             </li>
           </ul>
-          <a href="/dishes/<%= prato._id %>/edit" class="btn-editar">Edit</a>
+          <a href="/menus/dishes/edit" class="btn-editar">Edit</a>
           <form
             action="/dishes/<%= prato._id %>/delete?menuId=<%= menu._id %>"
             method="POST"
@@ -65,7 +65,7 @@
       </ul>
 
       <% if (pratos.length < maxDishes) { %>
-      <a href="/dishes/add?menuId=<%= menu._id %>" class="btn-adicionar">+</a>
+      <a href="/dishes/add" class="btn-adicionar">+</a>
       <% } else { %>
       <p class="max-dishes-warning">You have reached the maximum number of dishes (10).</p>
       <% } %>
