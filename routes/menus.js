@@ -24,8 +24,8 @@ router.post('/new', authController.verifyLoginUser, upload.single('image'), menu
 
 router.get("/dishes", authController.verifyLoginUser ,menuController.getMenuDishes);
 
-router.get("/:id/edit", menuController.renderEditMenuForm);
-router.post("/:id/edit", upload.single("image"), menuController.updateMenu);
+router.get("/edit", authController.verifyLoginUser, menuController.renderEditMenuForm);
+router.post("/edit", authController.verifyLoginUser, upload.single("image"), menuController.updateMenu);
 
 router.post("/:id", menuController.deleteMenu);
 

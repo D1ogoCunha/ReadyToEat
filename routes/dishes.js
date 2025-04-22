@@ -16,6 +16,6 @@ router.post("/:id", dishController.upload.single("image"), dishController.update
 
 router.post("/:id/delete", dishController.deleteDish);
 
-router.get("/:id", authController.verifyLoginUser, dishController.getDishDetails);
+router.get("/dish", authController.verifyLoginUser, dishController.getDishDetails);
 
 module.exports = router;

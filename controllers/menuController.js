@@ -42,53 +42,75 @@ menuController.getAllMenus = async (req, res) => {
 };
 
 menuController.getMenuDishes = async (req, res) => {
-    const { menuId } = req.query;
+  const menuId = req.query.menuId || req.cookies.menuId; 
 
-    try {
-        const menu = await Menu.findById(menuId);
-        const dishes = await Dish.find({ menu: menuId });
-        const dishCount = dishes.length;
+  if (req.query.menuId) {
+      res.cookie("menuId", req.query.menuId, { httpOnly: true, secure: false }); 
+      return res.redirect("/menus/dishes");
+  }
 
-        res.render("menu/dishes", { pratos: dishes, menu, dishCount, maxDishes: 10, user: req.user });
-    } catch (error) {
-        console.error("Error searching for dishes:", error);
-        res.status(500).send("Error searching for dishes.");
-    }
+  if (!menuId) {
+      return res.status(400).send("Menu ID is required.");
+  }
+
+  try {
+      const menu = await Menu.findById(menuId);
+      const dishes = await Dish.find({ menu: menuId });
+      const dishCount = dishes.length;
+
+      res.render("menu/dishes", { pratos: dishes, menu, dishCount, maxDishes: 10, user: req.user });
+  } catch (error) {
+      console.error("Error searching for dishes:", error);
+      res.status(500).send("Error searching for dishes.");
+  }
 };
 
 menuController.renderEditMenuForm = async (req, res) => {
+  const menuId = req.query.menuId || req.cookies.menuId; 
+
+  if (req.query.menuId) {
+      res.cookie("menuId", req.query.menuId, { httpOnly: true, secure: false });
+      return res.redirect("/menus/edit");
+  }
+
+  if (!menuId) {
+      return res.status(400).send("Menu ID is required.");
+  }
+
   try {
-    const menu = await Menu.findById(req.params.id);
-    if (!menu) {
-      return res.status(404).send("Menu not found.");
-    }
-    res.render("menu/editMenu", { menu });
+      const menu = await Menu.findById(menuId);
+      if (!menu) {
+          return res.status(404).send("Menu not found.");
+      }
+
+      res.render("menu/editMenu", { menu });
   } catch (error) {
-    console.error("Error searching for menu:", error);
-    res.status(500).send("Error searching for menu.");
+      console.error("Error rendering edit menu form:", error);
+      res.status(500).send("Error rendering edit menu form.");
   }
 };
 
 menuController.updateMenu = async (req, res) => {
+  const menuId = req.cookies.menuId; 
+
+  if (!menuId) {
+      return res.status(400).send("Menu ID is required.");
+  }
+
   try {
-    const { name } = req.body;
-    const updateData = { name };
+      const menu = await Menu.findByIdAndUpdate(menuId, {
+          name: req.body.name,
+          image: req.file ? `/uploads/${req.file.filename}` : undefined,
+      }, { new: true });
 
-    if (req.file) {
-      updateData.image = `/uploads/${req.file.filename}`;
-    }
+      if (!menu) {
+          return res.status(404).send("Menu not found.");
+      }
 
-    const menu = await Menu.findByIdAndUpdate(req.params.id, updateData, {
-      new: true,
-    });
-    if (!menu) {
-      return res.status(404).send("Menu not found.");
-    }
-
-    res.redirect("/menus");
+      res.redirect("/menus");
   } catch (error) {
-    console.error("Error updating menu:", error);
-    res.status(500).send("Error updating menu:.");
+      console.error("Error updating menu:", error);
+      res.status(500).send("Error updating menu.");
   }
 };
 
@@ -155,14 +177,12 @@ menuController.createPhoneOrder = async (req, res) => {
   try {
     const { customerId, selectedDishes } = req.body;
     
-    // Garantir que selectedDishes seja sempre um array
     const dishIds = Array.isArray(selectedDishes) ? selectedDishes : [selectedDishes];
     
     if (dishIds.length === 0) {
       return res.status(400).send("No dishes selected for the order.");
     }
     
-    // Buscar os pratos para calcular o valor total
     const dishes = await Dish.find({ _id: { $in: dishIds } });
     console.log("Found dishes:", dishes.length);
     
@@ -171,8 +191,7 @@ menuController.createPhoneOrder = async (req, res) => {
     }
     
     const totalAmount = dishes.reduce((sum, dish) => sum + (dish.preco || 0), 0);
-    
-    // Criar a encomenda com dados válidos
+ 
     const order = new Order({
       restaurantId: req.user._id,
       customerId,

@@ -20,7 +20,7 @@
           <div class="menu-card">
             <img src="<%= menu.image %>" alt="<%= menu.name %>" />
             <p><%= menu.name %></p>
-            <a href="/menus/<%= menu._id %>/edit" class="edit-button">Edit</a>
+            <a href="/menus/edit?menuId=<%= menu._id %>" class="edit-button">Edit</a>
             <form
               action="/menus/<%= menu._id %>"
               method="POST"

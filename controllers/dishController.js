@@ -53,7 +53,7 @@ dishController.save = async function (req, res) {
 
     const dishCount = await Dish.countDocuments({ menu: menuId });
     if (dishCount >= 10) {
-      const categories = await Category.find(); // Buscar categorias
+      const categories = await Category.find(); 
       return res.status(400).render("menu/add", {
         menuId: menuId,
         dish: req.body,
@@ -95,11 +95,11 @@ dishController.save = async function (req, res) {
     res.redirect(`/menus/dishes?menuId=${menuId}`);
   } catch (err) {
     console.error("Error saving dish:", err);
-    const categories = await Category.find(); // Buscar categorias
+    const categories = await Category.find(); 
     res.status(500).render("menu/add", {
       menuId: req.body.menuId,
-      dish: req.body, // Passar os dados do prato já preenchidos
-      categories: categories, // Passar as categorias
+      dish: req.body, 
+      categories: categories, 
       error: "Error saving dish."
     });
   }
@@ -189,20 +189,26 @@ dishController.deleteDish = async (req, res) => {
 };
 
 dishController.getDishDetails = async (req, res) => {
+  const dishId = req.query.dishId || req.cookies.dishId; 
+
+  if (req.query.dishId) {
+      res.cookie("dishId", req.query.dishId, { httpOnly: true, secure: false });
+      return res.redirect("/dishes/dish");
+  }
+
+  if (!dishId) {
+      return res.status(400).send("Dish ID is required.");
+  }
+
   try {
-    const prato = await Dish.findById(req.params.id);
-    if (!prato) {
-      return res.status(404).send("Prato não encontrado");
-    }
-
-    if (!req.user) {
-      return res.render("menu/dishInfo", { prato: prato, user: {} });
-    }
-
-    res.render("menu/dishInfo", { prato: prato, user: req.user });
+      const dish = await Dish.findById(dishId); 
+      if (!dish) {
+          return res.status(404).send("Dish not found.");
+      } 
+      res.render("menu/dishInfo", { prato: dish, user: req.user });
   } catch (error) {
-    console.error("Erro ao buscar detalhes do prato:", error);
-    res.status(500).send("Erro ao buscar detalhes do prato");
+      console.error("Error rendering dish details:", error);
+      res.status(500).send("Error rendering dish details.");
   }
 };
 

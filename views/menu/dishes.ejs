@@ -25,14 +25,14 @@
       <ul class="pratos-lista">
         <% pratos.forEach(function(prato) { %>
         <li class="prato-item">
-          <a href="/dishes/<%= prato._id %>">
+          <a href="/dishes/dish?dishId=<%= prato._id %>">
             <img
               src="<%= prato.imagem %>"
               alt="<%= prato.nome %>"
               class="prato-imagem"
             />
           </a>
-          <a href="/dishes/<%= prato._id %>">
+          <a href="/dishes/dish?dishId=<%= prato._id %>">
             <h2><%= prato.nome %></h2>
           </a>
           <p><strong>Descrição:</strong> <%= prato.descricao %></p>
