@@ -12,7 +12,7 @@
         <form
           id="dishForm"
           class="add-dish-form"
-          action="<%= dish ? `/dishes/${dish._id}` : '/dishes/add' %>"
+          action="<%= dish ? '/dishes/edit' : '/dishes/add' %>"
           method="POST"
           enctype="multipart/form-data"
         >

@@ -1,5 +1,6 @@
 const Dish = require("../models/dish");
 const Category = require("../models/category");
+const Menu = require("../models/menu");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -18,16 +19,29 @@ var upload = multer({ storage: storage });
 var dishController = {};
 
 dishController.list = async function (req, res) {
-  const { menuId } = req.query;
+  const { menuId, sort, category } = req.query;
 
   try {
     const menu = await Menu.findById(menuId);
 
-    const dishes = await Dish.find({ menu: menuId });
+    let query = { menu: menuId };
+    if (category) {
+      query.categoria = category;
+    }
 
-    res.render("menu/dishes", { pratos: dishes, menu });
+    let dishes = Dish.find(query);
+
+    if (sort === "price_asc") {
+      dishes = dishes.sort({ preco: 1 });
+    } else if (sort === "price_desc") {
+      dishes = dishes.sort({ preco: -1 });
+    }
+
+    dishes = await dishes;
+
+    res.json({ pratos: dishes, menu });
   } catch (err) {
-    console.log("Error listing dishes:", err);
+    console.error("Error listing dishes:", err);
     res.status(500).send("Error listing dishes.");
   }
 };
@@ -108,12 +122,7 @@ dishController.save = async function (req, res) {
 
 dishController.editForm = async function (req, res) {
   try {
-    const dishId = req.cookies.dishId || req.query.dishId;
-    
-    if (req.query.dishId) {
-      res.cookie("dishId", req.query.dishId, { httpOnly: true, secure: false });
-      return res.redirect("/dishes/edit");
-    }
+    const dishId = req.cookies.dishId;
 
     if (!dishId) {
       return res.status(400).send("Dish ID is required.");
@@ -134,7 +143,7 @@ dishController.editForm = async function (req, res) {
 
 dishController.update = async function (req, res) {
   try {
-    const dishId = req.cookies.dishId || req.query.dishId;
+    const dishId = req.cookies.dishId;
 
     if (!dishId) {
       return res.status(400).send("Dish ID is required.");
@@ -164,6 +173,7 @@ dishController.update = async function (req, res) {
     }
 
     await dish.save();
+    res.clearCookie("dishId"); // Limpar o cookie após o uso
     res.redirect(`/menus/dishes?menuId=${dish.menu}`);
   } catch (err) {
     console.log("Error updating dish:", err);

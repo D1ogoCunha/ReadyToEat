@@ -16,13 +16,26 @@
 
     <main>
       <h1><%= menu.name %></h1>
-    
-      <!-- Contador de pratos -->
-      <div class="dish-counter">
-        <p>Dishes: <%= pratos.length %>/<%= maxDishes %></p>
+
+      <div class="filters">
+        <label for="sort">Sort by:</label>
+        <select id="sort">
+          <option value="">Select</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+        </select>
+
+        <label for="category">Category:</label>
+        <select id="category">
+          <option value="">All</option>
+          <% const categories = [...new Set(pratos.map(prato =>
+          prato.categoria))]; %> <% categories.forEach(function(category) { %>
+          <option value="<%= category %>"><%= category %></option>
+          <% }); %>
+        </select>
       </div>
-    
-      <ul class="pratos-lista">
+
+      <ul id="pratos-lista" class="pratos-lista">
         <% pratos.forEach(function(prato) { %>
         <li class="prato-item">
           <a href="/dishes/dish?dishId=<%= prato._id %>">
@@ -37,22 +50,16 @@
           </a>
           <p><strong>Descrição:</strong> <%= prato.descricao %></p>
           <p><strong>Preço:</strong> <%= prato.preco.toFixed(2) %> €</p>
-          <h3>Informações Nutricionais (por 100g):</h3>
-          <ul>
-            <li>
-              <strong>Calorias:</strong> <%= prato.informacaoNutricional.calorias %> kcal
-            </li>
-            <li>
-              <strong>Proteínas:</strong> <%= prato.informacaoNutricional.proteinas %> g
-            </li>
-            <li>
-              <strong>Carboidratos:</strong> <%= prato.informacaoNutricional.carboidratos %> g
-            </li>
-            <li>
-              <strong>Gorduras:</strong> <%= prato.informacaoNutricional.gorduras %> g
-            </li>
-          </ul>
-          <a href="/dishes/edit?dishId=<%= prato._id %>" class="btn-editar">Edit</a>
+
+          <form
+            action="/dishes/edit"
+            method="GET"
+            style="display: inline"
+            onsubmit="document.cookie = `dishId=<%= prato._id %>; path=/;`"
+          >
+            <button type="submit" class="btn-editar">Edit</button>
+          </form>
+
           <form
             action="/dishes/<%= prato._id %>/delete?menuId=<%= menu._id %>"
             method="POST"
@@ -64,10 +71,75 @@
         <% }); %>
       </ul>
 
+      <script>
+        const menuId = "<%= menu._id %>";
+        const pratosLista = document.getElementById("pratos-lista");
+        const sortSelect = document.getElementById("sort");
+        const categorySelect = document.getElementById("category");
+
+        function loadDishes(sort, category) {
+          let url = `/dishes?menuId=${menuId}`;
+          if (sort) url += `&sort=${sort}`;
+          if (category) url += `&category=${category}`;
+
+          fetch(url)
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              pratosLista.innerHTML = ""; // Clear existing dishes
+              data.pratos.forEach((prato) => {
+                const listItem = document.createElement("li");
+                listItem.className = "prato-item";
+                listItem.innerHTML = `
+                    <a href="/dishes/dish?dishId=${prato._id}">
+                      <img src="${prato.imagem}" alt="${
+                  prato.nome
+                }" class="prato-imagem">
+                    </a>
+                    <a href="/dishes/dish?dishId=${prato._id}">
+                      <h2>${prato.nome}</h2>
+                    </a>
+                    <p><strong>Descrição:</strong> ${prato.descricao}</p>
+                    <p><strong>Preço:</strong> ${prato.preco.toFixed(2)} €</p>
+                    <a href="/dishes/edit?dishId=${
+                      prato._id
+                    }" class="btn-editar">Edit</a>
+                    <form
+                      action="/dishes/${prato._id}/delete?menuId=${menuId}"
+                      method="POST"
+                      style="display: inline"
+                    >
+                      <button type="submit" class="btn-editar">Delete</button>
+                    </form>
+                  `;
+                pratosLista.appendChild(listItem);
+              });
+            })
+            .catch((error) => console.error("Fetch error:", error));
+        }
+
+        sortSelect.addEventListener("change", () => {
+          loadDishes(sortSelect.value, categorySelect.value);
+        });
+
+        categorySelect.addEventListener("change", () => {
+          loadDishes(sortSelect.value, categorySelect.value);
+        });
+      </script>
+
+      <div class="dish-counter">
+        <p>Dishes: <%= pratos.length %>/<%= maxDishes %></p>
+      </div>
       <% if (pratos.length < maxDishes) { %>
       <a href="/dishes/add" class="btn-adicionar">+</a>
       <% } else { %>
-      <p class="max-dishes-warning">You have reached the maximum number of dishes (10).</p>
+      <p class="max-dishes-warning">
+        You have reached the maximum number of dishes (10).
+      </p>
       <% } %>
     </main>
   </body>

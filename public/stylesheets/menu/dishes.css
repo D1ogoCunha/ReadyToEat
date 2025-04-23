@@ -126,13 +126,33 @@ main {
 .dish-counter {
   font-size: 1.2rem;
   font-weight: bold;
-  margin-bottom: 20px;
   color: #333;
+  position: absolute; 
+  top: 95px;
+  right: 20px; 
+  margin: 0; 
 }
+
 
 .max-dishes-warning {
   color: red;
   font-weight: bold;
   margin-top: 20px;
   text-align: center;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filters label {
+  font-weight: bold;
+}
+
+.filters select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

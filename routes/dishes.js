@@ -4,7 +4,7 @@ var dishController = require("../controllers/dishController");
 var authController = require("../controllers/authController");
 const Dish = require("../models/dish");
 
-router.get("/", dishController.list);
+router.get("/", authController.verifyLoginUser, dishController.list);
 
 router.get("/add", dishController.addForm);
 
