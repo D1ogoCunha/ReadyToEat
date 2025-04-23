@@ -52,7 +52,7 @@
               <strong>Gorduras:</strong> <%= prato.informacaoNutricional.gorduras %> g
             </li>
           </ul>
-          <a href="/menus/dishes/edit" class="btn-editar">Edit</a>
+          <a href="/dishes/edit?dishId=<%= prato._id %>" class="btn-editar">Edit</a>
           <form
             action="/dishes/<%= prato._id %>/delete?menuId=<%= menu._id %>"
             method="POST"
