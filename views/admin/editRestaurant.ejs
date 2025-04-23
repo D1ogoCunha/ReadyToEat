@@ -15,10 +15,11 @@
       <div class="registration-wrapper">
 
         <form
-          action="/admin/restaurants/<%= restaurant._id %>/edit"
+        action="/admin/restaurants/restaurant/edit"
           method="POST"
           class="registration-form"
         >
+        <input type="hidden" name="restaurantId" value="<%= restaurant._id %>" />
           <div class="form-group">
             <label class="form-label">Restaurant Name*</label>
             <input

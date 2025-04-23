@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pending Requests</title>
-    <link rel="stylesheet" href="/stylesheets/admin/adminRestaurantManagement.css" />
+    <link
+      rel="stylesheet"
+      href="/stylesheets/admin/adminRestaurantManagement.css"
+    />
   </head>
   <body>
     <main class="page-container">
@@ -33,10 +36,15 @@
               <td class="table-cell"><%= restaurant.pricePerPerson %></td>
               <td class="table-cell">
                 <form
-                  action="/admin/validate/<%= restaurant._id %>"
+                  action="/admin/validate/restaurant"
                   method="POST"
                   style="display: inline"
                 >
+                  <input
+                    type="hidden"
+                    name="restaurantId"
+                    value="<%= restaurant._id %>"
+                  />
                   <button type="submit" class="btn btn-primary">
                     Validate
                   </button>

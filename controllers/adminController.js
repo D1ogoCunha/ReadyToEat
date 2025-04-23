@@ -2,10 +2,10 @@ const User = require("../models/user");
 const Order = require("../models/order");
 const adminController = {};
 
-adminController. getAdminDashboard = async (req, res) => {
+adminController.getAdminDashboard = async (req, res) => {
   try {
     const restaurants = await User.find({ role: "restaurant" });
-    res.render("admin/adminDashboard", { restaurants }); 
+    res.render("admin/adminDashboard", { restaurants });
   } catch (err) {
     console.error("Error searching for restaurants:", err);
     res.status(500).send("Error loading page.");
@@ -22,10 +22,12 @@ adminController.getRestaurantManagement = async (req, res) => {
   }
 };
 
-
 adminController.getPendingRestaurants = async (req, res) => {
   try {
-    const pendingRestaurants = await User.find({ role: "restaurant", status: "in validation" });
+    const pendingRestaurants = await User.find({
+      role: "restaurant",
+      status: "in validation",
+    });
     res.render("admin/pendingRequests", { pendingRestaurants });
   } catch (err) {
     console.error("All restaurants are valid:", err);
@@ -35,7 +37,11 @@ adminController.getPendingRestaurants = async (req, res) => {
 
 adminController.validateRestaurant = async (req, res) => {
   try {
-    const restaurantId = req.params.id;
+    const restaurantId = req.body.restaurantId;
+    if (!restaurantId) {
+      return res.status(400).send("Restaurant ID is required.");
+    }
+
     await User.findByIdAndUpdate(restaurantId, { status: "valid" });
     res.redirect("/admin/pending");
   } catch (err) {
@@ -57,45 +63,49 @@ adminController.deleteRestaurant = async (req, res) => {
 };
 
 adminController.getEditRestaurant = async (req, res) => {
+  const restaurantId = req.query.restaurantId || req.cookies.restaurantId; 
+
+  if (req.query.restaurantId) {
+      res.cookie("restaurantId", req.query.restaurantId, { httpOnly: true, secure: false });
+      return res.redirect("/admin/restaurants/restaurant/edit");
+  }
+
+  if (!restaurantId) {
+      return res.status(400).send("Restaurant ID is required.");
+  }
+
   try {
-    const restaurant = await User.findById(req.params.id);
+      const restaurant = await User.findById(restaurantId);
+      if (!restaurant) {
+          return res.status(404).send("Restaurant not found.");
+      }
 
-    if (!restaurant || restaurant.role !== "restaurant") {
-      return res.status(404).render("error", {
-        message: "Restaurant not found.",
-        error: { status: 404, stack: "" },
-      });
-    }
-
-    res.render("admin/editRestaurant", { restaurant });
-  } catch (err) {
-    console.error("Error fetching restaurant for editing:", err);
-    res.status(500).render("error", {
-      message: "An error occurred while fetching the restaurant.",
-      error: { status: 500, stack: err.stack },
-    });
+      res.render("admin/editRestaurant", { restaurant });
+  } catch (error) {
+      console.error("Error fetching restaurant:", error);
+      res.status(500).send("Error fetching restaurant.");
   }
 };
 
 adminController.postEditRestaurant = async (req, res) => {
+  const restaurantId = req.cookies.restaurantId || req.body.restaurantId; 
+
+  if (!restaurantId) {
+      return res.status(400).send("Restaurant ID is required.");
+  }
+
   try {
-    const { restaurantName, address, phone, pricePerPerson } = req.body;
-    const restaurantId = req.params.id;
+      await User.findByIdAndUpdate(restaurantId, {
+          restaurantName: req.body.restaurantName,
+          address: req.body.address,
+          phone: req.body.phone,
+          pricePerPerson: req.body.pricePerPerson,
+      });
 
-    await User.findByIdAndUpdate(restaurantId, {
-      restaurantName,
-      address,
-      phone,
-      pricePerPerson,
-    });
-
-    res.redirect("/admin/restaurantManagement");
-  } catch (err) {
-    console.error("Error updating restaurant:", err);
-    res.status(500).render("error", {
-      message: "Failed to update restaurant.",
-      error: { status: 500, stack: err.stack },
-    });
+      res.redirect("/admin");
+  } catch (error) {
+      console.error("Error updating restaurant:", error);
+      res.status(500).send("Error updating restaurant.");
   }
 };
 
@@ -105,7 +115,16 @@ adminController.getAddNewRestaurant = (req, res) => {
 
 adminController.postAddNewRestaurant = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, restaurantName, address, phone, pricePerPerson } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      restaurantName,
+      address,
+      phone,
+      pricePerPerson,
+    } = req.body;
 
     const newRestaurant = new User({
       firstName,
@@ -120,7 +139,7 @@ adminController.postAddNewRestaurant = async (req, res) => {
     });
 
     await newRestaurant.save();
-    res.redirect("/admin"); 
+    res.redirect("/admin");
   } catch (err) {
     console.error("Error creating new restaurant:", err);
     res.status(500).send("Failed to create new restaurant.");
@@ -129,7 +148,6 @@ adminController.postAddNewRestaurant = async (req, res) => {
 
 adminController.getAnalytics = async (req, res) => {
   try {
-    
     const topRestaurants = await User.aggregate([
       { $match: { role: "restaurant" } },
       {
@@ -182,16 +200,16 @@ adminController.getAnalytics2 = async (req, res) => {
       {
         $group: {
           _id: {
-            $dateToString: { format: "%Y-%m-%d", date: "$date" }, 
+            $dateToString: { format: "%Y-%m-%d", date: "$date" },
           },
-          count: { $sum: 1 }, 
+          count: { $sum: 1 },
         },
       },
-      { $sort: { _id: 1 } }, 
+      { $sort: { _id: 1 } },
     ]);
 
-    const labels = ordersByDate.map((order) => order._id); 
-    const orders = ordersByDate.map((order) => order.count); 
+    const labels = ordersByDate.map((order) => order._id);
+    const orders = ordersByDate.map((order) => order.count);
 
     res.json({ labels, orders });
   } catch (err) {
