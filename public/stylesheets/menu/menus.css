@@ -162,88 +162,80 @@ main {
   background-color: #e64a19;
 }
 
-.card {
-  box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
-  border-radius: 16px;
-  background-color: #ffffff;
-}
-
-.card .card-header {
-  font-weight: 500;
-  font-weight: bold;
-}
-
-.card-header:first-child {
-  border-radius: 0.35rem 0.35rem 0 0;
-}
-
-.card-header {
-  padding: 1rem 1.35rem;
+h1.text-center {
+  font-size: 2rem;
+  margin-bottom: 20px;
   color: #333;
-  margin-bottom: 0;
-  background-color: rgba(255, 87, 34, 0.1);
-  border-bottom: 1px solid #ccc;
 }
 
-.table {
+.table-order-history {
   width: 100%;
-  margin-bottom: 1rem;
-  color: #212529;
-}
-
-.table-responsive {
-  display: block;
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: 1rem;
+  text-align: left;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .table-order-history th,
 .table-order-history td {
-  padding: 0.75rem;
-  vertical-align: top;
-  padding-bottom: 0;
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
 }
 
 .table-order-history thead th {
-  vertical-align: bottom;
-  border-bottom: 2px solid #dee2e6;
+  background-color: #ff5722; 
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e64a19; 
 }
 
-.table-order-history tbody + tbody {
-  border-top: 2px solid #dee2e6;
+.table-order-history tbody tr {
+  transition: background-color 0.2s ease-in-out;
+}
+
+.table-order-history tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.table-order-history tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .table-order-history .badge {
   display: inline-block;
-  padding: 0.25em 0.4em;
-  font-size: 75%;
-  font-weight: 700;
+  padding: 0.25em 0.5em;
+  font-size: 0.85rem;
+  font-weight: 600;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
+  border-radius: 0.25rem;
 }
 
-.table-order-history .bg-warning {
-  background-color: #ffc107 !important;
+.table-order-history .badge.bg-warning {
+  background-color: #ffc107;
+  color: #212529;
 }
 
-.table-order-history .text-dark {
-  color: #212529 !important;
+.table-order-history .badge.bg-success {
+  background-color: #28a745;
+  color: #fff;
 }
 
-.table-order-history .bg-success {
-  background-color: #28a745 !important;
-}
-
-.table-order-history .bg-danger {
-  background-color: #dc3545 !important;
+.table-order-history .badge.bg-danger {
+  background-color: #dc3545;
+  color: #fff;
 }
 
 .btn{
   color:#fff;
   background-color: #ff5722;
+  margin-top: 10px;
 }
 
 .btn:hover{

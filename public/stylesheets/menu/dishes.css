@@ -125,7 +125,7 @@ main {
 
 .dish-counter {
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: 600;
   color: #333;
   position: absolute; 
   top: 95px;
@@ -148,7 +148,8 @@ main {
 }
 
 .filters label {
-  font-weight: bold;
+  font-weight: 600;
+  margin-top: 7px;
 }
 
 .filters select {
