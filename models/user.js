@@ -17,7 +17,7 @@ var UserSchema = new mongoose.Schema({
     status: { 
         type: String, 
         enum: ['in validation', 'valid'], 
-        default: 'in validation' 
+        default: function() { return this.role === 'restaurant' ? 'in validation' : 'valid'; }
     }
 });
 
