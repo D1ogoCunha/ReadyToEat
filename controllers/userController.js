@@ -16,25 +16,7 @@ userController.show = function (req, res) {
   });
 };
 
-/*userController.save = async function (req, res) {
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-        var user = new User({
-            name: req.body.name,
-            email: req.body.email,
-            password: hashedPassword,
-        });
-
-        await user.save();
-        console.log("User salvo com sucesso:", user);
-        res.redirect("/index");
-    } catch (err) {
-        console.log("Erro ao salvar User:", err);
-        res.status(500).send("Erro ao registrar. Tente novamente.");
-    }
-};
-*/
 userController.edit = function (req, res) {
   User.findOne({ _id: req.params.id }).exec(function (err, user) {
     if (err) {
