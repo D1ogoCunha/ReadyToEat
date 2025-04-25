@@ -49,7 +49,7 @@ app.use("/users", usersRouter);
 app.use("/order", orderRouter);
 
 app.use((req, res, next) => {
-    res.locals.user = req.user || null; // Passa o `req.user` para todas as views
+    res.locals.user = req.user || null; 
     next();
 });
 

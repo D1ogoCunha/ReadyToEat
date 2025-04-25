@@ -42,7 +42,7 @@ authController.submittedLogin = function (req, res, next) {
                     res.cookie("auth-token", authToken, { maxAge: 86400000, httpOnly: true });
 
                     if (user.role === "restaurant") {
-                        res.redirect("/menus");
+                        res.redirect("/index");
                     } else if (user.role === "customer") {
                         res.redirect("/index");
                     } else {
