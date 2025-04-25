@@ -1,49 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Restaurant Management</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/stylesheets/admin/adminRestaurantManagement.css" />
-  </head>
-  <body>
-    <main class="page-container">
-      <header class="page-header">
-        <h1 class="page-title">Restaurant Management</h1>
-        <div class="header-actions">
-          <button
-            class="btn btn-primary"
-            onclick="window.location.href='/admin/pending'"
-          >
-            Pending Requests
-          </button>
-          <button
-            class="btn btn-secondary"
-            onclick="window.location.href='/admin/addNewRestaurant'"
-          >
-            Add New Restaurant
-          </button>
-        </div>
-      </header>
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">Restaurant Management</h1>
+    <div class="header-actions">
+      <button
+        class="btn btn-primary"
+        onclick="window.location.href='/admin/pending'"
+      >
+        Pending Requests
+      </button>
+      <button
+        class="btn btn-secondary"
+        onclick="window.location.href='/admin/addNewRestaurant'"
+      >
+        Add New Restaurant
+      </button>
+    </div>
+  </div>
 
-      <section class="table-container">
-        <table class="restaurant-table">
-          <thead>
-            <tr class="table-header">
-              <th class="column-header">Name</th>
-              <th class="column-header">Address</th>
-              <th class="column-header">Phone</th>
-              <th class="column-header">Price per Person</th>
-              <th class="column-header">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if (restaurants && restaurants.length > 0) { %> <%
-            restaurants.forEach(function(restaurant) { %>
+  <div class="table-container">
+    <table class="restaurant-table">
+      <thead>
+        <tr class="table-header">
+          <th class="column-header">Name</th>
+          <th class="column-header">Address</th>
+          <th class="column-header">Phone</th>
+          <th class="column-header">Price per Person</th>
+          <th class="column-header">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (restaurants && restaurants.length > 0) { %>
+          <% restaurants.forEach(function (restaurant) { %>
             <tr class="table-row" data-id="<%= restaurant._id %>">
               <td class="table-cell"><%= restaurant.restaurantName %></td>
               <td class="table-cell"><%= restaurant.address %></td>
@@ -58,32 +45,22 @@
                     class="btn btn-edit"
                     >Edit</a
                   >
-                  <button class="btn btn-delete" data-id="<%= restaurant._id %>">Delete</button>
+                  <button
+                    class="btn btn-delete"
+                    data-id="<%= restaurant._id %>"
+                  >
+                    Delete
+                  </button>
                 </div>
               </td>
             </tr>
-            <% }); %> <% } else { %>
-            <tr>
-              <td colspan="5" class="table-cell">No restaurants found.</td>
-            </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </section>
-      <div id="delete-modal" class="modal hidden">
-        <div class="modal-content">
-          <p id="delete-message" class="modal-message"></p>
-          <div class="modal-actions">
-            <button id="confirm-delete" class="btn btn-confirmDelete">
-              Delete
-            </button>
-            <button id="cancel-delete" class="btn btn-cancelDelete">
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    </main>
-  </body>
-  <script src="/javascripts/adminDashboard.js" defer></script>
-</html>
+          <% }); %>
+        <% } else { %>
+          <tr>
+            <td colspan="5" class="table-cell">No restaurants found.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
