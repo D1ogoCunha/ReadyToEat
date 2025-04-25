@@ -62,16 +62,26 @@ body {
 }
 
 .btn-primary {
-  background-color: #359dd9;
+  background-color: #ff5722;
+}
+.btn-primary:hover {
+  background-color: #e64a19;
+  transform: scale(1.05);
 }
 
 .btn-secondary {
-  background-color: #56ccf2;
+  background-color: #ff5622e0;
 }
+.btn-secondary:hover {
+  background-color: #e64a19;
+  color: #fff;
+    transform: scale(1.05);
+}
+
 
 .btn-edit {
   text-decoration: none;
-  background-color: #56ccf2;
+  background-color: #ff5622ce;
   padding: 8px 16px;
   border-radius: 4px;
 }
@@ -109,8 +119,9 @@ body {
 }
 
 .back-button:hover {
-  background-color: #5a6268;
-}
+    background-color: #e64a19;
+    transform: scale(1.05);
+  }
 
 .table-container {
   background-color: #fff;
@@ -273,8 +284,35 @@ body {
   font-weight: 700;
   color: #333;
   margin-bottom: 20px;
-  text-align: center; /* Para garantir que o título fique centralizado */
-  background-color: #f8f9fa; /* Adiciona um fundo leve para destacar */
+  text-align: center; 
+  background-color: #f8f9fa; 
   padding: 10px;
   border-radius: 8px;
+}
+
+#analytics-link {
+  color: #000000; 
+  font-weight: 400; 
+  text-decoration: none; 
+}
+
+
+
+#analytics2-link {
+  color: #000000; 
+  font-weight: 400; 
+  text-decoration: none; 
+}
+
+#dashboard-link{
+  color: #000000; 
+  font-weight: 400; 
+  text-decoration: none; 
+}
+
+#dashboard-link:hover {
+  background-color: #f8f9fa; 
+  border-radius: 8px; 
+  padding: 5px 10px; 
+  transition: background-color 0.3s ease; /
 }

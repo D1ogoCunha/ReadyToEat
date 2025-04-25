@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await response.json();
 
         dynamicContent.innerHTML = `
-          <h2>Analytics</h2>
+          <h2>Analytics: Orders and revenue per restaurant</h2>
           <canvas id="ordersChart" width="400" height="200"></canvas>
           <canvas id="revenueChart" width="400" height="200"></canvas>
         `;
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await response.json();
 
         dynamicContent.innerHTML = `
-          <h2>Analytics 2: Orders Over Time</h2>
+          <h2>Analytics: Orders Over Time</h2>
           <canvas id="ordersOverTimeChart" width="400" height="200"></canvas>
         `;
 
