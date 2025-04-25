@@ -29,9 +29,4 @@ router.post("/edit", authController.verifyLoginUser, upload.single("image"), men
 
 router.post("/:id", menuController.deleteMenu);
 
-router.get("/order", authController.verifyLoginUser, menuController.renderOrderPage);
-
-router.get("/order/phone", authController.verifyLoginUser, menuController.renderPhoneOrderPage);
-router.post("/order/phone", authController.verifyLoginUser, menuController.createPhoneOrder);
-
 module.exports = router;

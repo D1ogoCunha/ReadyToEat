@@ -11,6 +11,7 @@ var dishesRouter = require("./routes/dishes");
 var menusRouter = require("./routes/menus");
 var adminRouter = require("./routes/admin");
 var usersRouter = require("./routes/users");
+var orderRouter = require("./routes/order");
 
 var app = express();
 
@@ -45,6 +46,12 @@ app.use("/dishes", dishesRouter);
 app.use("/menus", menusRouter);
 app.use("/admin", adminRouter);
 app.use("/users", usersRouter);
+app.use("/order", orderRouter);
+
+app.use((req, res, next) => {
+    res.locals.user = req.user || null; // Passa o `req.user` para todas as views
+    next();
+});
 
 app.use(function (req, res, next) {
   next(createError(404));
