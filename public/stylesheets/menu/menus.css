@@ -233,6 +233,7 @@ h1.text-center {
 }
 
 .btn{
+  border: none;
   color:#fff;
   background-color: #ff5722;
   margin-top: 10px;
@@ -240,5 +241,20 @@ h1.text-center {
 
 .btn:hover{
   color: #fff;
+  background-color: #e64a19;
+}
+
+.btn-custom {
+  border: none;
+  background-color: #ff5722;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.btn-custom:hover {
   background-color: #e64a19;
 }
