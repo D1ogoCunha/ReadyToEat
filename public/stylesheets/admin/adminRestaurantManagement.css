@@ -29,6 +29,28 @@ body {
   margin: 0;
 }
 
+.navbar {
+  padding: 10px 10px; 
+  display: flex;
+  align-items: center;
+  background-color: #505250;
+}
+
+.navbar-header {
+  display: flex;
+  align-items: center;
+}
+
+
+
+.navbar-logo img {
+  height: 50px; 
+  width: auto; 
+  margin-left: -350px;
+  margin-top: -15px;
+  
+}
+
 .header-actions {
   display: flex;
   gap: 16px;
