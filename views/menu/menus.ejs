@@ -16,29 +16,22 @@
     <main>
       <!-- Menus List -->
       <% menus.forEach(menu => { %>
-      <div class="menu-card-container">
-        <a href="/menus/dishes?menuId=<%= menu._id %>" class="menu-link">
-          <div class="menu-card">
-            <img src="<%= menu.image %>" alt="<%= menu.name %>" />
-            <p><%= menu.name %></p>
-            <a href="/menus/edit?menuId=<%= menu._id %>" class="edit-button"
-              >Edit</a
-            >
-            <form
-              action="/menus/<%= menu._id %>"
-              method="POST"
-              style="display: inline"
-            >
-              <button type="submit" class="edit-button">Delete</button>
-            </form>
-          </div>
-        </a>
-      </div>
+        <div class="menu-card-container">
+          <a href="/menus/dishes?menuId=<%= menu._id %>" class="menu-link">
+            <div class="menu-card">
+              <img src="<%= menu.image %>" alt="<%= menu.name %>" />
+              <p><%= menu.name %></p>
+              <a href="/menus/edit?menuId=<%= menu._id %>" class="edit-button">Edit</a>
+              <button class="delete-button" data-id="<%= menu._id %>">Delete</button>
+            </div>
+          </a>
+        </div>
 
       <!-- Add Menu Button -->
       <% }) %> <% if (user.role === "restaurant" || user.role === "admin" ) { %>
       <a href="/menus/new" class="add-menu">+</a>
       <% } %>
     </main>
+    <script src="/javascripts/menus.js"></script>
   </body>
 </html>

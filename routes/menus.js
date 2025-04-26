@@ -27,6 +27,6 @@ router.get("/dishes", authController.verifyLoginUser ,menuController.getMenuDish
 router.get("/edit", authController.verifyLoginUser, menuController.renderEditMenuForm);
 router.post("/edit", authController.verifyLoginUser, upload.single("image"), menuController.updateMenu);
 
-router.post("/:id", menuController.deleteMenu);
+router.delete("/:id", menuController.deleteMenu);
 
 module.exports = router;
