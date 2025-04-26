@@ -14,13 +14,16 @@
   <body>
     <%- include('../partials/navbar', { user: user }) %>
     <main>
+      <!-- Menus List -->
       <% menus.forEach(menu => { %>
       <div class="menu-card-container">
         <a href="/menus/dishes?menuId=<%= menu._id %>" class="menu-link">
           <div class="menu-card">
             <img src="<%= menu.image %>" alt="<%= menu.name %>" />
             <p><%= menu.name %></p>
-            <a href="/menus/edit?menuId=<%= menu._id %>" class="edit-button">Edit</a>
+            <a href="/menus/edit?menuId=<%= menu._id %>" class="edit-button"
+              >Edit</a
+            >
             <form
               action="/menus/<%= menu._id %>"
               method="POST"
@@ -31,6 +34,8 @@
           </div>
         </a>
       </div>
+
+      <!-- Add Menu Button -->
       <% }) %> <% if (user.role === "restaurant" || user.role === "admin" ) { %>
       <a href="/menus/new" class="add-menu">+</a>
       <% } %>

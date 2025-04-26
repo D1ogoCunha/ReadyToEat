@@ -2,12 +2,14 @@
   <div class="page-header">
     <h1 class="page-title">Restaurant Management</h1>
     <div class="header-actions">
+      <!-- Button to View Pending Requests -->
       <button
         class="btn btn-primary"
         onclick="window.location.href='/admin/pending'"
       >
         Pending Requests
       </button>
+      <!-- Button to Add a New Restaurant -->
       <button
         class="btn btn-secondary"
         onclick="window.location.href='/admin/addNewRestaurant'"
@@ -16,7 +18,7 @@
       </button>
     </div>
   </div>
-
+  <!-- Table Container -->
   <div class="table-container">
     <table class="restaurant-table">
       <thead>
@@ -29,36 +31,32 @@
         </tr>
       </thead>
       <tbody>
-        <% if (restaurants && restaurants.length > 0) { %>
-          <% restaurants.forEach(function (restaurant) { %>
-            <tr class="table-row" data-id="<%= restaurant._id %>">
-              <td class="table-cell"><%= restaurant.restaurantName %></td>
-              <td class="table-cell"><%= restaurant.address %></td>
-              <td class="table-cell"><%= restaurant.phone %></td>
-              <td class="table-cell">
-                €<%= restaurant.pricePerPerson.toFixed(2) %>
-              </td>
-              <td class="table-cell">
-                <div class="action-buttons">
-                  <a
-                    href="/admin/restaurants/restaurant/edit?restaurantId=<%= restaurant._id %>"
-                    class="btn btn-edit"
-                    >Edit</a
-                  >
-                  <button
-                    class="btn btn-delete"
-                    data-id="<%= restaurant._id %>"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
-          <% }); %>
-        <% } else { %>
-          <tr>
-            <td colspan="5" class="table-cell">No restaurants found.</td>
-          </tr>
+        <% if (restaurants && restaurants.length > 0) { %> <%
+        restaurants.forEach(function (restaurant) { %>
+        <tr class="table-row" data-id="<%= restaurant._id %>">
+          <td class="table-cell"><%= restaurant.restaurantName %></td>
+          <td class="table-cell"><%= restaurant.address %></td>
+          <td class="table-cell"><%= restaurant.phone %></td>
+          <td class="table-cell">
+            €<%= restaurant.pricePerPerson.toFixed(2) %>
+          </td>
+          <td class="table-cell">
+            <div class="action-buttons">
+              <a
+                href="/admin/restaurants/restaurant/edit?restaurantId=<%= restaurant._id %>"
+                class="btn btn-edit"
+                >Edit</a
+              >
+              <button class="btn btn-delete" data-id="<%= restaurant._id %>">
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+        <% }); %> <% } else { %>
+        <tr>
+          <td colspan="5" class="table-cell">No restaurants found.</td>
+        </tr>
         <% } %>
       </tbody>
     </table>

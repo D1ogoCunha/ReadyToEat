@@ -11,13 +11,13 @@ orderController.getOrderHistory = async (req, res) => {
 
     if (req.user.role === "restaurant") {
       populatedOrders = await Order.find({ restaurantId: req.user._id })
-        .populate("customerId", "firstName lastName") // Popula dados do cliente
-        .populate("dishes") // Popula dados dos pratos
+        .populate("customerId", "firstName lastName") 
+        .populate("dishes")
         .sort({ date: 1 });
     } else if (req.user.role === "customer") {
       populatedOrders = await Order.find({ customerId: req.user._id })
-        .populate("restaurantId", "restaurantName") // Popula nome do restaurante
-        .populate("dishes") // Popula dados dos pratos
+        .populate("restaurantId", "restaurantName") 
+        .populate("dishes")
         .sort({ date: 1 });
     }
 
@@ -57,11 +57,9 @@ orderController.renderPhoneOrderPage = async (req, res) => {
     const customers = await User.find({ role: "customer" });
     const menus = await Menu.find({ createdBy: req.user._id });
 
-    // Obter todos os pratos cujos menus estejam nos menus do user
     const menuIds = menus.map((menu) => menu._id);
     const dishes = await Dish.find({ menu: { $in: menuIds } });
 
-    // Agrupar pratos por menuId
     const dishesByMenu = {};
     menus.forEach((menu) => {
       dishesByMenu[menu._id] = {
@@ -70,7 +68,6 @@ orderController.renderPhoneOrderPage = async (req, res) => {
       };
     });
 
-    // Verificação no console
     console.log("Dishes by Menu:");
     for (const [menuId, group] of Object.entries(dishesByMenu)) {
       console.log(`Menu: ${group.menu.name}`);
@@ -85,8 +82,7 @@ orderController.renderPhoneOrderPage = async (req, res) => {
       user: req.user,
     });
   } catch (error) {
-    console.error("Erro ao renderizar página de encomenda telefónica:", error);
-    res.status(500).send("Erro ao renderizar página de encomenda telefónica.");
+    res.status(500).send("Error rendering phone order page.");
   }
 };
 
@@ -103,7 +99,6 @@ orderController.createPhoneOrder = async (req, res) => {
     }
 
     const dishes = await Dish.find({ _id: { $in: dishIds } });
-    console.log("Found dishes:", dishes.length);
 
     if (dishes.length === 0) {
       return res.status(404).send("No dishes found with the provided IDs.");
@@ -122,9 +117,6 @@ orderController.createPhoneOrder = async (req, res) => {
       status: "Pending",
       dishes: dishIds,
     });
-
-    const savedOrder = await order.save();
-    console.log("Order created successfully:", savedOrder._id);
 
     res.redirect("/order");
   } catch (error) {

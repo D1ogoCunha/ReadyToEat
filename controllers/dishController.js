@@ -197,20 +197,18 @@ dishController.deleteDish = async (req, res) => {
 
       fs.unlink(imagePath, (err) => {
         if (err) {
-          console.error("Erro ao deletar imagem:", err);
+          console.error("Error deleting the image: ", err);
         } else {
-          console.log("Imagem deletada com sucesso:", imagePath);
+          console.log("Image deleted successfully:", imagePath);
         }
       });
     }
 
     await Dish.findByIdAndDelete(id);
 
-    console.log("Prato deletado com sucesso:", id);
     res.redirect(`/menus/dishes?menuId=${menuId}`);
   } catch (error) {
-    console.error("Erro ao deletar o prato:", error);
-    res.status(500).send("Erro ao deletar o prato.");
+    res.status(500).send("Error deleting the dishes.");
   }
 };
 

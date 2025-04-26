@@ -7,9 +7,12 @@
     <link rel="stylesheet" href="/stylesheets/register.css" />
   </head>
   <body>
+    <!-- Edit Menu Container -->
     <div class="registration-container">
       <div class="registration-wrapper">
         <h1>Edit Menu</h1>
+
+        <!-- Edit Menu Form -->
         <form action="/menus/edit" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label class="form-label">Menu Name*</label>
@@ -22,10 +25,13 @@
               required
             />
           </div>
+
+          <!-- Menu Image Input -->
           <div class="form-group">
             <label class="form-label">Menu Image</label>
             <input type="file" class="form-input" name="image" />
           </div>
+          
           <div class="form-actions">
             <button type="submit" class="next-button">Save Changes</button>
           </div>

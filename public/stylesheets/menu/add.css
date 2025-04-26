@@ -44,13 +44,13 @@ body {
 }
 
 .form-select {
-  width: 100%; /* Garante que a largura ocupe todo o espaço disponível */
-  padding: 12px; /* Aumenta o espaço interno */
-  font-size: 16px; /* Aumenta o tamanho do texto */
+  width: 100%;
+  padding: 12px; 
+  font-size: 16px; 
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #ffffff;
-  box-sizing: border-box; /* Inclui padding no cálculo da largura */
+  box-sizing: border-box; 
 }
 
 .form-input,

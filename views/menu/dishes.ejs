@@ -17,6 +17,7 @@
     <main>
       <h1><%= menu.name %></h1>
 
+      <!-- Filters Section -->
       <div class="filters">
         <label for="sort">Sort by:</label>
         <select id="sort">
@@ -35,6 +36,7 @@
         </select>
       </div>
 
+      <!-- Dishes List -->
       <ul id="pratos-lista" class="pratos-lista">
         <% pratos.forEach(function(prato) { %>
         <li class="prato-item">
@@ -51,6 +53,7 @@
           <p><strong>Descrição:</strong> <%= prato.descricao %></p>
           <p><strong>Preço:</strong> <%= prato.preco.toFixed(2) %> €</p>
 
+          <!-- Delete Button -->
           <form
             action="/dishes/edit"
             method="GET"
@@ -71,6 +74,7 @@
         <% }); %>
       </ul>
 
+      <!-- JavaScript for Filters -->
       <script>
         const menuId = "<%= menu._id %>";
         const pratosLista = document.getElementById("pratos-lista");
@@ -131,9 +135,12 @@
         });
       </script>
 
+      <!-- Dish Counter -->
       <div class="dish-counter">
         <p>Dishes: <%= pratos.length %>/<%= maxDishes %></p>
       </div>
+      
+      <!-- Add Dish Button -->
       <% if (pratos.length < maxDishes) { %>
       <a href="/dishes/add" class="btn-adicionar">+</a>
       <% } else { %>
