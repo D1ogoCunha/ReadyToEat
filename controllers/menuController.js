@@ -141,27 +141,37 @@ menuController.deleteMenu = async (req, res) => {
 
     const dishes = await Dish.find({ menu: id });
 
+
     for (const dish of dishes) {
       if (dish.imagem) {
         const imagePath = path.join(__dirname, "..", "public", dish.imagem);
         try {
-          await fs.unlink(imagePath);
-          console.log(`Imagem deletada: ${imagePath}`);
+          await fs.promises.unlink(imagePath); 
+          console.log(`Image from dish deleted: ${imagePath}`);
         } catch (err) {
-          console.error(`Error deleting image ${imagePath}:`, err);
+          console.error(`Error deleting the image on path: ${imagePath}:`, err);
         }
       }
     }
 
     await Dish.deleteMany({ menu: id });
 
+    const menu = await Menu.findById(id);
+    if (menu && menu.image) {
+      const menuImagePath = path.join(__dirname, "..", "public", menu.image);
+      try {
+        await fs.promises.unlink(menuImagePath);
+        console.log(`Image from menu deleted: ${menuImagePath}`);
+      } catch (err) {
+        console.error(`Error deleting the imagem on path: ${menuImagePath}:`, err);
+      }
+    }
+
     await Menu.findByIdAndDelete(id);
 
-    console.log(`Menu e pratos associados deletados com sucesso (ID: ${id})`);
-    res.status(200).json({ message: "Menu deleted successfully." }); 
+    res.status(200).json({ message: "Menu deleted successfully." });
   } catch (error) {
-    console.error("Erro ao deletar o menu:", error);
-    res.status(500).json({ message: "Erro ao deletar o menu." }); 
+    res.status(500).json({ message: "Erro ao deletar o menu." });
   }
 };
 

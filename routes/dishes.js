@@ -14,7 +14,7 @@ router.get("/edit", authController.verifyLoginUser, dishController.editForm);
 
 router.post("/edit", dishController.upload.single("image"), dishController.update);
 
-router.post("/:id/delete", dishController.deleteDish);
+router.delete("/:id/delete", dishController.deleteDish);
 
 router.get("/dish", authController.verifyLoginUser, dishController.getDishDetails);
 

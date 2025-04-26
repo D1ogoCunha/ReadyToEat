@@ -63,83 +63,23 @@
             <button type="submit" class="btn-editar">Edit</button>
           </form>
 
-          <form
-            action="/dishes/<%= prato._id %>/delete?menuId=<%= menu._id %>"
-            method="POST"
-            style="display: inline"
+          <!-- Delete Button -->
+          <button
+            class="btn-editar btn-delete"
+            data-id="<%= prato._id %>"
+            data-menu-id="<%= menu._id %>"
           >
-            <button type="submit" class="btn-editar">Delete</button>
-          </form>
+            Delete
+          </button>
         </li>
         <% }); %>
       </ul>
-
-      <!-- JavaScript for Filters -->
-      <script>
-        const menuId = "<%= menu._id %>";
-        const pratosLista = document.getElementById("pratos-lista");
-        const sortSelect = document.getElementById("sort");
-        const categorySelect = document.getElementById("category");
-
-        function loadDishes(sort, category) {
-          let url = `/dishes?menuId=${menuId}`;
-          if (sort) url += `&sort=${sort}`;
-          if (category) url += `&category=${category}`;
-
-          fetch(url)
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Network response was not ok");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              pratosLista.innerHTML = ""; // Clear existing dishes
-              data.pratos.forEach((prato) => {
-                const listItem = document.createElement("li");
-                listItem.className = "prato-item";
-                listItem.innerHTML = `
-                    <a href="/dishes/dish?dishId=${prato._id}">
-                      <img src="${prato.imagem}" alt="${
-                  prato.nome
-                }" class="prato-imagem">
-                    </a>
-                    <a href="/dishes/dish?dishId=${prato._id}">
-                      <h2>${prato.nome}</h2>
-                    </a>
-                    <p><strong>Descrição:</strong> ${prato.descricao}</p>
-                    <p><strong>Preço:</strong> ${prato.preco.toFixed(2)} €</p>
-                    <a href="/dishes/edit?dishId=${
-                      prato._id
-                    }" class="btn-editar">Edit</a>
-                    <form
-                      action="/dishes/${prato._id}/delete?menuId=${menuId}"
-                      method="POST"
-                      style="display: inline"
-                    >
-                      <button type="submit" class="btn-editar">Delete</button>
-                    </form>
-                  `;
-                pratosLista.appendChild(listItem);
-              });
-            })
-            .catch((error) => console.error("Fetch error:", error));
-        }
-
-        sortSelect.addEventListener("change", () => {
-          loadDishes(sortSelect.value, categorySelect.value);
-        });
-
-        categorySelect.addEventListener("change", () => {
-          loadDishes(sortSelect.value, categorySelect.value);
-        });
-      </script>
 
       <!-- Dish Counter -->
       <div class="dish-counter">
         <p>Dishes: <%= pratos.length %>/<%= maxDishes %></p>
       </div>
-      
+
       <!-- Add Dish Button -->
       <% if (pratos.length < maxDishes) { %>
       <a href="/dishes/add" class="btn-adicionar">+</a>
@@ -150,4 +90,5 @@
       <% } %>
     </main>
   </body>
+  <script src="/javascripts/dishes.js"></script>
 </html>

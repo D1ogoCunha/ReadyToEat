@@ -173,7 +173,7 @@ dishController.update = async function (req, res) {
     }
 
     await dish.save();
-    res.clearCookie("dishId"); // Limpar o cookie após o uso
+    res.clearCookie("dishId");
     res.redirect(`/menus/dishes?menuId=${dish.menu}`);
   } catch (err) {
     console.log("Error updating dish:", err);
@@ -189,28 +189,27 @@ dishController.deleteDish = async (req, res) => {
     const dish = await Dish.findById(id);
 
     if (!dish) {
-      return res.status(404).send("Prato não encontrado.");
+      return res.status(404).json({ error: "Dish not found." });
     }
 
     if (dish.imagem) {
       const imagePath = path.join(__dirname, "..", "public", dish.imagem);
-
-      fs.unlink(imagePath, (err) => {
-        if (err) {
-          console.error("Error deleting the image: ", err);
-        } else {
-          console.log("Image deleted successfully:", imagePath);
-        }
-      });
+      fs.unlinkSync(imagePath);
+      console.log("Image deleted successfully:", imagePath);
     }
 
     await Dish.findByIdAndDelete(id);
 
-    res.redirect(`/menus/dishes?menuId=${menuId}`);
+    return res.status(200).json({ 
+      success: true, 
+      message: "Dish deleted successfully!" 
+    });
   } catch (error) {
-    res.status(500).send("Error deleting the dishes.");
+    console.error("Error deleting dish:", error);
+    return res.status(500).json({ error: "Error deleting dish." });
   }
 };
+
 
 dishController.getDishDetails = async (req, res) => {
   const dishId = req.query.dishId || req.cookies.dishId; 

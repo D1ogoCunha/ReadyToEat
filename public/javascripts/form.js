@@ -36,6 +36,34 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   showStep(currentStep);
+
+  const fileInput = document.getElementById("image");
+  const previewImage = document.getElementById("previewImage");
+  const previewText = document.getElementById("previewText");
+  const browseButton = document.querySelector(".browse");
+
+  fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    handleFile(file);
+  });
+
+  browseButton.addEventListener("click", () => {
+    fileInput.click();
+  });
+
+  function handleFile(file) {
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewImage.src = e.target.result;
+        previewImage.classList.remove("hidden");
+        previewText.classList.add("hidden");
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert("Please upload a valid image file (PNG or JPG).");
+    }
+  }
 });
 
 function toggleNewCategoryInput() {
