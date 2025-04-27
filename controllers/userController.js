@@ -127,8 +127,8 @@ userController.updateProfile = async (req, res) => {
       console.log("User profile updated successfully.");
       res.redirect("/users/profile/edit"); 
     } catch (error) {
-      console.error("Erro ao atualizar o perfil:", error);
-      res.status(500).send("Erro ao atualizar o perfil.");
+      console.error("Error updating profile:", error);
+      res.status(500).send("Error updating profile.");
     }
   };
 

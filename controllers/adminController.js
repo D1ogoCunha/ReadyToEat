@@ -53,8 +53,7 @@ adminController.validateRestaurant = async (req, res) => {
 adminController.deleteRestaurant = async (req, res) => {
   try {
     const restaurantId = req.params.id;
-    console.log("Deleting restaurant with ID:", restaurantId);
-    await User.findByIdAndDelete(req.params.id);
+    await User.findByIdAndDelete(restaurantId);
     res.status(200).send("Restaurant deleted successfully.");
   } catch (err) {
     console.error("Error deleting restaurant:", err);

@@ -202,7 +202,7 @@ body {
 }
 
 .image-upload input[type="file"] {
-  display: none; /* Esconde o input padrão */
+  display: none; 
 }
 
 .upload-area {
