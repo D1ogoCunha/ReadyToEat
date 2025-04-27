@@ -1,22 +1,22 @@
 var mongoose = require("mongoose");
 
 var DishSchema = new mongoose.Schema({
-    nome: { type: String, required: true }, // Nome do prato
-    descricao: { type: String, required: true }, // Descrição do prato
-    categoria: { type: String, required: true }, // Categoria (Starter, Main, Dessert)
-    tempoPreparo: { type: Number, required: true }, // Tempo de preparo em minutos
-    preco: { type: Number, required: true }, // Preço do prato
-    tamanhoPorcao: { type: String, required: true }, // Tamanho da porção (Small, Medium, Large)
+    nome: { type: String, required: true },
+    descricao: { type: String, required: true },
+    categoria: { type: String, required: true },
+    tempoPreparo: { type: Number, required: true },
+    preco: { type: Number, required: true },
+    tamanhoPorcao: { type: String, required: true },
     informacaoNutricional: {
-        calorias: { type: Number, required: true }, // Calorias por 100g
-        proteinas: { type: Number, required: true }, // Proteínas por 100g
-        carboidratos: { type: Number, required: true }, // Carboidratos por 100g
-        gorduras: { type: Number, required: true }, // Gorduras por 100g
-        sodio: { type: Number, required: true }, // Sódio por 100g
+        calorias: { type: Number, required: true },
+        proteinas: { type: Number, required: true },
+        carboidratos: { type: Number, required: true }, 
+        gorduras: { type: Number, required: true }, 
+        sodio: { type: Number, required: true }, 
     },
-    imagem: { type: String, required: true }, // Caminho da imagem do prato
-    menu: { type: mongoose.Schema.Types.ObjectId, ref: "Menu", required: true }, // Referência ao menu
-    criadoEm: { type: Date, default: Date.now }, // Data de criação do prato
+    imagem: { type: String, required: true }, 
+    menu: { type: mongoose.Schema.Types.ObjectId, ref: "Menu", required: true }, 
+    criadoEm: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Dish", DishSchema);

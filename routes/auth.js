@@ -1,21 +1,15 @@
 var express = require('express');
 var router = express.Router();
-var userController = require("../controllers/userController"); 
+var authController = require("../controllers/authController");
 
-// Rota para exibir o formulário de registro
-router.get("/register", function (req, res, next) {
-  res.render("register");
-});
+router.get("/register", authController.createLogin);
 
-// Rota para processar o formulário de registro
-router.post("/register", userController.save); 
+router.post("/register", authController.createLoginSubmitted);
 
-// Rota para exibir o formulário de login
-router.get("/login", function (req, res, next) {
-  res.render("login");
-});
+router.get("/login", authController.login);
 
-// Rota para processar o formulário de login
-router.post("/login", userController.login);
+router.post("/login", authController.submittedLogin);
+
+router.get("/logout", authController.logout);
 
 module.exports = router;
