@@ -118,6 +118,7 @@ orderController.createPhoneOrder = async (req, res) => {
       dishes: dishIds,
     });
 
+    order.save();
     res.redirect("/order");
   } catch (error) {
     console.error("Error creating phone order:", error.stack);

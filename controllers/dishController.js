@@ -194,8 +194,12 @@ dishController.deleteDish = async (req, res) => {
 
     if (dish.imagem) {
       const imagePath = path.join(__dirname, "..", "public", dish.imagem);
+      try {
       fs.unlinkSync(imagePath);
       console.log("Image deleted successfully:", imagePath);
+      } catch (err) {
+      console.error("Error deleting image:", err);
+      }
     }
 
     await Dish.findByIdAndDelete(id);
