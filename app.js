@@ -48,6 +48,10 @@ app.use("/admin", adminRouter);
 app.use("/users", usersRouter);
 app.use("/order", orderRouter);
 
+app.get("/", (req, res) => {
+  res.redirect("/login");
+});
+
 app.use((req, res, next) => {
     res.locals.user = req.user || null; 
     next();

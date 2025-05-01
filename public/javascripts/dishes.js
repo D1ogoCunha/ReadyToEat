@@ -1,5 +1,5 @@
-const menuId = "<%= menu._id %>";
 const pratosLista = document.getElementById("pratos-lista");
+const menuId = pratosLista.dataset.menuId; // Obtém o ID do menu
 const sortSelect = document.getElementById("sort");
 const categorySelect = document.getElementById("category");
 
@@ -16,36 +16,33 @@ function loadDishes(sort, category) {
       return response.json();
     })
     .then((data) => {
-      pratosLista.innerHTML = ""; 
+      pratosLista.innerHTML = ""; // Clear existing dishes
       data.pratos.forEach((prato) => {
         const listItem = document.createElement("li");
         listItem.className = "prato-item";
         listItem.innerHTML = `
-                    <a href="/dishes/dish?dishId=${prato._id}">
-                      <img src="${prato.imagem}" alt="${
+            <a href="/dishes/dish?dishId=${prato._id}">
+              <img src="${prato.imagem}" alt="${
           prato.nome
         }" class="prato-imagem">
-                    </a>
-                    <a href="/dishes/dish?dishId=${prato._id}">
-                      <h2>${prato.nome}</h2>
-                    </a>
-                    <p><strong>Descrição:</strong> ${prato.descricao}</p>
-                    <p><strong>Preço:</strong> ${prato.preco.toFixed(2)} €</p>
-                    <a href="/dishes/edit?dishId=${
-                      prato._id
-                    }" class="btn-editar">Edit</a>
-
-                      <button class="btn-editar btn-delete" data-id="${
-                        prato._id
-                      }" data-menu-id="${menuId}">
-                        Delete
-                        </button>
-
-                  `;
+            </a>
+            <a href="/dishes/dish?dishId=${prato._id}">
+              <h2>${prato.nome}</h2>
+            </a>
+            <p><strong>Descrição:</strong> ${prato.descricao}</p>
+            <p><strong>Preço:</strong> ${prato.preco.toFixed(2)} €</p>
+            <a href="/dishes/edit?dishId=${
+              prato._id
+            }" class="btn-editar">Edit</a>
+            <form
+              action="/dishes/${prato._id}/delete?menuId=${menuId}"
+              method="POST"
+              style="display: inline"
+            >
+              <button type="submit" class="btn-editar">Delete</button>
+            </form>
+          `;
         pratosLista.appendChild(listItem);
-
-        const deleteBtn = listItem.querySelector(".btn-delete");
-        deleteBtn.addEventListener("click", handleDeleteClick);
       });
     })
     .catch((error) => console.error("Fetch error:", error));

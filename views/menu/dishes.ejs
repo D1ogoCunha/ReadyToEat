@@ -37,7 +37,7 @@
       </div>
 
       <!-- Dishes List -->
-      <ul id="pratos-lista" class="pratos-lista">
+      <ul id="pratos-lista" class="pratos-lista" data-menu-id="<%= menu._id %>">
         <% pratos.forEach(function(prato) { %>
         <li class="prato-item">
           <a href="/dishes/dish?dishId=<%= prato._id %>">
@@ -89,6 +89,6 @@
       </p>
       <% } %>
     </main>
+    <script src="/javascripts/dishes.js"></script>
   </body>
-  <script src="/javascripts/dishes.js"></script>
 </html>
