@@ -1,21 +1,28 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms'; // Importar FormsModule
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { routes } from './app.routes';
+import { Menu } from './models/menu';
+import { RestaurantsComponent } from './pages/restaurants/restaurants.component';
+import { DishesComponent } from './pages/dishes/dishes.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    RestaurantsComponent,
+  ],
   imports: [
     BrowserModule,
-    FormsModule, // Adicionar FormsModule aqui
+    FormsModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
-    LoginComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

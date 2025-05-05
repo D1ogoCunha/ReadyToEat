@@ -4,7 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
-var cors = require("cors");
+const cors = require("cors");
 
 var indexRouter = require("./routes/index");
 var authRouter = require("./routes/auth");
@@ -13,6 +13,7 @@ var menusRouter = require("./routes/menus");
 var adminRouter = require("./routes/admin");
 var usersRouter = require("./routes/users");
 var orderRouter = require("./routes/order");
+var apiRouter = require("./routes/api");
 
 var app = express();
 
@@ -41,7 +42,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
-
+app.use("/", apiRouter);
 app.use("/", indexRouter);
 app.use("/", authRouter);
 app.use("/dishes", dishesRouter);
@@ -55,8 +56,8 @@ app.get("/", (req, res) => {
 });
 
 app.use((req, res, next) => {
-    res.locals.user = req.user || null; 
-    next();
+  res.locals.user = req.user || null;
+  next();
 });
 
 app.use(function (req, res, next) {
