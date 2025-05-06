@@ -24,6 +24,10 @@ export class DishesComponent implements OnInit {
         this.http.get<any[]>(`http://localhost:3000/api/menus/${menuId}/dishes`).subscribe({
           next: (dishes: any[]) => {
             this.dishes = dishes;
+
+            this.dishes.forEach(dish => {
+              console.log(`Prato: ${dish.nome}, Imagem: ${dish.imagem}`);
+            });
           },
           error: (err: any) => {
             console.error('Erro ao buscar pratos:', err);
