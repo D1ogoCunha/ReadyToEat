@@ -7,5 +7,6 @@ export const routes: Routes = [
     { path: 'dishes', component: DishesComponent },
     { path: 'restaurants', component: RestaurantsComponent },
     { path: 'restaurants/:restaurantId/menus', component: RestaurantMenusComponent },
+    { path: 'menus/:menuId/dishes', component: DishesComponent },
     { path: '', redirectTo: '/restaurants', pathMatch: 'full' }
 ];

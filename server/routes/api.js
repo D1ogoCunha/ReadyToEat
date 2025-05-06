@@ -27,4 +27,17 @@ router.get("/api/restaurants/:restaurantId/menus", async (req, res) => {
   }
 });
 
+router.get('/api/menus/:menuId/dishes', async (req, res) => {
+  try {
+    const { menuId } = req.params;
+    console.log('Menu ID recebido:', menuId); 
+    const dishes = await Dish.find({ menu: menuId });
+    console.log('Pratos encontrados:', dishes);
+    res.json(dishes);
+  } catch (error) {
+    console.error('Erro ao buscar pratos:', error);
+    res.status(500).json({ message: 'Erro ao buscar pratos.' });
+  }
+});
+
 module.exports = router;

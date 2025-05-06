@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-restaurant-menus',
   standalone: true,
-  imports: [CommonModule], // Adicione o CommonModule aqui
+  imports: [CommonModule, RouterModule],
   templateUrl: './restaurant-menus.component.html',
   styleUrls: ['./restaurant-menus.component.css']
 })
