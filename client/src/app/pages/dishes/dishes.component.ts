@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dishes.component.html',
+  styleUrls: ['./dishes.component.css']
 })
 export class DishesComponent implements OnInit {
   dishes: any[] = [];
