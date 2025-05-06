@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { FormsModule } from '@angular/forms'; // Importa o FormsModule
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  standalone: true,
+  imports: [FormsModule], // Adicione o FormsModule aqui
 })
 export class LoginComponent {
   email: string = '';
@@ -17,7 +20,7 @@ export class LoginComponent {
   onSubmit(): void {
     this.authService.login(this.email, this.password).subscribe({
       next: () => {
-        this.router.navigate(['/dashboard']); // Redireciona para o dashboard após login bem-sucedido
+        this.router.navigate(['/restaurants']);
       },
       error: (err) => {
         this.errorMessage = 'Invalid email or password.';

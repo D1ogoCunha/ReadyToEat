@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './auth/login/login.component';
 import { routes } from './app.routes';
 import { Menu } from './models/menu';
 import { RestaurantsComponent } from './pages/restaurants/restaurants.component';
