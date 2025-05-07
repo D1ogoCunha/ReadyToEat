@@ -19,11 +19,11 @@ router.get("/api/restaurants/:restaurantId/menus", async (req, res) => {
     const { restaurantId } = req.params;
     console.log('Restaurant ID recebido:', restaurantId); // Log para depuração
     const menus = await Menu.find({ createdBy: new mongoose.Types.ObjectId(restaurantId) }); // Certifique-se de usar ObjectId
-    console.log('Menus encontrados:', menus); // Log para depuração
+    console.log('Menus found:', menus); // Log para depuração
     res.json(menus);
   } catch (error) {
-    console.error('Erro ao buscar menus:', error);
-    res.status(500).json({ message: 'Erro ao buscar menus.' });
+    console.error('Error searching for menus:', error);
+    res.status(500).json({ message: 'Error searching for menus.' });
   }
 });
 
@@ -32,11 +32,31 @@ router.get('/api/menus/:menuId/dishes', async (req, res) => {
     const { menuId } = req.params;
     console.log('Menu ID recebido:', menuId); 
     const dishes = await Dish.find({ menu: menuId });
-    console.log('Pratos encontrados:', dishes);
+    console.log('Dishes found:', dishes);
     res.json(dishes);
   } catch (error) {
-    console.error('Erro ao buscar pratos:', error);
-    res.status(500).json({ message: 'Erro ao buscar pratos.' });
+    console.error('Error searching for dishes:', error);
+    res.status(500).json({ message: 'Error searching for dishes.' });
+  }
+});
+
+router.get('/api/dishes/:dishId', async (req, res) => {
+  try {
+    const { dishId } = req.params;
+    console.log('Dish ID recebido:', dishId); // Log para depuração
+
+    const dish = await Dish.findById(dishId);
+
+    if (!dish) {
+      console.log('Dish not found for ID:', dishId);
+      return res.status(404).json({ message: 'Dish not found' });
+    }
+
+    console.log('Dish not found:', dish);
+    res.json(dish);
+  } catch (error) {
+    console.error('Error searching for dish:', error);
+    res.status(500).json({ message: 'Error searching for dish:' });
   }
 });
 

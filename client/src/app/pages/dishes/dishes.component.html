@@ -38,17 +38,26 @@
       >
         <div class="col mb-5" *ngFor="let dish of dishes">
           <div class="card h-100">
-              <img class="card-img-top" [src]="'http://localhost:3000' + dish.imagem" alt="{{ dish.nome }}" />
+            <img
+              class="card-img-top"
+              [src]="'http://localhost:3000' + dish.imagem"
+              alt="{{ dish.nome }}"
+            />
             <div class="card-body p-4">
               <div class="text-center">
                 <h5 class="fw-bolder">{{ dish.nome }}</h5>
                 <p>{{ dish.descricao }}</p>
-                <p><strong>Preço:</strong> {{ dish.preco}} €</p>
+                <p><strong>Preço:</strong> {{ dish.preco }} €</p>
                 <!-- Product actions-->
                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                   <div class="text-center">
                     <a class="btn btn-outline-dark mt-auto" href="#"
                       >Add to cart</a
+                    >
+                    <a
+                      class="btn btn-outline-dark mt-auto"
+                      [routerLink]="['/dishes', dish._id, 'details']"
+                      >View Details</a
                     >
                   </div>
                 </div>

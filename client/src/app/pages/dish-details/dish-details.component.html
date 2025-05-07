@@ -1,0 +1,19 @@
+<div class="container mt-5" *ngIf="dish">
+    <div class="row">
+      <div class="col-md-6">
+        <img [src]="'http://localhost:3000' + dish.imagem" alt="{{ dish.nome }}" class="img-fluid" />
+      </div>
+      <div class="col-md-6">
+        <h2>{{ dish.nome }}</h2>
+        <p><strong>Category:</strong> {{ dish.categoria }}</p>
+        <p><strong>Description:</strong> {{ dish.descricao }}</p>
+        <p><strong>Price:</strong> {{ dish.preco }} €</p>
+        <p><strong>Preparation Time:</strong> {{ dish.tempoPreparo }} minutes</p>
+        <p><strong>Portion Size:</strong> {{ dish.tamanhoPorcao }}</p>
+        <p><strong>Calories:</strong> {{ dish.informacaoNutricional.calorias }}</p>
+        <p><strong>Proteins:</strong> {{ dish.informacaoNutricional.proteinas }} g</p>
+        <p><strong>Carbs:</strong> {{ dish.informacaoNutricional.carboidratos }} g</p>
+        <p><strong>Fat:</strong> {{ dish.informacaoNutricional.gorduras }} g</p>
+      </div>
+    </div>
+  </div>
