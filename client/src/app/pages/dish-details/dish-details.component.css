@@ -1,0 +1,59 @@
+body {
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #e6e7e7;
+  }
+  
+  .container {
+    max-width: 1350px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    background-color: #ccc;
+    border-top: 20px solid #ccc;
+    border-radius: 10px;
+    margin-top: 120px;
+    padding: 20px;
+  }
+  
+  .img-dish {
+    width: 500px;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 20px;
+    display: flex;
+  }
+  
+  .dish-details .text-primary {
+    color: #000000 !important;
+    font-size: 1.5rem;
+  }
+  
+  .table-responsive {
+    overflow: auto;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 5px;
+  }
+  
+  .table {
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #fff;
+  }
+  
+  .table td {
+    padding: 15px;
+    color: #333;
+  }
+  
+  .table td:first-child {
+    font-weight: bold;
+    color: #000;
+    font-size: 1.5rem;
+  }
+  
+  .table td.text-primary {
+    color: #000;
+  }
