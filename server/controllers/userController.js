@@ -16,7 +16,6 @@ userController.show = function (req, res) {
   });
 };
 
-
 userController.edit = function (req, res) {
   User.findOne({ _id: req.params.id }).exec(function (err, user) {
     if (err) {
@@ -34,6 +33,7 @@ userController.update = function (req, res) {
     } else {
       user.name = req.body.name;
       user.email = req.body.email;
+      user.nif = req.body.nif;
       user.password = req.body.password;
 
       user.save(function (err) {
@@ -64,7 +64,6 @@ userController.renderProfilePage = (req, res) => {
 userController.renderSecurityProfilePage = (req, res) => {
   res.render("user/security", { user: req.user });
 };
-
 
 userController.updatePassword = async (req, res) => {
   try {
@@ -111,66 +110,85 @@ userController.updatePassword = async (req, res) => {
 };
 
 userController.updateProfile = async (req, res) => {
-    try {
-      const { firstName, lastName, email, restaurantName, address, phone, pricePerPerson } = req.body;
-      const updatedUser = await User.findByIdAndUpdate(
-        req.user._id,
-        { firstName, lastName, email, restaurantName, address, phone, pricePerPerson },
-        { new: true, runValidators: true }
-      );
-  
-      if (!updatedUser) {
-        console.log("User not found for updating.");
-        return res.status(404).send("User not found.");
-      }
-  
-      console.log("User profile updated successfully.");
-      res.redirect("/users/profile/edit"); 
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      res.status(500).send("Error updating profile.");
-    }
-  };
+  try {
+    const {
+      firstName,
+      lastName,
+      email,
+      nif,
+      restaurantName,
+      address,
+      phone,
+      pricePerPerson,
+    } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        firstName,
+        lastName,
+        email,
+        nif,
+        restaurantName,
+        address,
+        phone,
+        pricePerPerson,
+      },
+      { new: true, runValidators: true }
+    );
 
-  userController.renderChartPage = (req, res) => {
-    res.render("user/chart", { user: req.user});
-  };
-  
-  userController.getMostOrderedDishes = async (req, res) => {
-    try {
-      const dishes = await Order.aggregate([
-        { $unwind: "$dishes" }, 
-        {
-          $group: {
-            _id: "$dishes",
-            count: { $sum: 1 }, 
-          },
-        },
-        { $sort: { count: -1 } }, 
-        { $limit: 5 }, 
-      ]);
-  
-      const dishDetails = await Dish.find({ _id: { $in: dishes.map((d) => d._id) } });
-  
-      const chartData = dishes
-        .map((dish) => {
-          const dishDetail = dishDetails.find((d) => d._id.equals(dish._id));
-          if (dishDetail) {
-            return {
-              name: dishDetail.nome, 
-              count: dish.count, 
-            };
-          }
-          return null; 
-        })
-        .filter((dish) => dish !== null); 
-  
-      res.json(chartData); 
-    } catch (error) {
-      console.error("Error fetching most ordered dishes:", error);
-      res.status(500).send("Failed to load chart data.");
+    if (!updatedUser) {
+      console.log("User not found for updating.");
+      return res.status(404).send("User not found.");
     }
-  };
-  
+
+    console.log("User profile updated successfully.");
+    res.redirect("/users/profile/edit");
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).send("Error updating profile.");
+  }
+};
+
+userController.renderChartPage = (req, res) => {
+  res.render("user/chart", { user: req.user });
+};
+
+userController.getMostOrderedDishes = async (req, res) => {
+  try {
+    const dishes = await Order.aggregate([
+      { $unwind: "$dishes" },
+      {
+        $group: {
+          _id: "$dishes",
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+      { $limit: 5 },
+    ]);
+
+    const dishDetails = await Dish.find({
+      _id: { $in: dishes.map((d) => d._id) },
+    });
+
+    const chartData = dishes
+      .map((dish) => {
+        const dishDetail = dishDetails.find((d) => d._id.equals(dish._id));
+        if (dishDetail) {
+          return {
+            name: dishDetail.nome,
+            count: dish.count,
+          };
+        }
+        return null;
+      })
+      .filter((dish) => dish !== null);
+
+    res.json(chartData);
+  } catch (error) {
+    console.error("Error fetching most ordered dishes:", error);
+    res.status(500).send("Failed to load chart data.");
+  }
+};
 
 module.exports = userController;

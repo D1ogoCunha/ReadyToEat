@@ -99,6 +99,19 @@
                     required
                   />
                 </div>
+                <!-- NIF -->
+                <div class="mb-3">
+                  <label class="smallmb" for="inputNIF">NIF*</label>
+                  <input
+                    class="form-control"
+                    id="inputNIF"
+                    type="text"
+                    name="nif"
+                    placeholder="212345678"
+                    value="<%= user.nif %>"
+                    required
+                  />
+                </div>
 
                 <% if (user.role === "restaurant") { %>
                 <!-- Restaurant Name-->

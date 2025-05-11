@@ -4,6 +4,16 @@ var UserSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, unique: true, required: true },
+    nif: { 
+        type: Number, 
+        required: true, 
+        validate: {
+            validator: function(value) {
+                return /^\d{9}$/.test(value.toString());
+            },
+            message: 'O NIF deve ter exatamente 9 dígitos.'
+        }
+    },
     password: { type: String, required: true },
     role: { 
         type: String, 

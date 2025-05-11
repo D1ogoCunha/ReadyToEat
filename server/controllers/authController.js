@@ -76,6 +76,7 @@ authController.createLoginSubmitted = function (req, res, next) {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
+    nif: req.body.nif,
     password: hashedPassword,
     role: req.body.role,
   };

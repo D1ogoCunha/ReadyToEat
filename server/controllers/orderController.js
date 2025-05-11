@@ -11,7 +11,7 @@ orderController.getOrderHistory = async (req, res) => {
 
     if (req.user.role === "restaurant") {
       populatedOrders = await Order.find({ restaurantId: req.user._id })
-        .populate("customerId", "firstName lastName") 
+        .populate("customerId", "firstName lastName nif") 
         .populate("dishes")
         .sort({ date: 1 });
     } else if (req.user.role === "customer") {

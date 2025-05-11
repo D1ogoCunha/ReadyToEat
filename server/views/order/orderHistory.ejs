@@ -16,7 +16,7 @@
     <div class="container-xl px-4 mt-4">
       <hr class="mt-0 mb-4" />
       <h1 class="text-center">Order History</h1>
-      
+
       <!-- Orders Table -->
       <div class="card-body p-0">
         <div class="table-responsive table-order-history">
@@ -26,6 +26,7 @@
                 <th>#</th>
                 <% if (user.role === "restaurant") { %>
                 <th>Customer</th>
+                <th>NIF</th>
                 <th>Amount</th>
                 <th>Status</th>
                 <th>Dishes</th>
@@ -49,6 +50,10 @@
                   <%= order.customerId.firstName %> <%=
                   order.customerId.lastName %> <% } else { %> Unknown Customer
                   <% } %>
+                </td>
+                <td>
+                  <% if (order.customerId && order.customerId.nif) { %> <%=
+                  order.customerId.nif %> <% } else { %> Unknown NIF <% } %>
                 </td>
                 <td>$<%= order.amount ? order.amount.toFixed(2) : '0.00' %></td>
                 <td>

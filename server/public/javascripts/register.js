@@ -41,6 +41,7 @@ function validateStep(step) {
     const firstName = document.querySelector("input[name='firstName']");
     const lastName = document.querySelector("input[name='lastName']");
     const email = document.querySelector("input[name='email']");
+    const nif = document.querySelector("input[name='nif']");
     const password = document.querySelector("input[name='password']");
 
     if (!firstName.value.trim()) {
@@ -53,6 +54,10 @@ function validateStep(step) {
     }
     if (!email.value.trim() || !/\S+@\S+\.\S+/.test(email.value)) {
       alert("A valid Email is required.");
+      isValid = false;
+    }
+    if (!nif.value.trim() || !/^\d{9}$/.test(nif.value)) {
+      alert("NIF must be a valid 9-digit number.");
       isValid = false;
     }
     if (!password.value.trim() || password.value.length < 6) {

@@ -97,6 +97,7 @@ adminController.postEditRestaurant = async (req, res) => {
       await User.findByIdAndUpdate(restaurantId, {
           restaurantName: req.body.restaurantName,
           address: req.body.address,
+          nif: req.body.nif,
           phone: req.body.phone,
           pricePerPerson: req.body.pricePerPerson,
       });
@@ -118,6 +119,7 @@ adminController.postAddNewRestaurant = async (req, res) => {
       firstName,
       lastName,
       email,
+      nif,
       password,
       restaurantName,
       address,
@@ -129,6 +131,7 @@ adminController.postAddNewRestaurant = async (req, res) => {
       firstName,
       lastName,
       email,
+      nif,
       password,
       role: "restaurant",
       restaurantName,
