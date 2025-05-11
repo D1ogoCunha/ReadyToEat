@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { DishesComponent } from './dishes.component';
 
 describe('DishesComponent', () => {
@@ -8,7 +8,7 @@ describe('DishesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DishesComponent]
+      imports: [DishesComponent, NavbarComponent]
     })
     .compileComponents();
 
