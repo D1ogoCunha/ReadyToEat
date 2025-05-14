@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-dish-details',
@@ -15,7 +15,11 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 export class DishDetailsComponent implements OnInit {
   dish: any;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private cartService: CartService // Injetar o CartService
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -31,5 +35,12 @@ export class DishDetailsComponent implements OnInit {
         });
       }
     });
+  }
+
+  addToCart(): void {
+    if (this.dish) {
+      this.cartService.addToCart(this.dish);
+      alert(`${this.dish.nome} foi adicionado ao carrinho!`);
+    }
   }
 }

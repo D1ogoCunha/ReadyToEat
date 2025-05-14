@@ -11,12 +11,16 @@ import { routes } from './app.routes';
 import { Menu } from './models/menu';
 import { RestaurantsComponent } from './pages/restaurants/restaurants.component';
 import { DishesComponent } from './pages/dishes/dishes.component';
+import { ShoppingCartComponent } from './pages/shopping-cart/shopping-cart.component';
+import { CartService } from './services/cart.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RestaurantsComponent,
+    DishesComponent,
+    ShoppingCartComponent,
   ],
   imports: [
     BrowserModule,
@@ -24,7 +28,7 @@ import { DishesComponent } from './pages/dishes/dishes.component';
     HttpClientModule,
     RouterModule.forRoot(routes),
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [CartService],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
