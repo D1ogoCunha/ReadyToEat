@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CartService } from '../../services/cart.service';
 import { CommonModule } from '@angular/common';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -12,14 +14,20 @@ import { CommonModule } from '@angular/common';
 })
 export class ShoppingCartComponent implements OnInit {
   cartItems: any[] = [];
-  shippingCost: number = 10; // Valor fixo de envio
+  shippingCost: number = 10;
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private router: Router) {}
 
   ngOnInit(): void {
     this.cartService.cartItems$.subscribe((items) => {
       this.cartItems = items;
     });
+
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.cartItems = this.cartService.getCartItems();
+      });
   }
 
   calculateSubtotal(): number {
@@ -40,20 +48,21 @@ export class ShoppingCartComponent implements OnInit {
 
   increaseQuantity(item: any): void {
     item.quantity = (item.quantity || 1) + 1;
-    this.cartService.addToCart(item); // Atualizar o carrinho
+    this.cartService.updateCartItem(item);
   }
 
   decreaseQuantity(item: any): void {
     if (item.quantity > 1) {
       item.quantity -= 1;
-      this.cartService.addToCart(item); // Atualizar o carrinho
+      this.cartService.updateCartItem(item);
     }
   }
 
   removeFromCart(item: any): void {
-    this.cartItems = this.cartItems.filter((cartItem) => cartItem !== item);
-    this.cartService.clearCart(); // Atualizar o carrinho
-    this.cartItems.forEach((cartItem) => this.cartService.addToCart(cartItem));
+    this.cartItems = this.cartItems.filter(
+      (cartItem) => cartItem._id !== item._id
+    );
+    this.cartService.removeCartItem(item._id);
   }
 
   proceedToCheckout(): void {
