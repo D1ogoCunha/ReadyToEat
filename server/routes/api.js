@@ -8,7 +8,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken"); 
 const config = require("../jwt_secret/config"); 
 
-router.post("/login", async (req, res) => {
+router.post("/auth/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
