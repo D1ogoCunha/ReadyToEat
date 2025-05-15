@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class RestaurantService {
-  private apiUrl = 'http://localhost:3000/restaurants';
+  private apiUrl = 'http://localhost:3000/users/restaurants';
 
   constructor(private http: HttpClient) { }
 
@@ -15,6 +15,9 @@ export class RestaurantService {
   }
   
   getRestaurantById(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/restaurants/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+  getMenusByRestaurantId(restaurantId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${restaurantId}/menus`);
   }
 }

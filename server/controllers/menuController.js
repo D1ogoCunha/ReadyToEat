@@ -175,5 +175,16 @@ menuController.deleteMenu = async (req, res) => {
   }
 };
 
+menuController.getDishesByMenuId = async (req, res) => {
+  const menuId = req.params.menuId;
+
+  try {
+    const dishes = await Dish.find({ menu: menuId });
+    res.json(dishes);
+  } catch (error) {
+    console.error("Error fetching dishes:", error);
+    res.status(500).send("Failed to load dishes.");
+  }
+};
 
 module.exports = menuController;

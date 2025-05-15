@@ -3,16 +3,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { routes } from './app.routes';
-import { Menu } from './models/menu';
 import { RestaurantsComponent } from './pages/restaurants/restaurants.component';
 import { DishesComponent } from './pages/dishes/dishes.component';
 import { ShoppingCartComponent } from './pages/shopping-cart/shopping-cart.component';
 import { CartService } from './services/cart.service';
+
 
 @NgModule({
   declarations: [

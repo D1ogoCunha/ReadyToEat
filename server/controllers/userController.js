@@ -3,6 +3,7 @@ const User = require("../models/user");
 const Order = require("../models/order");
 const Dish = require("../models/dish");
 const bcrypt = require("bcrypt");
+const Menu = require("../models/menu");
 
 var userController = {};
 
@@ -121,6 +122,7 @@ userController.updateProfile = async (req, res) => {
       phone,
       pricePerPerson,
     } = req.body;
+
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
       {
@@ -132,6 +134,7 @@ userController.updateProfile = async (req, res) => {
         address,
         phone,
         pricePerPerson,
+        image: req.file ? `/uploads/${req.file.filename}` : undefined,
       },
       { new: true, runValidators: true }
     );
@@ -188,6 +191,48 @@ userController.getMostOrderedDishes = async (req, res) => {
   } catch (error) {
     console.error("Error fetching most ordered dishes:", error);
     res.status(500).send("Failed to load chart data.");
+  }
+};
+
+userController.getRestaurants = async (req, res) => {
+  try {
+    const restaurants = await User.find({ role: "restaurant" });
+    console.log("Restaurants found:", restaurants);
+    res.json(restaurants);
+  } catch (error) {
+    console.error("Error fetching restaurants:", error);
+    res.status(500).send("Failed to load restaurants.");
+  }
+};
+
+userController.getRestaurantesById = async (req, res) => {
+  try {
+    const { restaurantId } = req.params;
+    const restaurant = await User.findById(restaurantId);
+    if (!restaurant) {
+      return res.status(404).send("Restaurant not found.");
+    }
+    console.log("Restaurant found:", restaurant);
+    res.json(restaurant);
+  }
+  catch (error) {
+    console.error("Error fetching restaurant:", error);
+    res.status(500).send("Failed to load restaurant.");
+  }
+}
+
+userController.getMenusByRestaurantId = async (req, res) => {
+  try {
+    const { restaurantId } = req.params;
+    const menus = await Menu.find({ createdBy: restaurantId });
+    if (!menus) {
+      return res.status(404).send("Menus not found.");
+    }
+    console.log("Menus found:", menus);
+    res.json(menus);
+  } catch (error) {
+    console.error("Error fetching menus:", error);
+    res.status(500).send("Failed to load menus.");
   }
 };
 

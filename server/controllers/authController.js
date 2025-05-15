@@ -86,6 +86,7 @@ authController.createLoginSubmitted = function (req, res, next) {
     userData.address = req.body.address;
     userData.phone = req.body.phone;
     userData.pricePerPerson = req.body.pricePerPerson;
+    userData.image = req.file ? `/uploads/${req.file.filename}` : null;
   }
 
   User.create(userData)

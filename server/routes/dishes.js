@@ -18,4 +18,6 @@ router.delete("/:id/delete", dishController.deleteDish);
 
 router.get("/dish", authController.verifyLoginUser, dishController.getDishDetails);
 
+router.get("/:dishId", dishController.getDishById);
+
 module.exports = router;

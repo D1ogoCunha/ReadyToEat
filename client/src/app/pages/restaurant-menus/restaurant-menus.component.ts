@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { RestaurantService } from '../../services/restaurant.service';
 
 @Component({
   selector: 'app-restaurant-menus',
@@ -16,17 +17,23 @@ export class RestaurantMenusComponent implements OnInit {
   menus: any[] = [];
   restaurantId!: string;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(private route: ActivatedRoute,  private restaurantService : RestaurantService) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const restaurantId = params.get('restaurantId');
       if (restaurantId) {
-        this.http.get<any[]>(`http://localhost:3000/api/restaurants/${restaurantId}/menus`).subscribe({
+        this.restaurantId = restaurantId;
+
+        this.restaurantService.getMenusByRestaurantId(restaurantId).subscribe({
           next: (menus: any[]) => {
             this.menus = menus;
+            this.menus.forEach(menu =>
+              console.log(`Menu: ${menu.nome}, Imagem: ${menu.imagem}`)
+            );
           },
           error: (err: any) => {
+            console.error('Erro ao procurar menus:', err);
           }
         });
       }

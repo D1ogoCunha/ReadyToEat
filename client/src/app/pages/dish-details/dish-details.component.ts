@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CartService } from '../../services/cart.service';
+import { DishesService } from '../../services/dishes.service'; 
 
 @Component({
   selector: 'app-dish-details',
@@ -17,7 +18,7 @@ export class DishDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient,
+    private dishesService: DishesService,
     private cartService: CartService // Injetar o CartService
   ) {}
 
@@ -25,7 +26,7 @@ export class DishDetailsComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const dishId = params.get('dishId');
       if (dishId) {
-        this.http.get<any>(`http://localhost:3000/api/dishes/${dishId}`).subscribe({
+        this.dishesService.getDishById(dishId).subscribe({
           next: (dish: any) => {
             this.dish = dish;
           },

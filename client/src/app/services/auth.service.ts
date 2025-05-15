@@ -16,6 +16,7 @@ export class AuthService {
     const url = `${this.apiUrl}/login`;
     return this.http.post(url, { email, password }).pipe(
       tap((response: any) => {
+        console.log('Login response:', response);
         if (response && response.token) {
           this.setToken(response.token);
         }
@@ -42,6 +43,7 @@ export class AuthService {
 
   private setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
+    console.log('Token set:', token);
   }
 
   private clearToken(): void {

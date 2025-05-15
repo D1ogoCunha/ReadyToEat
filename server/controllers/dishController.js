@@ -239,4 +239,20 @@ dishController.getDishDetails = async (req, res) => {
   }
 };
 
+dishController.getDishById = async (req, res) => {
+  const dishId = req.params.dishId; 
+
+  try {
+    const dish = await Dish.findById(dishId) 
+    if (!dish) {
+      return res.status(404).json({ message: "Dish not found" });
+    }
+    res.json(dish);
+  }
+  catch (error) {
+    console.error("Error fetching dish:", error);
+    res.status(500).json({ message: "Error fetching dish" });
+  }
+}
+
 module.exports = { ...dishController, upload };

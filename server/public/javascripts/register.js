@@ -68,6 +68,8 @@ function validateStep(step) {
     const restaurantName = document.querySelector("input[name='restaurantName']");
     const address = document.querySelector("input[name='address']");
     const phone = document.querySelector("input[name='phone']");
+    const pricePerPerson = document.querySelector("input[name='pricePerPerson']");
+    const image = document.querySelector("input[name='image']");
 
     if (!restaurantName.value.trim()) {
       alert("Restaurant Name is required.");
@@ -79,6 +81,14 @@ function validateStep(step) {
     }
     if (!phone.value.trim() || !/^\d{9}$/.test(phone.value)) {
       alert("Phone must be a valid 9-digit number.");
+      isValid = false;
+    }
+    if (!pricePerPerson.value.trim() || isNaN(pricePerPerson.value) || pricePerPerson.value <= 0) {
+      alert("Price per person must be a valid positive number.");
+      isValid = false;
+    }
+    if (!image.files[0]) {
+      alert("Image is required.");
       isValid = false;
     }
   }
@@ -120,15 +130,11 @@ document.getElementById("register-form").addEventListener("submit", async functi
 
   const form = event.target;
   const formData = new FormData(form);
-  const formObject = Object.fromEntries(formData.entries());
 
   try {
     const response = await fetch(form.action, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formObject),
+      body: formData, // NÃO definir headers, o browser trata do multipart/form-data
     });
 
     if (!response.ok) {

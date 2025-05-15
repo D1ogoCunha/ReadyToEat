@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CartService } from '../../services/cart.service';
+import { MenusService } from '../../services/menus.service';
 
 @Component({
   selector: 'app-dishes',
@@ -15,23 +16,27 @@ import { CartService } from '../../services/cart.service';
   styleUrls: ['./dishes.component.css']
 })
 export class DishesComponent implements OnInit {
-  dishes: any[] = [];
+dishes: any[] = [];
   menuId!: string;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private cartService: CartService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private menusService: MenusService,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const menuId = params.get('menuId');
       if (menuId) {
         this.menuId = menuId;
-        this.http.get<any[]>(`http://localhost:3000/api/menus/${menuId}/dishes`).subscribe({
+
+        this.menusService.getDishesByMenuId(menuId).subscribe({
           next: (dishes: any[]) => {
             this.dishes = dishes;
-
-            this.dishes.forEach(dish => {
-              console.log(`Prato: ${dish.nome}, Imagem: ${dish.imagem}`);
-            });
+            this.dishes.forEach(dish =>
+              console.log(`Prato: ${dish.nome}, Imagem: ${dish.imagem}`)
+            );
           },
           error: (err: any) => {
             console.error('Erro ao buscar pratos:', err);
@@ -41,7 +46,7 @@ export class DishesComponent implements OnInit {
     });
   }
 
-    addToCart(dish: any) {
+  addToCart(dish: any) {
     this.cartService.addToCart(dish);
     alert(`${dish.nome} foi adicionado ao carrinho!`);
   }

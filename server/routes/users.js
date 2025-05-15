@@ -13,6 +13,11 @@ router.post("/profile/edit", authController.verifyLoginUser, userController.upda
 router.get("/profile/chart", authController.verifyLoginUser, userController.renderChartPage);
 router.post("/profile/chart", authController.verifyLoginUser, userController.getMostOrderedDishes);
 
+router.get("/restaurants", userController.getRestaurants);
+router.get("/restaurants/:restaurantId", userController.getRestaurantesById);
+
+router.get("/restaurants/:restaurantId/menus", userController.getMenusByRestaurantId);
+
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
