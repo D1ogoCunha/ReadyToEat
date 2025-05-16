@@ -17,6 +17,11 @@
   border-radius: var(--bs-badge-border-radius);
 }
 
+.display-4 {
+    font-size: 45px;
+    font-weight: 200;
+    line-height: 1.2;
+}
 .badge:empty {
   display: none;
 }

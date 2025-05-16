@@ -2,7 +2,6 @@
   href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
   rel="stylesheet"
 />
-
 <app-navbar></app-navbar>
 
 <header class="bg-dark py-5">
@@ -21,7 +20,7 @@
         <!-- Restaurant image (use a default if missing) -->
         <img
           class="card-img-top"
-          [src]="restaurant.image || 'assets/default-restaurant.jpg'"
+          [src]="'http://localhost:3000' + restaurant.image"
           alt="{{ restaurant.name }}"
         />
         <!-- Restaurant details -->

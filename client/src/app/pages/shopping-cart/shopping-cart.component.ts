@@ -4,11 +4,12 @@ import { CartService } from '../../services/cart.service';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-shopping-cart',
   standalone: true,
-  imports: [CommonModule, NavbarComponent],
+  imports: [CommonModule, NavbarComponent, RouterLink],
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.css'],
 })

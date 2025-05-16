@@ -167,6 +167,12 @@
     border-color: var(--bs-btn-disabled-border-color);
     opacity: var(--bs-btn-disabled-opacity);
   }
+
+  .display-4 {
+    font-size: 45px;
+    font-weight: 200;
+    line-height: 1.2;
+}
   
   .btn-outline-dark {
     --bs-btn-color: #212529;

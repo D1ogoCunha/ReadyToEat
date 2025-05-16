@@ -97,6 +97,25 @@
   padding-left: var(--bs-navbar-nav-link-padding-x);
 }
 
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-user .dropdown-toggle {
+  border: none;
+  background: none;
+  color: #212529;
+  font-size: 1.65rem;
+  padding: 0 0.5rem;
+}
+
+.navbar-user .dropdown-menu {
+  min-width: 160px;
+}
+
+
 /* Nav links */
 .nav-link {
   display: block;

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { RouterModule } from '@angular/router';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-navbar',
@@ -19,4 +20,8 @@ export class NavbarComponent implements OnInit {
       this.cartCount = count;
     });
   }
+  user = {
+    firstName: 'John',
+    lastName: 'Doe'
+  };
 }
