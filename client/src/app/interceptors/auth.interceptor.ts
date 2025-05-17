@@ -1,32 +1,25 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor
-} from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class AuthInterceptorInterceptor implements HttpInterceptor {
+export class AuthInterceptor implements HttpInterceptor {
 
-  constructor() { }
+  constructor() {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    console.log('AuthInterceptor ativo!');
 
+    // Verifica se o cookie "authToken" existe
+    const hasAuthCookie = document.cookie.split(';').some(cookie => cookie.trim().startsWith('auth-token='));
 
-
-    let currentUser = JSON.parse(localStorage.getItem('currentUser') || "{}");
-
-    if (currentUser && currentUser.token) {
-      request = request.clone({
-        setHeaders: {
-          "x-access-token": `${currentUser.token}`
-        }
-      });
+    if (hasAuthCookie) {
+      console.log('authToken encontrado nos cookies.');
+      const cloned = request.clone({ withCredentials: true });
+      return next.handle(cloned);
+    } else {
+      console.warn('authToken não encontrado nos cookies. Requisição original será usada.');
+      return next.handle(request);
     }
-
-    return next.handle(request);
   }
-
 }

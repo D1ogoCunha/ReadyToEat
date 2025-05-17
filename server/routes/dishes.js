@@ -6,18 +6,18 @@ const Dish = require("../models/dish");
 
 router.get("/", authController.verifyLoginUser, dishController.list);
 
-router.get("/add", dishController.addForm);
+router.get("/add", authController.verifyLoginUser, dishController.addForm);
 
-router.post("/add", dishController.upload.single("image"), dishController.save);
+router.post("/add", authController.verifyLoginUser, dishController.upload.single("image"), dishController.save);
 
 router.get("/edit", authController.verifyLoginUser, dishController.editForm);
 
-router.post("/edit", dishController.upload.single("image"), dishController.update);
+router.post("/edit", authController.verifyLoginUser, dishController.upload.single("image"), dishController.update);
 
-router.delete("/:id/delete", dishController.deleteDish);
+router.delete("/:id/delete", authController.verifyLoginUser, dishController.deleteDish);
 
 router.get("/dish", authController.verifyLoginUser, dishController.getDishDetails);
 
-router.get("/:dishId", dishController.getDishById);
+router.get("/:dishId", authController.verifyLoginUser, dishController.getDishById);
 
 module.exports = router;

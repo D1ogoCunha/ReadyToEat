@@ -11,6 +11,6 @@ private apiUrl = 'http://localhost:3000/menus';
   constructor(private http: HttpClient) { }
 
   getDishesByMenuId(menuId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${menuId}/dishes`);
+    return this.http.get<any[]>(`${this.apiUrl}/${menuId}/dishes`, { withCredentials: true });
   }
 }

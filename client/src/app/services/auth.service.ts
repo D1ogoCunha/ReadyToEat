@@ -4,13 +4,13 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000/auth';
   private tokenKey = 'currentUser';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<any> {
     const url = `${this.apiUrl}/login`;
@@ -36,16 +36,16 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  getToken(): string | null {
-    const user = JSON.parse(localStorage.getItem(this.tokenKey) || '{}');
-    return user.token || null;
+  private setToken(token: string): void {
+  document.cookie = 'auth-token=${token}; path=/; SameSite=None';
   }
 
-  private setToken(token: string): void {
-    localStorage.setItem(this.tokenKey, JSON.stringify({ token }));
+  getToken(): string | null {
+    const match = document.cookie.match(new RegExp('(^| )auth-token=([^;]+)'));
+    return match ? match[2] : null;
   }
 
   private clearToken(): void {
-    localStorage.removeItem(this.tokenKey);
+    document.cookie = 'auth-token=; Max-Age=0; path=/;';
   }
 }

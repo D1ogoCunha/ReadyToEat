@@ -5,7 +5,7 @@ const authController = require("../controllers/authController");
 
 router.get("/", authController.verifyAdmin, adminController.getAdminDashboard);
 
-router.get("/restaurantManagement", adminController.getRestaurantManagement);
+router.get("/restaurantManagement", authController.verifyLoginUser, adminController.getRestaurantManagement);
 
 router.delete("/restaurants/:id", authController.verifyAdmin, adminController.deleteRestaurant);
 
