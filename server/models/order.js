@@ -5,7 +5,7 @@ const orderSchema = new mongoose.Schema({
   customerId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   date: { type: Date, default: Date.now },
   amount: { type: Number, required: true },
-  status: { type: String, enum: ["Pending", "Paid", "Cancelled"], default: "Pending" },
+  status: { type: String, enum: ["Pending", "Completed", "Cancelled"], default: "Pending" },
   dishes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Dish" }],
 });
 

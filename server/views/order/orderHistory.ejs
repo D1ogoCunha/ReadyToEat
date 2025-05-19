@@ -25,16 +25,17 @@
               <tr>
                 <th>#</th>
                 <% if (user.role === "restaurant") { %>
-                <th>Customer</th>
-                <th>NIF</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Dishes</th>
+                  <th>Customer</th>
+                  <th>NIF</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Dishes</th>
                 <% } else if (user.role === "customer") { %>
-                <th>Restaurant</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Dishes</th>
+                  <th>Restaurant</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Dishes</th>
                 <% } %>
               </tr>
             </thead>
@@ -57,13 +58,15 @@
                 </td>
                 <td>$<%= order.amount ? order.amount.toFixed(2) : '0.00' %></td>
                 <td>
-                  <% if (order.status === "Pending") { %>
-                  <span class="badge bg-warning text-dark">Pending</span>
-                  <% } else if (order.status === "Paid") { %>
-                  <span class="badge bg-success">Paid</span>
-                  <% } else { %>
-                  <span class="badge bg-danger">Cancelled</span>
-                  <% } %>
+                  <select class="form-select form-select-sm order-status-select"
+                          data-order-id="<%= order._id %>">
+                    <option value="Pending" <%= order.status === "Pending" ? "selected" : "" %>>Pending</option>
+                    <option value="Completed" <%= order.status === "Completed" ? "selected" : "" %>>Completed</option>
+                    <option value="Cancelled" <%= order.status === "Cancelled" ? "selected" : "" %>>Cancelled</option>
+                  </select>
+                </td>
+                <td>
+                <%= order.date ? new Date(order.date).toLocaleDateString() : 'N/A' %>
                 </td>
                 <td>
                   <% if (order.dishes && order.dishes.length > 0) { %>
@@ -121,4 +124,26 @@
       <% } %>
     </div>
   </body>
+    <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.order-status-select').forEach(function(select) {
+      select.addEventListener('change', function() {
+        const orderId = this.dataset.orderId;
+        const newStatus = this.value;
+        fetch('/order/update-status', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ orderId, status: newStatus })
+        })
+        .then(res => res.ok ? res.json() : Promise.reject())
+        .then(data => {
+        })
+        .catch(() => alert('Error updating order status'));
+      });
+    });
+  });
+  </script>
 </html>
