@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs"); 
 const jwt = require("jsonwebtoken"); 
 const config = require("../jwt_secret/config"); 
-
+/*
 router.post("/auth/login", async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -33,6 +33,6 @@ router.post("/auth/login", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: "Internal server error." });
   }
-});
+});*/
 
 module.exports = router;

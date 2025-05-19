@@ -13,11 +13,15 @@ authController.login = function (req, res, next) {
 authController.submittedLogin = function (req, res, next) {
   const emailInput = req.body.email;
   const passwordInput = req.body.password;
+  const fromRest = req.body.rest ? req.body.rest : undefined;
 
   User.findOne({ email: emailInput })
     .then(function (user) {
       if (!user) {
         console.log("User not found:", emailInput);
+        if (fromRest) {
+          return res.status(401).json({ error: "Invalid email or password." });
+        }
         return res.render("login", {
           errorMessage: "Invalid email or password.",
         });
@@ -26,6 +30,11 @@ authController.submittedLogin = function (req, res, next) {
       bcrypt.compare(passwordInput, user.password).then(function (result) {
         if (!result) {
           console.log("Wrong password:", emailInput);
+          if (fromRest) {
+            return res
+              .status(401)
+              .json({ error: "Invalid email or password." });
+          }
           return res.render("login", {
             errorMessage: "Invalid email or password.",
           });
@@ -33,6 +42,12 @@ authController.submittedLogin = function (req, res, next) {
 
         if (user.role === "restaurant" && user.status === "in validation") {
           console.log("Restaurant not validated:", emailInput);
+          if (fromRest) {
+            return res.status(403).json({
+              error:
+                "Your account is under validation. Please wait for approval.",
+            });
+          }
           return res.render("login", {
             errorMessage:
               "Your account is under validation. Please wait for approval.",
@@ -50,6 +65,18 @@ authController.submittedLogin = function (req, res, next) {
           httpOnly: true,
         });
 
+        if (fromRest) {
+          return res.json({
+            token: authToken,
+            role: user.role,
+            user: {
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+            },
+          });
+        }
+
         if (user.role === "restaurant") {
           res.redirect("/index");
         } else if (user.role === "customer") {
@@ -60,6 +87,9 @@ authController.submittedLogin = function (req, res, next) {
       });
     })
     .catch(function (err) {
+      if (fromRest) {
+        return res.status(500).json({ error: "Internal server error." });
+      }
       next(err);
     });
 };
@@ -105,31 +135,48 @@ authController.createLoginSubmitted = function (req, res, next) {
 };
 
 authController.verifyLoginUser = function (req, res, next) {
+  const fromRest = req.body.rest ? req.body.rest : undefined;
   const authToken = req.cookies["auth-token"];
   if (authToken) {
     jwt.verify(authToken, config.secret, async function (err, decoded) {
       if (err) {
         console.log("Error verifying token:", err);
+        if (fromRest) {
+          return res.status(401).json({ error: "Unauthorized" });
+        }
         return res.redirect("/login");
       }
       try {
         const user = await User.findOne({ email: decoded.email });
         if (!user) {
+          if (fromRest) {
+            return res.status(401).json({ error: "Unauthorized" });
+          }
           return res.redirect("/login");
         }
         req.user = user;
         next();
       } catch (error) {
+        if (fromRest) {
+          return res.status(401).json({ error: "Unauthorized" });
+        }
         res.redirect("/login");
       }
     });
   } else {
+    if (fromRest) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
     res.redirect("/login");
   }
 };
 
 authController.logout = function (req, res, next) {
+  const fromRest = req.body.rest ? req.body.rest : undefined;
   res.clearCookie("auth-token");
+  if (fromRest) {
+    return res.status(200).json({ message: "Logged out" });
+  }
   res.redirect("/login");
 };
 
