@@ -11,25 +11,44 @@ orderController.getOrderHistory = async (req, res) => {
 
     if (req.user.role === "restaurant") {
       populatedOrders = await Order.find({ restaurantId: req.user._id })
-        .populate("customerId", "firstName lastName nif") 
+        .populate("customerId", "firstName lastName nif")
         .populate("dishes")
         .sort({ date: 1 });
     } else if (req.user.role === "customer") {
       populatedOrders = await Order.find({ customerId: req.user._id })
-        .populate("restaurantId", "restaurantName") 
+        .populate("restaurantId", "restaurantName")
         .populate("dishes")
         .sort({ date: 1 });
+    }
+
+    let customers = [];
+    let menus = [];
+    if (req.user.role === "restaurant") {
+      customers = await User.find({ role: "customer" });
+      menus = await Menu.find({ createdBy: req.user._id });
+
+      const menuIds = menus.map((menu) => menu._id);
+      const dishes = await Dish.find({ menu: { $in: menuIds } });
+
+      menus.forEach((menu) => {
+        menu.dishes = dishes.filter(
+          (dish) => String(dish.menu) === String(menu._id)
+        );
+      });
     }
 
     res.render("order/orderHistory", {
       orders: populatedOrders || [],
       user: req.user,
+      customers,
+      menus,
     });
   } catch (error) {
     console.error("Error fetching order history:", error.stack);
     res.status(500).send("Error fetching order history: " + error.message);
   }
 };
+
 
 orderController.renderOrderPage = async (req, res) => {
   try {
@@ -49,40 +68,6 @@ orderController.renderOrderPage = async (req, res) => {
   } catch (error) {
     console.error("Error fetching order history:", error.stack);
     res.status(500).send("Error fetching order history: " + error.message);
-  }
-};
-
-orderController.renderPhoneOrderPage = async (req, res) => {
-  try {
-    const customers = await User.find({ role: "customer" });
-    const menus = await Menu.find({ createdBy: req.user._id });
-
-    const menuIds = menus.map((menu) => menu._id);
-    const dishes = await Dish.find({ menu: { $in: menuIds } });
-
-    const dishesByMenu = {};
-    menus.forEach((menu) => {
-      dishesByMenu[menu._id] = {
-        menu,
-        dishes: dishes.filter((dish) => String(dish.menu) === String(menu._id)),
-      };
-    });
-
-    console.log("Dishes by Menu:");
-    for (const [menuId, group] of Object.entries(dishesByMenu)) {
-      console.log(`Menu: ${group.menu.name}`);
-      group.dishes.forEach((d) => {
-        console.log(`  - ${d.nome} (€${d.preco.toFixed(2)})`);
-      });
-    }
-  
-    res.render("order/phoneOrder", {
-      customers,
-      dishesByMenu,
-      user: req.user,
-    });
-  } catch (error) {
-    res.status(500).send("Error rendering phone order page.");
   }
 };
 
@@ -123,6 +108,18 @@ orderController.createPhoneOrder = async (req, res) => {
   } catch (error) {
     console.error("Error creating phone order:", error.stack);
     res.status(500).send("Error creating phone order: " + error.message);
+  }
+};
+
+orderController.updateOrderStatus = async (req, res) => {
+  const { orderId, status } = req.body;
+  if (!orderId || !status) return res.status(400).json({ error: 'Missing data' });
+  try {
+    const order = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
+    if (!order) return res.status(404).json({ error: 'Order not found' });
+    res.json({ success: true, order });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
   }
 };
 

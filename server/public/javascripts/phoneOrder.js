@@ -1,33 +1,78 @@
-function updateDishesByMenu(menuId) {
-  const dishesContainer = document.getElementById("dishes-container");
-  const allDishes = dishesByMenuData; 
-
-  dishesContainer.innerHTML = "";
-
-  if (menuId && allDishes[menuId]) {
-    const group = allDishes[menuId];
-    if (group.dishes.length > 0) {
-      group.dishes.forEach((dish) => {
-        const dishElement = document.createElement("div");
-        dishElement.classList.add("form-check");
-        dishElement.innerHTML = `
-          <input
-            class="form-check-input"
-            type="checkbox"
-            id="dish-${dish._id}"
-            name="selectedDishes"
-            value="${dish._id}"
-          />
-          <label class="form-check-label" for="dish-${dish._id}">
-            ${dish.nome} - €${dish.preco ? dish.preco.toFixed(2) : "0.00"}
-          </label>
-        `;
-        dishesContainer.appendChild(dishElement);
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.order-status-select').forEach(function(select) {
+      select.addEventListener('change', function() {
+        const orderId = this.dataset.orderId;
+        const newStatus = this.value;
+        fetch('/order/update-status', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ orderId, status: newStatus })
+        })
+        .then(res => res.ok ? res.json() : Promise.reject())
+        .then(data => {
+        })
+        .catch(() => alert('Error updating order status'));
       });
-    } else {
-      dishesContainer.innerHTML = `<p class="text-muted">No dishes in this menu.</p>`;
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+
+  const customerSelect = document.getElementById('customerId');
+  if (customerSelect) {
+    const allOptions = Array.from(customerSelect.options);
+    
+    const customerSearchInput = document.createElement('input');
+    customerSearchInput.type = 'text';
+    customerSearchInput.className = 'form-control mb-2';
+    customerSearchInput.placeholder = 'Search customer by name or NIF...';
+    customerSearchInput.id = 'customerSearch';
+    
+    customerSelect.parentNode.insertBefore(customerSearchInput, customerSelect);
+    
+    customerSearchInput.addEventListener('input', function () {
+      const query = this.value.trim().toLowerCase();
+
+      while (customerSelect.firstChild) {
+        customerSelect.removeChild(customerSelect.firstChild);
+      }
+
+      allOptions.forEach(option => {
+        if (option.text.toLowerCase().includes(query)) {
+          const clonedOption = option.cloneNode(true);
+          customerSelect.appendChild(clonedOption);
+        }
+      });
+      
+      if (customerSelect.options.length === 0) {
+        allOptions.forEach(option => {
+          const clonedOption = option.cloneNode(true);
+          customerSelect.appendChild(clonedOption);
+        });
+      }
+    });
+    
+    const phoneOrderModal = document.getElementById('phoneOrderModal');
+    if (phoneOrderModal) {
+      phoneOrderModal.addEventListener('hidden.bs.modal', function () {
+        customerSearchInput.value = '';
+        
+        while (customerSelect.firstChild) {
+          customerSelect.removeChild(customerSelect.firstChild);
+        }
+        
+        allOptions.forEach(option => {
+          const clonedOption = option.cloneNode(true);
+          customerSelect.appendChild(clonedOption);
+        });
+        
+        document.querySelectorAll('input[name="selectedDishes"]').forEach(checkbox => {
+          checkbox.checked = false;
+        });
+      });
     }
-  } else {
-    dishesContainer.innerHTML = `<p class="text-muted">Please select a menu to see the dishes.</p>`;
   }
-}
+});
