@@ -21,3 +21,39 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".edit-button").forEach((btn) => {
+    btn.addEventListener("click", function () {
+      document.getElementById("editMenuId").value = this.dataset.id;
+      document.getElementById("editMenuName").value = this.dataset.name;
+    });
+  });
+  document
+    .getElementById("editMenuForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      fetch("/menus/edit", {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) =>
+          res.ok ? location.reload() : alert("Error updating menu")
+        )
+        .catch(() => alert("Error updating menu"));
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('createMenuForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('/menus/new', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.ok ? location.reload() : alert('Error creating menu'))
+    .catch(() => alert('Error creating menu'));
+  });
+});

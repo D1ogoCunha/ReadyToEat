@@ -30,6 +30,7 @@ export class AuthService {
 
   logout(): void {
     this.clearToken();
+    localStorage.removeItem(this.tokenKey);
   }
 
   isAuthenticated(): boolean {
@@ -37,7 +38,7 @@ export class AuthService {
   }
 
   private setToken(token: string): void {
-  document.cookie = 'auth-token=${token}; path=/; SameSite=None';
+  document.cookie = `auth-token=${token}; path=/;`;
   }
 
   getToken(): string | null {

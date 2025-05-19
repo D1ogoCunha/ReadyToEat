@@ -91,26 +91,31 @@ menuController.renderEditMenuForm = async (req, res) => {
 };
 
 menuController.updateMenu = async (req, res) => {
-  const menuId = req.cookies.menuId; 
+  // Buscar o ID do corpo do pedido
+  const menuId = req.body._id;
 
   if (!menuId) {
-      return res.status(400).send("Menu ID is required.");
+    return res.status(400).send("Menu ID is required.");
   }
 
   try {
-      const menu = await Menu.findByIdAndUpdate(menuId, {
-          name: req.body.name,
-          image: req.file ? `/uploads/${req.file.filename}` : undefined,
-      }, { new: true });
+    const updateData = {
+      name: req.body.name,
+    };
+    if (req.file) {
+      updateData.image = `/uploads/${req.file.filename}`;
+    }
 
-      if (!menu) {
-          return res.status(404).send("Menu not found.");
-      }
+    const menu = await Menu.findByIdAndUpdate(menuId, updateData, { new: true });
 
-      res.redirect("/menus");
+    if (!menu) {
+      return res.status(404).send("Menu not found.");
+    }
+
+    return res.status(200).json({ message: "Menu updated successfully." });
   } catch (error) {
-      console.error("Error updating menu:", error);
-      res.status(500).send("Error updating menu.");
+    console.error("Error updating menu:", error);
+    res.status(500).send("Error updating menu.");
   }
 };
 
