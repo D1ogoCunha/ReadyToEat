@@ -77,3 +77,12 @@ function toggleNewCategoryInput() {
     document.getElementById("newCategory").removeAttribute("required");
   }
 }
+
+  function goBackToDishes() {
+    var menuId = document.querySelector('input[name="menuId"]').value;
+    if (menuId) {
+      window.location.href = '/menus/dishes?menuId=' + menuId;
+    } else {
+      window.history.back();
+    }
+  }
