@@ -236,4 +236,49 @@ userController.getMenusByRestaurantId = async (req, res) => {
   }
 };
 
+userController.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("firstName lastName email nif");
+    if (!user) return res.status(404).json({ error: "User not found." });
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching profile." });
+  }
+};
+
+userController.updateProfileRest = async (req, res) => {
+  try {
+    const { firstName, lastName, email, nif } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { firstName, lastName, email, nif },
+      { new: true, runValidators: true }
+    ).select("firstName lastName email nif");
+    if (!updatedUser) return res.status(404).json({ error: "User not found." });
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: "Error updating profile." });
+  }
+};
+
+userController.changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ error: "New password and confirmation do not match." });
+    }
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ error: "User not found." });
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: "Current password is incorrect." });
+    }
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+    res.json({ message: "Password updated successfully." });
+  } catch (error) {
+    res.status(500).json({ error: "Error updating password." });
+  }
+};
+
 module.exports = userController;

@@ -33,7 +33,7 @@ export class AuthService {
 
   logout(): void {
     this.clearToken();
-    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem('user');
   }
 
   isAuthenticated(): boolean {
