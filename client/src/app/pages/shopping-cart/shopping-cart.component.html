@@ -23,7 +23,7 @@
           <div class="row cart-item mb-3" *ngFor="let item of cartItems">
             <div class="col-md-3">
               <img
-                [src]="item.imagem"
+                [src]="'http://localhost:3000' + item.imagem"
                 [alt]="item.nome"
                 class="img-fluid rounded"
               />

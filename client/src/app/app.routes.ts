@@ -9,6 +9,7 @@ import { ProfileEditComponent } from './pages/user/profile-edit/profile-edit.com
 import { ProfileSecurityComponent } from './pages/user/profile-security/profile-security.component';
 import { ProfileChartComponent } from './pages/user/profile-chart/profile-chart.component';
 import { AuthGuard } from './guards/auth.guard';
+import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
   { path: 'dishes', component: DishesComponent, canActivate: [AuthGuard] },
@@ -21,5 +22,6 @@ export const routes: Routes = [
   { path: 'user/profile/edit', component: ProfileEditComponent, canActivate: [AuthGuard] },
   { path: 'user/profile/security', component: ProfileSecurityComponent, canActivate: [AuthGuard] },
   { path: 'user/profile/chart', component: ProfileChartComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: '/restaurants', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];

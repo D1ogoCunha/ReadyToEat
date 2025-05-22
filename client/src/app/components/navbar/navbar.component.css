@@ -29,6 +29,7 @@
   align-items: center;
   justify-content: space-between;
   font-size: 20px;
+  margin-bottom: 5px !important;
 }
 
 /* Brand */
@@ -41,7 +42,8 @@
   text-decoration: none;
   white-space: nowrap;
 }
-.navbar-brand:hover, .navbar-brand:focus {
+.navbar-brand:hover,
+.navbar-brand:focus {
   color: var(--bs-navbar-brand-hover-color);
 }
 
@@ -97,7 +99,6 @@
   padding-left: var(--bs-navbar-nav-link-padding-x);
 }
 
-
 .navbar-user {
   display: flex;
   align-items: center;
@@ -115,7 +116,6 @@
   min-width: 160px;
 }
 
-
 /* Nav links */
 .nav-link {
   display: block;
@@ -124,7 +124,8 @@
   text-decoration: none;
   transition: color 0.15s;
 }
-.nav-link:hover, .nav-link:focus {
+.nav-link:hover,
+.nav-link:focus {
   color: var(--bs-navbar-hover-color);
 }
 .nav-link.disabled {
