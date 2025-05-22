@@ -11,7 +11,7 @@ private apiUrl = 'http://localhost:3000/dishes';
   constructor(private http: HttpClient) { }
 
   getDishById(dishId: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${dishId}` , { withCredentials: true });
+    return this.http.get<any>(`${this.apiUrl}/${dishId}`);
   }
   
 }

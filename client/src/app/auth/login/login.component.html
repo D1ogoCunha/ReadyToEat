@@ -2,7 +2,7 @@
     <div class="container">
       <img src="/assets/images/readyToEat.jpg" alt="Ready to Eat" />
       <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-      <form (ngSubmit)="onSubmit()">
+      <form (ngSubmit)="onLogin()">
         <label for="email">Email:</label>
         <input
           type="email"

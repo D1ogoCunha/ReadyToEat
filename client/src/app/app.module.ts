@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+/*import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -12,24 +12,25 @@ import { DishesComponent } from './pages/dishes/dishes.component';
 import { ShoppingCartComponent } from './pages/shopping-cart/shopping-cart.component';
 import { CartService } from './services/cart.service';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
-
+*/
 @NgModule({
-  declarations: [
+  /*declarations: [
     AppComponent,
     LoginComponent,
     RestaurantsComponent,
     DishesComponent,
     ShoppingCartComponent,
-  ],
+  ],*/
   imports: [
-    BrowserModule,
+   /* BrowserModule,
     FormsModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes),*/
   ],
   providers: [
-    CartService,
+    /*CartService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  */
   ], 
-  bootstrap: [AppComponent],
+  //bootstrap: [AppComponent],
 })
 export class AppModule {}

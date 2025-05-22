@@ -94,6 +94,7 @@ authController.submittedLogin = function (req, res, next) {
     });
 };
 
+
 authController.createLogin = function (req, res, next) {
   res.render("register");
 };
@@ -135,49 +136,63 @@ authController.createLoginSubmitted = function (req, res, next) {
 };
 
 authController.verifyLoginUser = function (req, res, next) {
-  const fromRest = req.body.rest ? req.body.rest : undefined;
-  const authToken = req.cookies["auth-token"];
-  if (authToken) {
-    jwt.verify(authToken, config.secret, async function (err, decoded) {
+  let token;
+
+  // Se vier do frontend (API REST), o token vem no header Authorization
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies && req.cookies['auth-token']) {
+    // Se vier do backend (browser), o token vem no cookie
+    token = req.cookies['auth-token'];
+  }
+
+  const handleUnauthorized = (message = "Unauthorized. Please log in.") => {
+    if (req.accepts('html') && !req.xhr) {
+      return res.redirect("/login");
+    } else {
+      return res.status(401).json({ message });
+    }
+  };
+
+  if (token) {
+    jwt.verify(token, config.secret, async function (err, decoded) {
       if (err) {
         console.log("Error verifying token:", err);
-        if (fromRest) {
-          return res.status(401).json({ error: "Unauthorized" });
-        }
-        return res.redirect("/login");
+        return handleUnauthorized("Invalid or expired token.");
       }
       try {
         const user = await User.findOne({ email: decoded.email });
         if (!user) {
-          if (fromRest) {
-            return res.status(401).json({ error: "Unauthorized" });
-          }
-          return res.redirect("/login");
+          return handleUnauthorized("User not found for the provided token.");
         }
         req.user = user;
         next();
       } catch (error) {
-        if (fromRest) {
-          return res.status(401).json({ error: "Unauthorized" });
+        console.error("Server error during token verification:", error);
+        if (req.accepts('html') && !req.xhr) {
+          return res.redirect("/login");
+        } else {
+          return res.status(500).json({ message: "Internal server error during authentication." });
         }
-        res.redirect("/login");
       }
     });
   } else {
-    if (fromRest) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-    res.redirect("/login");
+    return handleUnauthorized("No authentication token provided.");
   }
 };
 
 authController.logout = function (req, res, next) {
-  const fromRest = req.body.rest ? req.body.rest : undefined;
-  res.clearCookie("auth-token");
-  if (fromRest) {
-    return res.status(200).json({ message: "Logged out" });
+  // res.clearCookie("auth-token"); // No longer using cookies for auth token
+  // For stateless JWTs, server-side logout mainly means the client discards the token.
+  // If you had a token blacklist, you'd add the token to it here.
+  
+  // If the request is from an API client, just send a success response.
+  // If it's a browser navigating, then redirect.
+  if (req.accepts('html') && !req.xhr) {
+    res.redirect("/login");
+  } else {
+    res.status(200).json({ message: "Logged out successfully." });
   }
-  res.redirect("/login");
 };
 
 authController.verifyAdmin = function (req, res, next) {

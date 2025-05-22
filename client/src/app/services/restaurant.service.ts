@@ -11,13 +11,13 @@ export class RestaurantService {
   constructor(private http: HttpClient) { }
 
   getRestaurants(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl , { withCredentials: true });
+    return this.http.get<any[]>(this.apiUrl);
   }
   
   getRestaurantById(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`, { withCredentials: true });
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
   getMenusByRestaurantId(restaurantId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${restaurantId}/menus`, { withCredentials: true });
+    return this.http.get<any[]>(`${this.apiUrl}/${restaurantId}/menus`);
   }
 }
