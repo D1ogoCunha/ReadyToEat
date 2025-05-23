@@ -42,56 +42,61 @@ menuController.getAllMenus = async (req, res) => {
 };
 
 menuController.getMenuDishes = async (req, res) => {
-  const menuId = req.query.menuId || req.cookies.menuId; 
+  const menuId = req.query.menuId || req.cookies.menuId;
 
   if (req.query.menuId) {
-      res.cookie("menuId", req.query.menuId, { httpOnly: true, secure: false }); 
-      return res.redirect("/menus/dishes");
+    res.cookie("menuId", req.query.menuId, { httpOnly: true, secure: false });
+    return res.redirect("/menus/dishes");
   }
 
   if (!menuId) {
-      return res.status(400).send("Menu ID is required.");
+    return res.status(400).send("Menu ID is required.");
   }
 
   try {
-      const menu = await Menu.findById(menuId);
-      const dishes = await Dish.find({ menu: menuId });
-      const dishCount = dishes.length;
+    const menu = await Menu.findById(menuId);
+    const dishes = await Dish.find({ menu: menuId });
+    const dishCount = dishes.length;
 
-      res.render("menu/dishes", { pratos: dishes, menu, dishCount, maxDishes: 10, user: req.user });
+    res.render("menu/dishes", {
+      pratos: dishes,
+      menu,
+      dishCount,
+      maxDishes: 10,
+      user: req.user,
+    });
   } catch (error) {
-      console.error("Error searching for dishes:", error);
-      res.status(500).send("Error searching for dishes.");
+    console.error("Error searching for dishes:", error);
+    res.status(500).send("Error searching for dishes.");
   }
 };
 
 menuController.renderEditMenuForm = async (req, res) => {
-  const menuId = req.query.menuId || req.cookies.menuId; 
+  const menuId = req.query.menuId || req.cookies.menuId;
 
   if (req.query.menuId) {
-      res.cookie("menuId", req.query.menuId, { httpOnly: true, secure: false });
-      return res.redirect("/menus/edit");
+    res.cookie("menuId", req.query.menuId, { httpOnly: true, secure: false });
+    return res.redirect("/menus/edit");
   }
 
   if (!menuId) {
-      return res.status(400).send("Menu ID is required.");
+    return res.status(400).send("Menu ID is required.");
   }
 
   try {
-      const menu = await Menu.findById(menuId);
-      if (!menu) {
-          return res.status(404).send("Menu not found.");
-      }
+    const menu = await Menu.findById(menuId);
+    if (!menu) {
+      return res.status(404).send("Menu not found.");
+    }
 
-      res.render("menu/editMenu", { menu });
+    res.render("menu/editMenu", { menu });
   } catch (error) {
-      console.error("Error rendering edit menu form:", error);
-      res.status(500).send("Error rendering edit menu form.");
+    console.error("Error rendering edit menu form:", error);
+    res.status(500).send("Error rendering edit menu form.");
   }
 };
 
 menuController.updateMenu = async (req, res) => {
-  // Buscar o ID do corpo do pedido
   const menuId = req.body._id;
 
   if (!menuId) {
@@ -106,7 +111,9 @@ menuController.updateMenu = async (req, res) => {
       updateData.image = `/uploads/${req.file.filename}`;
     }
 
-    const menu = await Menu.findByIdAndUpdate(menuId, updateData, { new: true });
+    const menu = await Menu.findByIdAndUpdate(menuId, updateData, {
+      new: true,
+    });
 
     if (!menu) {
       return res.status(404).send("Menu not found.");
@@ -121,7 +128,7 @@ menuController.updateMenu = async (req, res) => {
 
 menuController.authenticate = async (req, res, next) => {
   try {
-    const token = req.cookies.token; 
+    const token = req.cookies.token;
     if (!token) {
       return res.redirect("/login");
     }
@@ -132,7 +139,7 @@ menuController.authenticate = async (req, res, next) => {
       return res.redirect("/login");
     }
 
-    req.user = user; 
+    req.user = user;
     next();
   } catch (error) {
     console.error("Authentication error:", error);
@@ -146,12 +153,11 @@ menuController.deleteMenu = async (req, res) => {
 
     const dishes = await Dish.find({ menu: id });
 
-
     for (const dish of dishes) {
       if (dish.imagem) {
         const imagePath = path.join(__dirname, "..", "public", dish.imagem);
         try {
-          await fs.promises.unlink(imagePath); 
+          await fs.promises.unlink(imagePath);
           console.log(`Image from dish deleted: ${imagePath}`);
         } catch (err) {
           console.error(`Error deleting the image on path: ${imagePath}:`, err);
@@ -168,7 +174,10 @@ menuController.deleteMenu = async (req, res) => {
         await fs.promises.unlink(menuImagePath);
         console.log(`Image from menu deleted: ${menuImagePath}`);
       } catch (err) {
-        console.error(`Error deleting the imagem on path: ${menuImagePath}:`, err);
+        console.error(
+          `Error deleting the imagem on path: ${menuImagePath}:`,
+          err
+        );
       }
     }
 
@@ -189,6 +198,16 @@ menuController.getDishesByMenuId = async (req, res) => {
   } catch (error) {
     console.error("Error fetching dishes:", error);
     res.status(500).send("Failed to load dishes.");
+  }
+};
+
+menuController.getMenuById = async (req, res) => {
+  try {
+    const menu = await Menu.findById(req.params.menuId);
+    if (!menu) return res.status(404).json({ message: "Menu not found." });
+    res.json(menu);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to load menu." });
   }
 };
 

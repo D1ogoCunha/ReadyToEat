@@ -3,7 +3,6 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const menuController = require("../controllers/menuController");
-const dishController = require("../controllers/dishController");
 const authController = require("../controllers/authController");
 
 const storage = multer.diskStorage({
@@ -29,6 +28,6 @@ router.post("/edit", authController.verifyLoginUser, upload.single("image"), men
 
 router.delete("/:id", authController.verifyLoginUser, menuController.deleteMenu);
 
-router.get("/:menuId/dishes", authController.verifyLoginUser, menuController.getDishesByMenuId);
+
 
 module.exports = router;

@@ -59,9 +59,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-
-// Assuming environment.ts has apiUrl: 'http://localhost:3000' (or your server's port)
-// import { environment } from '../../environments/environment';
+import { UserService } from './user.service';
 
 interface DecodedToken {
   email: string;
@@ -74,26 +72,29 @@ interface DecodedToken {
   providedIn: 'root'
 })
 export class AuthService {
-  // private serverApiUrl = environment.apiUrl; // Example
-  private serverApiUrl = 'http://localhost:3000'; // Adjust if your server runs on a different port
+  private serverApiUrl = 'http://localhost:3000';
   private tokenKey = 'authToken';
 
   private currentUserSubject: BehaviorSubject<DecodedToken | null>;
   public currentUser: Observable<DecodedToken | null>;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private userService: UserService  
+  ) {
     let initialUser: DecodedToken | null = null;
     const token = localStorage.getItem(this.tokenKey);
     if (token) {
       try {
         initialUser = jwtDecode<DecodedToken>(token);
-        if (initialUser.exp * 1000 < Date.now()) { // Check expiration
+        if (initialUser.exp * 1000 < Date.now()) {
           initialUser = null;
-          localStorage.removeItem(this.tokenKey); // Token expired
+          localStorage.removeItem(this.tokenKey);
         }
       } catch (e) {
         console.error("Error decoding token on init:", e);
-        localStorage.removeItem(this.tokenKey); // Invalid token
+        localStorage.removeItem(this.tokenKey);
       }
     }
     this.currentUserSubject = new BehaviorSubject<DecodedToken | null>(initialUser);
@@ -104,8 +105,8 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  login(credentials: { email: string, password: string }): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${this.serverApiUrl}/login`, {...credentials, rest:true}).pipe(
+  login(credentials: { email: string, password: string }): Observable<{ token: string, user: any }> {
+    return this.http.post<{ token: string, user: any }>(`${this.serverApiUrl}/login`, { ...credentials, rest: true }).pipe(
       tap(response => {
         if (response && response.token) {
           localStorage.setItem(this.tokenKey, response.token);
@@ -117,14 +118,20 @@ export class AuthService {
             this.currentUserSubject.next(null);
           }
         }
+        if (response && response.user) {
+          localStorage.setItem('user', JSON.stringify(response.user));
+          this.userService.setUser(response.user); 
+        }
       })
     );
   }
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem('user');
     this.currentUserSubject.next(null);
-    this.router.navigate(['/login']); // Adjust as needed
+    this.userService.clearUser(); 
+    this.router.navigate(['/login']);
   }
 
   getToken(): string | null {
@@ -138,10 +145,9 @@ export class AuthService {
     }
     try {
       const decoded = jwtDecode<DecodedToken>(token);
-      return decoded.exp * 1000 > Date.now(); // Check if token is expired
+      return decoded.exp * 1000 > Date.now();
     } catch (e) {
-      return false; // Invalid token
+      return false;
     }
   }
 }
-

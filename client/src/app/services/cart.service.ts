@@ -21,16 +21,17 @@ export class CartService {
     }
   }
 
-  addToCart(dish: any) {
-    const existingItem = this.cart.find((item) => item._id === dish._id);
-    if (existingItem) {
-      existingItem.quantity = (existingItem.quantity || 1) + 1;
-    } else {
-      dish.quantity = 1;
-      this.cart.push(dish);
-    }
-    this.updateCartState();
+  addToCart(dish: any, restaurantId: string) {
+  const existingItem = this.cart.find((item) => item._id === dish._id);
+  if (existingItem) {
+    existingItem.quantity = (existingItem.quantity || 1) + 1;
+  } else {
+    dish.quantity = 1;
+    dish.restaurantId = restaurantId; 
+    this.cart.push(dish);
   }
+  this.updateCartState();
+}
 
   getCartItems() {
     if (!this.cart.length) {

@@ -6,11 +6,15 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class MenusService {
-private apiUrl = 'http://localhost:3000/menus';
+  private apiUrl = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient) { }
 
   getDishesByMenuId(menuId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/${menuId}/dishes`);
+  }
+
+  getMenuById(menuId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${menuId}`);
   }
 }

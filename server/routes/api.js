@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../jwt_secret/config");
 const authController = require("../controllers/authController");
 const userController = require("../controllers/userController"); 
+const menuController = require("../controllers/menuController");
 
 // Profile REST API routes
 router.get('/profile', authController.verifyLoginUser, userController.getProfile);
@@ -35,33 +36,9 @@ router.post('/orders', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-/*
-router.post("/auth/login", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(401).json({ error: "Invalid email or password." });
-    }
-    const valid = await bcrypt.compare(password, user.password);
-    if (!valid) {
-      return res.status(401).json({ error: "Invalid email or password." });
-    }
-    if (user.role === "restaurant" && user.status === "in validation") {
-      return res.status(403).json({
-        error: "Your account is under validation. Please wait for approval.",
-      });
-    }
-    const token = jwt.sign(
-      { email: user.email, role: user.role },
-      config.secret,
-      { expiresIn: 86400 }
-    );
-    res.json({ token });
-  } catch (err) {
-    res.status(500).json({ error: "Internal server error." });
-  }
-});*/
+
+router.get('/:menuId', menuController.getMenuById);
+router.get("/:menuId/dishes", authController.verifyLoginUser, menuController.getDishesByMenuId);
 
 
 

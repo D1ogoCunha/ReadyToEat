@@ -6,6 +6,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { RouterLink } from '@angular/router';
 import { OrderService } from '../../services/order.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -18,7 +19,7 @@ export class ShoppingCartComponent implements OnInit {
   cartItems: any[] = [];
   shippingCost: number = 10;
 
-  constructor(private cartService: CartService, private router: Router, private orderService: OrderService) {}
+  constructor(private cartService: CartService, private router: Router, private orderService: OrderService) { }
 
   ngOnInit(): void {
     this.cartService.cartItems$.subscribe((items) => {
@@ -40,7 +41,7 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   calculateTax(): number {
-    const taxRate = 0.1; // 10% de imposto
+    const taxRate = 0.1; 
     return this.calculateSubtotal() * taxRate;
   }
 
@@ -68,15 +69,25 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   proceedToCheckout(): void {
-    const customerId = localStorage.getItem('userId');
+    let customerId: string | undefined;
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        customerId = decoded._id;
+      } catch {
+        customerId = undefined;
+      }
+    }
     if (!customerId) {
-      alert('Precisa de estar autenticado para encomendar.');
+      alert('You need to be authenticated to order.');
       return;
     }
     if (!this.cartItems.length) {
-      alert('O carrinho está vazio.');
+      alert('The cart is empty.');
       return;
     }
+
     const restaurantId = this.cartItems[0].restaurantId;
     const dishes = this.cartItems.map(item => item._id);
     const amount = this.calculateSubtotal();
@@ -85,11 +96,11 @@ export class ShoppingCartComponent implements OnInit {
 
     this.orderService.createOrder(order).subscribe({
       next: () => {
-        alert('Encomenda criada com sucesso!');
+        alert('Order created successfully!');
         this.cartService.clearCart();
         this.router.navigate(['/']);
       },
-      error: () => alert('Erro ao criar encomenda!')
+      error: () => alert('Error creating order!')
     });
   }
 }

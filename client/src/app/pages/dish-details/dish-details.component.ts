@@ -4,7 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CartService } from '../../services/cart.service';
-import { DishesService } from '../../services/dishes.service'; 
+import { DishesService } from '../../services/dishes.service';
+import { MenusService } from '../../services/menus.service';
 
 @Component({
   selector: 'app-dish-details',
@@ -19,8 +20,9 @@ export class DishDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private dishesService: DishesService,
-    private cartService: CartService // Injetar o CartService
-  ) {}
+    private cartService: CartService,
+    private menusService: MenusService
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -39,9 +41,14 @@ export class DishDetailsComponent implements OnInit {
   }
 
   addToCart(): void {
-    if (this.dish) {
-      this.cartService.addToCart(this.dish);
-      alert(`${this.dish.nome} foi adicionado ao carrinho!`);
+    if (this.dish && this.dish.menu) {
+      this.menusService.getMenuById(this.dish.menu).subscribe({
+        next: (menu: any) => {
+          this.cartService.addToCart(this.dish, menu.createdBy); 
+          alert(`${this.dish.nome} was successfully added to your cart!`);
+        },
+        error: () => alert('An error occurred while retrieving the restaurant for this dish.')
+      });
     }
   }
 }

@@ -46,7 +46,7 @@ app.use(cors({
   credentials: true
 }));
 
-app.use("/", apiRouter);
+app.use("/api", apiRouter);
 app.use("/", indexRouter);
 app.use("/", authRouter);
 app.use("/dishes", dishesRouter);

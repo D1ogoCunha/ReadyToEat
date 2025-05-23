@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../../services/profile.service';
 import { NavbarComponent } from '../../../components/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-profile-edit',
@@ -16,12 +17,13 @@ export class ProfileEditComponent implements OnInit {
   profileForm!: FormGroup;
   errorMessage = '';
   successMessage = '';
-  user: any = JSON.parse(localStorage.getItem('user') || '{}'); 
+  user: any = JSON.parse(localStorage.getItem('user') || '{}');
 
 
   constructor(
     private fb: FormBuilder,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -43,17 +45,17 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onSubmit(): void {
-  if (this.profileForm.invalid) return;
-  this.profileService.updateProfile(this.profileForm.value).subscribe({
-    next: (response) => {
-      const updatedUser = response.user || response;
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      this.user = updatedUser; 
-      this.successMessage = 'Profile updated successfully!';
-    },
-    error: () => {
-      this.errorMessage = 'Error updating profile.';
-    }
-  });
-}
+    if (this.profileForm.invalid) return;
+    this.profileService.updateProfile(this.profileForm.value).subscribe({
+      next: (response) => {
+        const updatedUser = response.user || response;
+        this.userService.setUser(updatedUser); 
+        this.user = updatedUser;
+        this.successMessage = 'Profile updated successfully!';
+      },
+      error: () => {
+        this.errorMessage = 'Error updating profile.';
+      }
+    });
+  }
 }
