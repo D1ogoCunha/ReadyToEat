@@ -1,0 +1,47 @@
+<app-navbar></app-navbar>
+<header class="bg-dark py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">Order History</h1>
+      <p class="lead fw-normal text-white-50 mb-0"></p>
+    </div>
+  </div>
+</header>
+<div class="container py-5">
+  <div *ngIf="loading" class="text-center">Loading...</div>
+  <div *ngIf="!loading && orders.length === 0" class="text-center text-muted">
+    No orders found.
+  </div>
+  <div *ngIf="!loading && orders.length > 0" class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Restaurant</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Dishes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ order.restaurantId?.restaurantName || "Unknown" }}</td>
+          <td>€{{ order.amount?.toFixed(2) }}</td>
+          <td>{{ order.date | date : "shortDate" }}</td>
+          <td>{{ order.status }}</td>
+          <td>
+            <ul class="mb-0">
+              <li *ngFor="let dish of order.dishes">
+                {{ dish.nome || "Unnamed dish" }} - €{{
+                  dish.preco?.toFixed(2) || "0.00"
+                }}
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

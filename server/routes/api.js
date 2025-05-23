@@ -18,6 +18,24 @@ router.put('/profile', authController.verifyLoginUser, userController.updateProf
 router.put('/profile/password', authController.verifyLoginUser, userController.changePassword);
 router.get('/profile/charts', authController.verifyLoginUser, userController.getMostOrderedDishes);
 
+
+router.get('/orders', async (req, res) => {
+  const { customerId } = req.query;
+  if (!customerId) return res.status(400).json({ error: 'Missing customerId' });
+  if (!mongoose.Types.ObjectId.isValid(customerId)) {
+    return res.status(400).json({ error: 'Invalid customerId' });
+  }
+
+  try {
+    const orders = await Order.find({ customerId: new mongoose.Types.ObjectId(customerId) })
+      .populate('restaurantId')
+      .populate('dishes');
+    res.json(orders);
+  } catch (err) {
+    console.error('Erro ao buscar encomendas:', err); // <-- Isto mostra o erro real
+    res.status(500).json({ error: err.message });
+  }
+});
 router.post('/orders', async (req, res) => {
   try {
     const { restaurantId, customerId, amount, dishes } = req.body;
@@ -39,6 +57,7 @@ router.post('/orders', async (req, res) => {
 
 router.get('/:menuId', menuController.getMenuById);
 router.get("/:menuId/dishes", authController.verifyLoginUser, menuController.getDishesByMenuId);
+
 
 
 

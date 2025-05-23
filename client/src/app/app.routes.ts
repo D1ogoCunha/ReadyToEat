@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { DishesComponent } from './pages/dishes/dishes.component';
 import { RestaurantsComponent } from './pages/restaurants/restaurants.component';
 import { RestaurantMenusComponent } from './pages/restaurant-menus/restaurant-menus.component';
+import { OrderComponent } from './pages/order/order.component';
 import { LoginComponent } from './auth/login/login.component';
 import { DishDetailsComponent } from './pages/dish-details/dish-details.component';
 import { ShoppingCartComponent } from './pages/shopping-cart/shopping-cart.component';
@@ -23,5 +24,6 @@ export const routes: Routes = [
   { path: 'user/profile/security', component: ProfileSecurityComponent, canActivate: [AuthGuard] },
   { path: 'user/profile/chart', component: ProfileChartComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent },
+  { path: 'orders', component: OrderComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];

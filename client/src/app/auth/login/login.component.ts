@@ -31,7 +31,7 @@ export class LoginComponent {
           // Successful login, AuthService handles token storage and currentUser update
           // Navigate to a default route or a returnUrl if available
           console.log('Login successful', response);
-          this.router.navigate(['/restaurants']); // Or to a dashboard, or based on returnUrl
+          this.router.navigate(['/home']);
         },
         error: (err) => {
           console.error('Login failed', err);
