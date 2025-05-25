@@ -8,6 +8,15 @@
 
 <app-navbar></app-navbar>
 
+<header class="bg-dark py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">Dishes Details</h1>
+      <p class="lead fw-normal text-white-50 mb-0"></p>
+    </div>
+  </div>
+</header>
+
 <div class="container mt-5" *ngIf="dish">
   <div class="card">
     <div class="container-fluid">
@@ -33,12 +42,15 @@
             <strong>Price: </strong><span>{{ dish.preco }} €</span>
           </h4>
           <h5 class="preparation-time">
-            <strong>Preparation Time: </strong><span>{{ dish.tempoPreparo }} minutes</span>
+            <strong>Preparation Time: </strong
+            ><span>{{ dish.tempoPreparo }} minutes</span>
           </h5>
           <h5 class="portion-size">
             <strong>Portion Size: </strong><span>{{ dish.tamanhoPorcao }}</span>
           </h5>
-          <h5 class="nutritional-info"><strong>Nutritional Information:</strong></h5>
+          <h5 class="nutritional-info">
+            <strong>Nutritional Information:</strong>
+          </h5>
           <table class="table table-bordered">
             <tbody>
               <tr>

@@ -38,7 +38,7 @@
               <p><strong>Preço:</strong> {{ dish.preco }} €</p>
               <!-- Product actions-->
               <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center">
+                <div class="text-center button-group">
                   <a
                     class="btn btn-outline-dark mt-auto"
                     (click)="addToCart(dish)"
@@ -48,8 +48,9 @@
                   <a
                     class="btn btn-outline-dark mt-auto"
                     [routerLink]="['/dishes', dish._id, 'details']"
-                    >View Details</a
                   >
+                    View Details
+                  </a>
                 </div>
               </div>
             </div>
@@ -64,7 +65,7 @@
 
 <!-- Footer-->
 <footer class="py-5 bg-dark">
-  <div class="container">
+  <div class="Bcontainer">
     <p class="m-0 text-center text-white">Copyright &copy; ReadyToEat 2025</p>
   </div>
 </footer>
