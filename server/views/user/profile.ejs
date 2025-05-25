@@ -30,17 +30,35 @@
               <!-- Profile picture image-->
               <img
                 class="img-account-profile rounded-circle mb-2"
-                src="/images/account.png"
+                src="<%= user.image ? user.image : '/images/account.png' %>"
                 alt=""
               />
-              <!-- Profile picture help block-->
               <div class="small font-italic text-muted mb-4">
                 JPG or PNG no larger than 5 MB
               </div>
-              <!-- Profile picture upload button-->
-              <button class="btn btn-primary" type="button">
-                Upload new image
-              </button>
+              <!-- Form só para upload da imagem -->
+              <form
+                action="/users/profile/edit"
+                method="POST"
+                enctype="multipart/form-data"
+                id="imgUploadForm"
+              >
+                <input
+                  type="file"
+                  id="profileImage"
+                  name="profileImage"
+                  accept="image/*"
+                  style="display: none"
+                  onchange="document.getElementById('imgUploadForm').submit();"
+                />
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  onclick="document.getElementById('profileImage').click()"
+                >
+                  Upload new image
+                </button>
+              </form>
             </div>
           </div>
         </div>

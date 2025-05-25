@@ -23,7 +23,7 @@ export const routes: Routes = [
   { path: 'user/profile/edit', component: ProfileEditComponent, canActivate: [AuthGuard] },
   { path: 'user/profile/security', component: ProfileSecurityComponent, canActivate: [AuthGuard] },
   { path: 'user/profile/chart', component: ProfileChartComponent, canActivate: [AuthGuard] },
-  { path: 'home', component: HomeComponent },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'orders', component: OrderComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];

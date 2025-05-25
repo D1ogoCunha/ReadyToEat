@@ -112,30 +112,29 @@ userController.updatePassword = async (req, res) => {
 
 userController.updateProfile = async (req, res) => {
   try {
-    const {
-      firstName,
-      lastName,
-      email,
-      nif,
-      restaurantName,
-      address,
-      phone,
-      pricePerPerson,
-    } = req.body;
+    const updateFields = {};
+    if (req.body.firstName) updateFields.firstName = req.body.firstName;
+    if (req.body.lastName) updateFields.lastName = req.body.lastName;
+    if (req.body.email) updateFields.email = req.body.email;
+    if (req.body.nif) updateFields.nif = req.body.nif;
+    if (req.body.restaurantName)
+      updateFields.restaurantName = req.body.restaurantName;
+    if (req.body.address) updateFields.address = req.body.address;
+    if (req.body.phone) updateFields.phone = req.body.phone;
+    if (req.body.pricePerPerson)
+      updateFields.pricePerPerson = req.body.pricePerPerson;
+
+    if (req.file) {
+      updateFields.image = `/uploads/${req.file.filename}`;
+    }
+
+    if (Object.keys(updateFields).length === 0) {
+      return res.redirect("/users/profile/edit");
+    }
 
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
-      {
-        firstName,
-        lastName,
-        email,
-        nif,
-        restaurantName,
-        address,
-        phone,
-        pricePerPerson,
-        image: req.file ? `/uploads/${req.file.filename}` : undefined,
-      },
+      updateFields,
       { new: true, runValidators: true }
     );
 
@@ -214,12 +213,11 @@ userController.getRestaurantesById = async (req, res) => {
     }
     console.log("Restaurant found:", restaurant);
     res.json(restaurant);
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error fetching restaurant:", error);
     res.status(500).send("Failed to load restaurant.");
   }
-}
+};
 
 userController.getMenusByRestaurantId = async (req, res) => {
   try {
@@ -238,7 +236,9 @@ userController.getMenusByRestaurantId = async (req, res) => {
 
 userController.getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select("firstName lastName email nif");
+    const user = await User.findById(req.user._id).select(
+      "firstName lastName email nif"
+    );
     if (!user) return res.status(404).json({ error: "User not found." });
     res.json(user);
   } catch (error) {
@@ -265,7 +265,9 @@ userController.changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     if (newPassword !== confirmPassword) {
-      return res.status(400).json({ error: "New password and confirmation do not match." });
+      return res
+        .status(400)
+        .json({ error: "New password and confirmation do not match." });
     }
     const user = await User.findById(req.user._id);
     if (!user) return res.status(404).json({ error: "User not found." });
