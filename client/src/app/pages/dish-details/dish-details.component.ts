@@ -47,7 +47,7 @@ export class DishDetailsComponent implements OnInit {
           this.cartService.addToCart(this.dish, menu.createdBy); 
           alert(`${this.dish.nome} was successfully added to your cart!`);
         },
-        error: () => alert('An error occurred while retrieving the restaurant for this dish.')
+        //error: () => alert('An error occurred while retrieving the restaurant for this dish.')
       });
     }
   }

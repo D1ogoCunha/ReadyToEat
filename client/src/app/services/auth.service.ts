@@ -150,4 +150,8 @@ export class AuthService {
       return false;
     }
   }
+
+  register(userData: any): Observable<any> {
+    return this.http.post(`${this.serverApiUrl}/register`, userData);
+  }
 }

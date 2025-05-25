@@ -22,16 +22,21 @@ export class CartService {
   }
 
   addToCart(dish: any, restaurantId: string) {
-  const existingItem = this.cart.find((item) => item._id === dish._id);
-  if (existingItem) {
-    existingItem.quantity = (existingItem.quantity || 1) + 1;
-  } else {
-    dish.quantity = 1;
-    dish.restaurantId = restaurantId; 
-    this.cart.push(dish);
+    if (this.cart.length > 0 && this.cart[0].restaurantId !== restaurantId) {
+      alert('You can only add dishes from the same restaurant to the cart.');
+      return;
+    }
+
+    const existingItem = this.cart.find((item) => item._id === dish._id);
+    if (existingItem) {
+      existingItem.quantity = (existingItem.quantity || 1) + 1;
+    } else {
+      dish.quantity = 1;
+      dish.restaurantId = restaurantId;
+      this.cart.push(dish);
+    }
+    this.updateCartState();
   }
-  this.updateCartState();
-}
 
   getCartItems() {
     if (!this.cart.length) {
@@ -62,7 +67,7 @@ export class CartService {
     }
   }
 
-    removeCartItem(itemId: string): void {
+  removeCartItem(itemId: string): void {
     this.cart = this.cart.filter((item) => item._id !== itemId);
     this.updateCartState();
   }

@@ -46,7 +46,7 @@ export class DishesComponent implements OnInit {
     this.menusService.getMenuById(this.menuId).subscribe({
       next: (menu: any) => {
         this.cartService.addToCart(dish, menu.createdBy); 
-        alert(`${dish.nome} was successfully added to your cart!`);
+        //alert(`${dish.nome} was successfully added to your cart!`);
       },
       error: () => alert('An error occurred while retrieving the restaurant for this dish.')
     });

@@ -12,12 +12,30 @@
   </div>
 </header>
 <div class="container px-4 px-lg-5 mt-5">
+  <!-- Filters Section -->
+  <div class="d-flex justify-content-end mb-4">
+    <div class="me-3">
+      <label for="sort" class="form-label">Sort by:</label>
+      <select
+        id="sort"
+        class="form-select"
+        [(ngModel)]="selectedSort"
+        (change)="applyFilters()"
+      >
+        <option value="">Select</option>
+        <option value="priceLowToHigh">Price: Low to High</option>
+        <option value="priceHighToLow">Price: High to Low</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Restaurant List -->
   <div
     class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
   >
-    <div class="col mb-5" *ngFor="let restaurant of restaurants">
+    <div class="col mb-5" *ngFor="let restaurant of filteredRestaurants">
       <div class="card h-100">
-        <!-- Restaurant image (use a default if missing) -->
+        <!-- Restaurant image -->
         <img
           class="card-img-top"
           [src]="'http://localhost:3000' + restaurant.image"

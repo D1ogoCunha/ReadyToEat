@@ -11,6 +11,7 @@ import { ProfileSecurityComponent } from './pages/user/profile-security/profile-
 import { ProfileChartComponent } from './pages/user/profile-chart/profile-chart.component';
 import { AuthGuard } from './guards/auth.guard';
 import { HomeComponent } from './pages/home/home.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 export const routes: Routes = [
   { path: 'dishes', component: DishesComponent, canActivate: [AuthGuard] },
@@ -25,5 +26,6 @@ export const routes: Routes = [
   { path: 'user/profile/chart', component: ProfileChartComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'orders', component: OrderComponent, canActivate: [AuthGuard] },
+  {path: 'register', component: RegisterComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
