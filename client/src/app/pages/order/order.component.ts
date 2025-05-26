@@ -21,11 +21,12 @@ export class OrderComponent implements OnInit {
   reviewComment: string = '';
   reviewImage: File | null = null;
   reviewOrderId: string | null = null;
+  selectedOrderToCancel: any = null;
 
   constructor(
     private orderService: OrderService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -71,6 +72,45 @@ export class OrderComponent implements OnInit {
         alert('Avaliação enviada!');
       },
       error: () => alert('Erro ao enviar avaliação!')
+    });
+  }
+
+  canCancel(order: any): boolean {
+    if (!order || !order.date || order.status === 'Preparing' || order.status === 'Cancelled') return false;
+    const created = new Date(order.date);
+    const now = new Date();
+    const diffMinutes = (now.getTime() - created.getTime()) / 60000;
+    return diffMinutes <= 5;
+  }
+
+  cancelOrder(order: any) {
+    this.selectedOrderToCancel = order;
+    const modalEl = document.getElementById('cancelModal');
+    if (modalEl) {
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+  }
+
+  confirmCancel() {
+    if (!this.selectedOrderToCancel) return;
+    this.orderService.cancelOrder(this.selectedOrderToCancel._id).subscribe({
+      next: () => {
+        this.selectedOrderToCancel.status = 'Cancelled';
+        const modalEl = document.getElementById('cancelModal');
+        if (modalEl) {
+          bootstrap.Modal.getInstance(modalEl)?.hide();
+        }
+        this.selectedOrderToCancel = null;
+      },
+      error: (err) => {
+        alert(err.error?.error || 'Unable to cancel order.');
+        const modalEl = document.getElementById('cancelModal');
+        if (modalEl) {
+          bootstrap.Modal.getInstance(modalEl)?.hide();
+        }
+        this.selectedOrderToCancel = null;
+      }
     });
   }
 }

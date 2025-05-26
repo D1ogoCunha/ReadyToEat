@@ -6,17 +6,21 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class OrderService {
-   private apiUrl = 'http://localhost:3000/api/orders';
-  constructor(private http: HttpClient) {}
+  private apiUrl = 'http://localhost:3000/api/orders';
+  constructor(private http: HttpClient) { }
 
   createOrder(order: any) {
     return this.http.post('http://localhost:3000/api/orders', order);
   }
-    getCustomerOrders(customerId: string): Observable<any[]> {
+  getCustomerOrders(customerId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}?customerId=${customerId}`);
   }
 
   submitReview(orderId: string, formData: FormData) {
     return this.http.post(`http://localhost:3000/api/orders/${orderId}/review`, formData);
+  }
+
+  cancelOrder(orderId: string) {
+    return this.http.post(`${this.apiUrl}/${orderId}/cancel`, {});
   }
 }

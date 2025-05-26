@@ -11,6 +11,7 @@ const config = require("../jwt_secret/config");
 const authController = require("../controllers/authController");
 const userController = require("../controllers/userController");
 const menuController = require("../controllers/menuController");
+const orderController = require("../controllers/orderController");
 const multer = require("multer");
 const path = require("path");
 
@@ -109,6 +110,8 @@ router.post("/orders/:orderId/review", upload.single("image"), async (req, res) 
     res.status(500).json({ error: err.message });
   }
 });
+
+router.post("/orders/:orderId/cancel", orderController.cancelOrder);
 
 router.get("/:menuId", menuController.getMenuById);
 router.get(

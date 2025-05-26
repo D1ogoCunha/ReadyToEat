@@ -49,7 +49,6 @@ orderController.getOrderHistory = async (req, res) => {
   }
 };
 
-
 orderController.renderOrderPage = async (req, res) => {
   try {
     if (!req.user) {
@@ -113,13 +112,46 @@ orderController.createPhoneOrder = async (req, res) => {
 
 orderController.updateOrderStatus = async (req, res) => {
   const { orderId, status } = req.body;
-  if (!orderId || !status) return res.status(400).json({ error: 'Missing data' });
+  if (!orderId || !status)
+    return res.status(400).json({ error: "Missing data" });
   try {
-    const order = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
-    if (!order) return res.status(404).json({ error: 'Order not found' });
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
+    if (!order) return res.status(404).json({ error: "Order not found" });
     res.json({ success: true, order });
   } catch (err) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+orderController.cancelOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.orderId);
+    if (!order) return res.status(404).json({ error: "Order not found." });
+
+    const now = new Date();
+    const diffMinutes = (now - order.date) / 60000;
+    if (diffMinutes > 5) {
+      return res.status(400).json({
+        error: "You can only cancel within 5 minutes of placing the order.",
+      });
+    }
+
+    if (order.status === "Preparing") {
+      return res.status(400).json({
+        error: "Order is already being prepared and cannot be cancelled.",
+      });
+    }
+
+    order.status = "Cancelled";
+    await order.save();
+
+    res.json({ message: "Order cancelled successfully." });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
