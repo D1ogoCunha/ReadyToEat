@@ -28,8 +28,9 @@
         <div class="card h-100">
           <img
             class="card-img-top"
-            [src]="'http://localhost:3000' + dish.imagem"
+            [src]="dish.imagem ? 'http://localhost:3000' + dish.imagem : 'https://via.placeholder.com/300x200?text=No+Image'"
             alt="{{ dish.nome }}"
+            style="object-fit: cover; height: 200px;"
           />
           <div class="card-body p-4">
             <div class="text-center">
@@ -38,17 +39,21 @@
               <p><strong>Preço:</strong> {{ dish.preco }} €</p>
               <!-- Product actions-->
               <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center button-group">
+                <div
+                  class="text-center button-group d-flex flex-column align-items-center gap-2"
+                >
                   <a
-                    class="btn btn-outline-dark mt-auto"
+                    class="btn btn-outline-dark btn-sm rounded-pill fw-bold px-4"
                     (click)="addToCart(dish)"
                   >
+                    <i class="bi bi-cart-plus me-1"></i>
                     Add to cart
                   </a>
                   <a
-                    class="btn btn-outline-dark mt-auto"
+                    class="btn btn-outline-dark btn-sm rounded-pill fw-bold px-4"
                     [routerLink]="['/dishes', dish._id, 'details']"
                   >
+                    <i class="bi bi-info-circle me-1"></i>
                     View Details
                   </a>
                 </div>

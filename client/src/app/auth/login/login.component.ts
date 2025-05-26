@@ -28,8 +28,6 @@ export class LoginComponent {
       .login({ email: this.email, password: this.password })
       .subscribe({
         next: (response) => {
-          // Successful login, AuthService handles token storage and currentUser update
-          // Navigate to a default route or a returnUrl if available
           console.log('Login successful', response);
           this.router.navigate(['/home']);
         },
