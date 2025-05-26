@@ -31,15 +31,16 @@ export class ShoppingCartComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      this.cartService['cart'] = JSON.parse(storedCart);
+      this.cartService['cartItems'].next(this.cartService['cart']);
+      this.cartService['cartCount'].next(this.cartService['cart'].length);
+    }
+
     this.cartService.cartItems$.subscribe((items) => {
       this.cartItems = items;
     });
-
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.cartItems = this.cartService.getCartItems();
-      });
   }
 
   calculateSubtotal(): number {
@@ -140,6 +141,13 @@ export class ShoppingCartComponent implements OnInit {
 
     this.orderService.createOrder(order).subscribe({
       next: () => {
+        const modalElement = document.getElementById('paymentModal');
+        if (modalElement) {
+          const modalInstance = bootstrap.Modal.getInstance(modalElement);
+          if (modalInstance) {
+            modalInstance.hide();
+          }
+        }
         alert('Order created successfully!');
         this.cartService.clearCart();
         this.router.navigate(['/']);
