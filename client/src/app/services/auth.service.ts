@@ -152,6 +152,9 @@ export class AuthService {
   }
 
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.serverApiUrl}/register`, userData);
-  }
+  return this.http.post<any>(
+    `${this.serverApiUrl}/register`,
+    { ...userData, rest: true }
+  );
+}
 }

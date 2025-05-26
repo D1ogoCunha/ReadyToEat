@@ -107,6 +107,8 @@ authController.createLogin = function (req, res, next) {
 };
 
 authController.createLoginSubmitted = function (req, res, next) {
+  const isRest = req.body.rest ? true : false;
+
   const hashedPassword = bcrypt.hashSync(req.body.password, 8);
   req.body.password = hashedPassword;
 
@@ -128,15 +130,35 @@ authController.createLoginSubmitted = function (req, res, next) {
   }
 
   User.create(userData)
-    .then(function () {
-      res.redirect("/login");
+    .then(function (user) {
+      if (isRest) {
+        // NÃO gera token JWT
+        // Apenas retorna mensagem de sucesso e dados do usuário
+        return res.status(201).json({
+          message: "Registration successful",
+          user: {
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+          },
+        });
+      } else {
+        // regular form submit
+        return res.redirect("/login");
+      }
     })
     .catch(function (err) {
       if (err.code === 11000 && err.keyPattern && err.keyPattern.email) {
-        return res.render("register", {
-          errorMessage:
-            "This email is already in use. Please use a different email.",
-        });
+        if (isRest) {
+          return res.status(409).json({ error: "Email already in use" });
+        } else {
+          return res.render("register", {
+            errorMessage:
+              "This email is already in use. Please use a different email.",
+          });
+        }
       }
       next(err);
     });
