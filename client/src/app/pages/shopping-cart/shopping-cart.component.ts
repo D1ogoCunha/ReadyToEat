@@ -7,19 +7,28 @@ import { filter } from 'rxjs/operators';
 import { RouterLink } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { jwtDecode } from 'jwt-decode';
+import { FormsModule } from '@angular/forms';
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-shopping-cart',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, RouterLink],
+  imports: [CommonModule, NavbarComponent, RouterLink, FormsModule],
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.css'],
 })
 export class ShoppingCartComponent implements OnInit {
   cartItems: any[] = [];
   shippingCost: number = 10;
+  paymentOption: string = '';
+  deliveryAddress: string = '';
 
-  constructor(private cartService: CartService, private router: Router, private orderService: OrderService) { }
+  constructor(
+    private cartService: CartService,
+    private router: Router,
+    private orderService: OrderService
+  ) {}
 
   ngOnInit(): void {
     this.cartService.cartItems$.subscribe((items) => {
@@ -41,7 +50,7 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   calculateTax(): number {
-    const taxRate = 0.1; 
+    const taxRate = 0.1;
     return this.calculateSubtotal() * taxRate;
   }
 
@@ -89,7 +98,7 @@ export class ShoppingCartComponent implements OnInit {
     }
 
     const restaurantId = this.cartItems[0].restaurantId;
-    const dishes = this.cartItems.map(item => item._id);
+    const dishes = this.cartItems.map((item) => item._id);
     const amount = this.calculateSubtotal();
 
     const order = { restaurantId, customerId, amount, dishes };
@@ -100,7 +109,63 @@ export class ShoppingCartComponent implements OnInit {
         this.cartService.clearCart();
         this.router.navigate(['/']);
       },
-      error: () => alert('Error creating order!')
+      error: () => alert('Error creating order!'),
     });
+  }
+  confirmPayment(): void {
+    if (this.paymentOption === 'courier' && !this.deliveryAddress) {
+      alert('Please enter a delivery address.');
+      return;
+    }
+
+    const customerId = this.getCustomerId();
+    if (!customerId) {
+      alert('You need to be authenticated to order.');
+      return;
+    }
+
+    const restaurantId = this.cartItems[0].restaurantId;
+    const dishes = this.cartItems.map((item) => item._id);
+    const amount = this.calculateSubtotal();
+
+    const order = {
+      restaurantId,
+      customerId,
+      amount,
+      dishes,
+      paymentOption: this.paymentOption,
+      deliveryAddress:
+        this.paymentOption === 'courier' ? this.deliveryAddress : null,
+    };
+
+    this.orderService.createOrder(order).subscribe({
+      next: () => {
+        alert('Order created successfully!');
+        this.cartService.clearCart();
+        this.router.navigate(['/']);
+      },
+      error: () => alert('Error creating order!'),
+    });
+  }
+
+  openPaymentModal(): void {
+    const modalElement = document.getElementById('paymentModal');
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+    }
+  }
+
+  private getCustomerId(): string | undefined {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        return decoded._id;
+      } catch {
+        return undefined;
+      }
+    }
+    return undefined;
   }
 }

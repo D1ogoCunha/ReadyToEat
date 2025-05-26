@@ -22,6 +22,7 @@
           <th>Date</th>
           <th>Status</th>
           <th>Dishes</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -40,8 +41,76 @@
               </li>
             </ul>
           </td>
+          <td>
+            <button
+              *ngIf="order.status === 'Completed'"
+              class="btn btn-outline-dark mt-auto"
+              (click)="openReviewModal(order)"
+            >
+              Evaluate
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<!-- Modal de Avaliação -->
+<div
+  class="modal fade"
+  id="reviewModal"
+  tabindex="-1"
+  aria-labelledby="reviewModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form (ngSubmit)="submitReview()" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h5 class="modal-title" id="reviewModalLabel">Evaluate Order</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="reviewComment" class="form-label">Feedback</label>
+            <textarea
+              id="reviewComment"
+              class="form-control"
+              [(ngModel)]="reviewComment"
+              name="reviewComment"
+              rows="3"
+              required
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="reviewImage" class="form-label">Picture(optional)</label>
+            <input
+              type="file"
+              id="reviewImage"
+              class="form-control"
+              (change)="onFileSelected($event)"
+              accept="image/*"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-dark mt-auto"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-outline-dark mt-auto">
+            Send Feedback
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

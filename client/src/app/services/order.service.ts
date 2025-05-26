@@ -15,4 +15,8 @@ export class OrderService {
     getCustomerOrders(customerId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}?customerId=${customerId}`);
   }
+
+  submitReview(orderId: string, formData: FormData) {
+    return this.http.post(`http://localhost:3000/api/orders/${orderId}/review`, formData);
+  }
 }

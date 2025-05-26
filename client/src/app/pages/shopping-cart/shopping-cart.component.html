@@ -5,7 +5,6 @@
 
 <app-navbar></app-navbar>
 
-
 <header class="bg-dark py-5">
   <div class="container">
     <div class="text-center text-white">
@@ -80,18 +79,20 @@
         </button>
       </div>
     </div>
-        <div class="col-lg-4">
+    <div class="col-lg-4">
       <!-- Cart Summary -->
       <div class="card cart-summary shadow-sm">
         <div class="card-body">
           <div class="d-flex align-items-center justify-content-between mb-4">
             <strong>Total: </strong>
-            <span class="fs-4 fw-bold text-primary">{{ calculateSubtotal() }}€</span>
+            <span class="fs-4 fw-bold text-primary"
+              >{{ calculateSubtotal() }}€</span
+            >
           </div>
           <div class="d-grid">
             <button
               class="btn btn-primary btn-lg"
-              (click)="proceedToCheckout()"
+              (click)="openPaymentModal()"
             >
               <i class="bi bi-bag-check-fill me-2"></i>
               Proceed to Checkout
@@ -100,3 +101,89 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Modal de Pagamento -->
+<div
+  class="modal fade"
+  id="paymentModal"
+  tabindex="-1"
+  aria-labelledby="paymentModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form (ngSubmit)="confirmPayment()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="paymentModalLabel">
+            Payment Options
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-check mb-2">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="paymentOption"
+              id="payAtRestaurant"
+              value="restaurant"
+              [(ngModel)]="paymentOption"
+              required
+            />
+            <label class="form-check-label" for="payAtRestaurant">
+              Pay at the restaurant
+            </label>
+          </div>
+          <div class="form-check mb-2">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="paymentOption"
+              id="payToCourier"
+              value="courier"
+              [(ngModel)]="paymentOption"
+              required
+            />
+            <label class="form-check-label" for="payToCourier">
+              Pay to the courier
+            </label>
+          </div>
+          <div *ngIf="paymentOption === 'courier'" class="mt-3">
+            <label for="addressInput" class="form-label">Delivery Address</label>
+            <input
+              type="text"
+              id="addressInput"
+              class="form-control"
+              [(ngModel)]="deliveryAddress"
+              name="deliveryAddress"
+              placeholder="Enter your address"
+              required
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+          >
+            Confirm
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
