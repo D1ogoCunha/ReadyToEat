@@ -3,7 +3,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CartService } from '../../services/cart.service';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { jwtDecode } from 'jwt-decode';
@@ -25,10 +25,11 @@ export class ShoppingCartComponent implements OnInit {
   deliveryAddress: string = '';
 
   constructor(
-    private cartService: CartService,
-    private router: Router,
-    private orderService: OrderService
-  ) {}
+  private cartService: CartService,
+  private router: Router,
+  private orderService: OrderService,
+  private toastr: ToastrService
+) {}
 
   ngOnInit(): void {
     const storedCart = localStorage.getItem('cart');
@@ -148,7 +149,8 @@ export class ShoppingCartComponent implements OnInit {
             modalInstance.hide();
           }
         }
-        alert('Order created successfully!');
+        this.toastr.success('Order created successfully!');
+        //alert('Order created successfully!');
         this.cartService.clearCart();
         this.router.navigate(['/']);
       },
