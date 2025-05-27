@@ -2,6 +2,7 @@ const Order = require("../models/order");
 const User = require("../models/user");
 const Dish = require("../models/dish");
 const Menu = require("../models/menu");
+const mongoose = require("mongoose");
 
 const orderController = {};
 
@@ -154,5 +155,69 @@ orderController.cancelOrder = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+orderController.getOrders = async (req, res) => {
+  const { customerId } = req.query;
+  if (!customerId) return res.status(400).json({ error: "Missing customerId" });
+  if (!mongoose.Types.ObjectId.isValid(customerId)) {
+    return res.status(400).json({ error: "Invalid customerId" });
+  }
+
+  try {
+    const orders = await Order.find({
+      customerId: new mongoose.Types.ObjectId(customerId),
+    })
+      .populate("restaurantId")
+      .populate("dishes");
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+orderController.createOrder = async (req, res) => {
+  try {
+    const {
+      restaurantId,
+      customerId,
+      amount,
+      dishes,
+      paymentOption,
+      deliveryAddress,
+    } = req.body;
+
+    if (!restaurantId || !customerId || !amount || !dishes || !dishes.length) {
+      return res.status(400).json({ error: "Missing required fields." });
+    }
+
+    const order = new Order({
+      restaurantId,
+      customerId,
+      amount,
+      dishes,
+      paymentOption,
+      deliveryAddress,
+    });
+
+    await order.save();
+    res.status(201).json(order);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+orderController.addReview = async (req, res) => {
+  try {
+    const { comment } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
+    await Order.findByIdAndUpdate(req.params.orderId, {
+      $push: { reviews: { comment, image, date: new Date() } },
+    });
+    res.status(200).json({ message: "Review saved" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 
 module.exports = orderController;

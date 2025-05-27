@@ -15,7 +15,6 @@ const dishController = require("../controllers/dishController");
 const orderController = require("../controllers/orderController");
 const multer = require("multer");
 const path = require("path");
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, "../public/uploads"));
@@ -26,140 +25,433 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Auth REST API routes
+/**
+ * @swagger
+ * tags:
+ *   - name: Api
+ *     description: API routes for the angular food delivery application.
+ */
+
+/**
+ * @swagger
+ * /api/register:
+ *   get:
+ *     summary: Show registration form
+ *     tags: [Api]
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Api]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
+ */
+
 router.get("/register", authController.createLogin);
 
+/**
+ * @swagger
+ * /api/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Api]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
+ */
 router.post(
   "/register",
   upload.single("image"),
   authController.createLoginSubmitted
 );
 
+/**
+ * @swagger
+ * /api/login:
+ *   get:
+ *     summary: Show login form
+ *     tags: [Api]
+ *   post:
+ *     summary: Login a user
+ *     tags: [Api]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ */
 router.get("/login", authController.login);
 
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [Api]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ */
 router.post("/login", authController.submittedLogin);
 
+/**
+ * @swagger
+ * /api/logout:
+ *   get:
+ *     summary: Logout a user
+ *     tags: [Api]
+ */
 router.get("/logout", authController.logout);
 
-// Profile REST API routes
+/**
+ * @swagger
+ * /api/profile:
+ *   get:
+ *     summary: Get user profile
+ *     tags: [Api]
+ *   put:
+ *     summary: Update user profile
+ *     tags: [Api]
+ *   put:
+ *     summary: Change user password
+ *     tags: [Api]
+ */
 router.get(
   "/profile",
   authController.verifyLoginUser,
   userController.getProfile
 );
+
+/**
+ * @swagger
+ * /api/profile:
+ *   put:
+ *     summary: Update user profile
+ *     tags: [Api]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
+ */
 router.put(
   "/profile",
   authController.verifyLoginUser,
   userController.updateProfileRest
 );
+
+/**
+ * @swagger
+ * /api/profile/password:
+ *   put:
+ *     summary: Change user password
+ *     tags: [Api]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *               newPassword:
+ *                 type: string
+ *               confirmPassword:
+ *                 type: string
+ */
 router.put(
   "/profile/password",
   authController.verifyLoginUser,
   userController.changePassword
 );
+
+/**
+ * @swagger
+ * /api/profile/charts:
+ *   get:
+ *     summary: Get most ordered dishes
+ *     tags: [Api]
+ */
 router.get(
   "/profile/charts",
   authController.verifyLoginUser,
   userController.getMostOrderedDishes
 );
 
-//Order REST API routes
-router.get("/orders", async (req, res) => {
-  const { customerId } = req.query;
-  if (!customerId) return res.status(400).json({ error: "Missing customerId" });
-  if (!mongoose.Types.ObjectId.isValid(customerId)) {
-    return res.status(400).json({ error: "Invalid customerId" });
-  }
+/**
+ * @swagger
+ * /api/orders:
+ *   get:
+ *     summary: Get all orders for a customer
+ *     tags: [Api]
+ *     parameters:
+ *       - in: query
+ *         name: customerId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Customer ID
+ *     responses:
+ *       200:
+ *         description: List of orders
+ *       400:
+ *         description: Missing or invalid customerId
+ *       500:
+ *         description: Internal server error
+ *   post:
+ *     summary: Create a new order
+ *     tags: [Api]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               restaurantId:
+ *                 type: string
+ *               customerId:
+ *                 type: string
+ *               amount:
+ *                 type: number
+ *               dishes:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               paymentOption:
+ *                 type: string
+ *               deliveryAddress:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Order created
+ *       400:
+ *         description: Missing required fields
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/orders", orderController.getOrders);
 
-  try {
-    const orders = await Order.find({
-      customerId: new mongoose.Types.ObjectId(customerId),
-    })
-      .populate("restaurantId")
-      .populate("dishes");
-    res.json(orders);
-  } catch (err) {
-    console.error("Erro ao buscar encomendas:", err); // <-- Isto mostra o erro real
-    res.status(500).json({ error: err.message });
-  }
-});
+/**
+ * @swagger
+ * /api/orders:
+ *   post:
+ *     summary: Create a new order
+ *     tags: [Api]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               restaurantId:
+ *                 type: string
+ *               customerId:
+ *                 type: string
+ *               amount:
+ *                 type: number
+ *               dishes:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               paymentOption:
+ *                 type: string
+ *               deliveryAddress:
+ *                 type: string
+ */
+router.post("/orders", orderController.createOrder);
 
-router.post("/orders", async (req, res) => {
-  try {
-    const {
-      restaurantId,
-      customerId,
-      amount,
-      dishes,
-      paymentOption,
-      deliveryAddress,
-    } = req.body;
-
-    if (!restaurantId || !customerId || !amount || !dishes || !dishes.length) {
-      return res.status(400).json({ error: "Missing required fields." });
-    }
-
-    const order = new Order({
-      restaurantId,
-      customerId,
-      amount,
-      dishes,
-      paymentOption,
-      deliveryAddress,
-    });
-
-    await order.save();
-    res.status(201).json(order);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
+/**
+ * @swagger
+ * /api/orders/{orderId}/review:
+ *   post:
+ *     summary: Add a review to an order
+ *     tags: [Api]
+ *     parameters:
+ *       - in: path
+ *         name: orderId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Order ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               comment:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Review saved
+ *       500:
+ *         description: Internal server error
+ */
 router.post(
   "/orders/:orderId/review",
   upload.single("image"),
-  async (req, res) => {
-    try {
-      const { comment } = req.body;
-      const image = req.file ? `/uploads/${req.file.filename}` : null;
-      await Order.findByIdAndUpdate(req.params.orderId, {
-        $push: { reviews: { comment, image, date: new Date() } },
-      });
-      res.status(200).json({ message: "Review saved" });
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  }
+  orderController.addReview
 );
 
+/**
+ * @swagger
+ * /api/orders/{orderId}/cancel:
+ *   post:
+ *     summary: Cancel an order
+ *     tags: [Api]
+ *     parameters:
+ *       - in: path
+ *         name: orderId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Order ID
+ *     responses:
+ *       200:
+ *         description: Order cancelled
+ *       500:
+ *         description: Internal server error
+ */
 router.post("/orders/:orderId/cancel", orderController.cancelOrder);
 
-// Menu REST API routes
+/**
+ * @swagger
+ * /api/{menuId}:
+ *   get:
+ *     summary: Get menu by ID
+ *     tags: [Api]
+ *     parameters:
+ *       - in: path
+ *         name: menuId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Menu ID
+ *     responses:
+ *       200:
+ *         description: Menu found
+ *       404:
+ *         description: Menu not found
+ *       500:
+ *         description: Internal server error
+ */
 router.get("/:menuId", menuController.getMenuById);
 
+/**
+ * @swagger
+ * /api/{menuId}/dishes:
+ *   get:
+ *     summary: Get dishes by menu ID
+ *     tags: [Api]
+ *     parameters:
+ *       - in: path
+ *         name: menuId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Menu ID
+ *     responses:
+ *       200:
+ *         description: List of dishes for the menu
+ *       500:
+ *         description: Internal server error
+ */
 router.get(
   "/:menuId/dishes",
   authController.verifyLoginUser,
   menuController.getDishesByMenuId
 );
 
-// Dish REST API routes
-router.get("/dishes", async (req, res) => {
-  try {
-    const dishes = await Dish.find();
-    res.json(dishes);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+/**
+ * @swagger
+ * /api/dishes:
+ *   get:
+ *     summary: Get all dishes
+ *     tags: [Api]
+ *     responses:
+ *       200:
+ *         description: List of dishes
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/dishes", dishController.list);
 
-router.get("/dishes/:dishId", async (req, res) => {
-  try {
-    const dish = await Dish.findById(req.params.dishId);
-    if (!dish) return res.status(404).json({ error: "Dish not found" });
-    res.json(dish);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+/**
+ * @swagger
+ * /api/dishes/{dishId}:
+ *   get:
+ *     summary: Get dish by ID
+ *     tags: [Api]
+ *     parameters:
+ *       - in: path
+ *         name: dishId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Dish ID
+ *     responses:
+ *       200:
+ *         description: Dish found
+ *       404:
+ *         description: Dish not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/dishes/:dishId", dishController.getDishById);
+
 module.exports = router;

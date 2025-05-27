@@ -5,6 +5,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 const cors = require("cors");
+const { swaggerUi, swaggerSpec } = require('./swagger');
 
 var indexRouter = require("./routes/index");
 var authRouter = require("./routes/auth");
@@ -41,6 +42,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/images', express.static('public/images'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(cors({
   origin: 'http://localhost:4200',
