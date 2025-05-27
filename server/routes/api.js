@@ -11,6 +11,7 @@ const config = require("../jwt_secret/config");
 const authController = require("../controllers/authController");
 const userController = require("../controllers/userController");
 const menuController = require("../controllers/menuController");
+const dishController = require("../controllers/dishController");
 const orderController = require("../controllers/orderController");
 const multer = require("multer");
 const path = require("path");
@@ -24,6 +25,21 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage });
+
+// Auth REST API routes
+router.get("/register", authController.createLogin);
+
+router.post(
+  "/register",
+  upload.single("image"),
+  authController.createLoginSubmitted
+);
+
+router.get("/login", authController.login);
+
+router.post("/login", authController.submittedLogin);
+
+router.get("/logout", authController.logout);
 
 // Profile REST API routes
 router.get(
@@ -47,6 +63,7 @@ router.get(
   userController.getMostOrderedDishes
 );
 
+//Order REST API routes
 router.get("/orders", async (req, res) => {
   const { customerId } = req.query;
   if (!customerId) return res.status(400).json({ error: "Missing customerId" });
@@ -98,26 +115,51 @@ router.post("/orders", async (req, res) => {
   }
 });
 
-router.post("/orders/:orderId/review", upload.single("image"), async (req, res) => {
-  try {
-    const { comment } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
-    await Order.findByIdAndUpdate(req.params.orderId, {
-      $push: { reviews: { comment, image, date: new Date() } },
-    });
-    res.status(200).json({ message: "Review saved" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+router.post(
+  "/orders/:orderId/review",
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const { comment } = req.body;
+      const image = req.file ? `/uploads/${req.file.filename}` : null;
+      await Order.findByIdAndUpdate(req.params.orderId, {
+        $push: { reviews: { comment, image, date: new Date() } },
+      });
+      res.status(200).json({ message: "Review saved" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
   }
-});
+);
 
 router.post("/orders/:orderId/cancel", orderController.cancelOrder);
 
+// Menu REST API routes
 router.get("/:menuId", menuController.getMenuById);
+
 router.get(
   "/:menuId/dishes",
   authController.verifyLoginUser,
   menuController.getDishesByMenuId
 );
 
+// Dish REST API routes
+router.get("/dishes", async (req, res) => {
+  try {
+    const dishes = await Dish.find();
+    res.json(dishes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get("/dishes/:dishId", async (req, res) => {
+  try {
+    const dish = await Dish.findById(req.params.dishId);
+    if (!dish) return res.status(404).json({ error: "Dish not found" });
+    res.json(dish);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 module.exports = router;

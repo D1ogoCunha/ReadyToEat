@@ -8,7 +8,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 @Component({
   selector: 'app-restaurants',
   standalone: true,
-  imports: [CommonModule, RouterModule, NavbarComponent, FormsModule], // Add FormsModule
+  imports: [CommonModule, RouterModule, NavbarComponent, FormsModule],
   templateUrl: './restaurants.component.html',
   styleUrls: ['./restaurants.component.css']
 })
@@ -25,7 +25,7 @@ export class RestaurantsComponent implements OnInit {
       next: (data) => {
         console.log('Restaurants received:', data);
         this.restaurants = data;
-        this.filteredRestaurants = data; // Initialize filtered list
+        this.filteredRestaurants = data;
       },
       error: (err) => console.error('Error loading restaurants:', err)
     });
@@ -34,7 +34,6 @@ export class RestaurantsComponent implements OnInit {
     applyFilters(): void {
     let filtered = [...this.restaurants];
   
-    // Sort by price
     if (this.selectedSort === 'priceLowToHigh') {
       filtered.sort((a, b) => Number(a.pricePerPerson) - Number(b.pricePerPerson));
     } else if (this.selectedSort === 'priceHighToLow') {

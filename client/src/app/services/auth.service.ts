@@ -72,7 +72,7 @@ interface DecodedToken {
   providedIn: 'root'
 })
 export class AuthService {
-  private serverApiUrl = 'http://localhost:3000';
+  private serverApiUrl = 'http://localhost:3000/api';
   private tokenKey = 'authToken';
 
   private currentUserSubject: BehaviorSubject<DecodedToken | null>;

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DishesService {
-private apiUrl = 'http://localhost:3000/dishes';
+private apiUrl = 'http://localhost:3000/api/dishes';
 
   constructor(private http: HttpClient) { }
 
