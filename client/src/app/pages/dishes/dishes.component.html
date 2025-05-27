@@ -21,16 +21,71 @@
   </header>
   <!-- Section-->
   <div class="container px-4 px-lg-5 mt-5">
+    <!-- Filtros -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <form class="row g-3 align-items-end justify-content-center">
+          <div class="col-md-4 col-lg-3">
+            <label for="sort" class="form-label mb-1 fw-semibold">
+              <i class="bi bi-funnel"></i> Sort by
+            </label>
+            <select
+              id="sort"
+              class="form-select"
+              [(ngModel)]="selectedSort"
+              (change)="applyFilters()"
+              name="sort"
+            >
+              <option value="">Select</option>
+              <option value="priceLowToHigh">Price: Low to High</option>
+              <option value="priceHighToLow">Price: High to Low</option>
+              <option value="prepTimeLowToHigh">Preparation Time: Low to High</option>
+              <option value="prepTimeHighToLow">Preparation Time: High to Low</option>
+              <option value="portionSmallToLarge">Portion Size: Small to Large</option>
+              <option value="portionLargeToSmall">Portion Size: Large to Small</option>
+            </select>
+          </div>
+          <div class="col-md-4 col-lg-3">
+            <label for="category" class="form-label mb-1 fw-semibold">
+              <i class="bi bi-tags"></i> Category
+            </label>
+            <select
+              id="category"
+              class="form-select"
+              [(ngModel)]="selectedCategory"
+              (change)="applyFilters()"
+              name="category"
+            >
+              <option value="">All</option>
+              <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+            </select>
+          </div>
+          <div class="col-md-4 col-lg-2 d-flex align-items-end">
+            <button
+              type="button"
+              class="btn btn-outline-secondary w-100"
+              (click)="resetFilters()"
+            >
+              <i class="bi bi-x-circle"></i> Clear Filters
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
     <div
       class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
     >
-      <div class="col mb-5" *ngFor="let dish of dishes">
+      <div class="col mb-5" *ngFor="let dish of filteredDishes">
         <div class="card h-100">
           <img
             class="card-img-top"
-            [src]="dish.imagem ? 'http://localhost:3000' + dish.imagem : 'https://via.placeholder.com/300x200?text=No+Image'"
+            [src]="
+              dish.imagem
+                ? 'http://localhost:3000' + dish.imagem
+                : 'https://via.placeholder.com/300x200?text=No+Image'
+            "
             alt="{{ dish.nome }}"
-            style="object-fit: cover; height: 200px;"
+            style="object-fit: cover; height: 200px"
           />
           <div class="card-body p-4">
             <div class="text-center">
