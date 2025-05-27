@@ -29,6 +29,11 @@ var UserSchema = new mongoose.Schema({
         type: String, 
         enum: ['in validation', 'valid'], 
         default: function() { return this.role === 'restaurant' ? 'in validation' : 'valid'; }
+    },
+    deliveryDistance: { 
+        type: Number, 
+        required: function() { return this.role === 'restaurant'; },
+        min: 1
     }
 });
 

@@ -188,6 +188,22 @@
                     required
                   />
                 </div>
+                <!-- Delivery Distance-->
+                <div class="mb-3">
+                  <label class="smallmb" for="deliveryDistance"
+                    >Delivery Distance (km)*</label
+                  >
+                  <input
+                    class="form-control"
+                    id="deliveryDistance"
+                    type="number"
+                    name="deliveryDistance"
+                    placeholder="Enter delivery distance"
+                    value="<%= user.deliveryDistance %>"
+                    min="1"
+                    required
+                  />
+                </div>
                 <% } %>
 
                 <!-- Save changes button-->

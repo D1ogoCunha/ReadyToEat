@@ -123,6 +123,9 @@ userController.updateProfile = async (req, res) => {
     if (req.body.phone) updateFields.phone = req.body.phone;
     if (req.body.pricePerPerson)
       updateFields.pricePerPerson = req.body.pricePerPerson;
+    if (req.body.deliveryDistance)
+      updateFields.deliveryDistance = req.body.deliveryDistance;
+
 
     if (req.file) {
       updateFields.image = `/uploads/${req.file.filename}`;
@@ -195,12 +198,13 @@ userController.getMostOrderedDishes = async (req, res) => {
 
 userController.getRestaurants = async (req, res) => {
   try {
-    const restaurants = await User.find({ role: "restaurant" });
-    console.log("Restaurants found:", restaurants);
+    const restaurants = await User.find({
+      role: "restaurant",
+      status: "valid"
+    });
     res.json(restaurants);
-  } catch (error) {
-    console.error("Error fetching restaurants:", error);
-    res.status(500).send("Failed to load restaurants.");
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 

@@ -12,6 +12,7 @@ export class User {
     public phone?: string,
     public pricePerPerson?: number,
     public status?: 'in validation' | 'valid',
-    public _id?: string
+    public _id?: string,
+    public deliveryDistance?: number
   ) {}
 }

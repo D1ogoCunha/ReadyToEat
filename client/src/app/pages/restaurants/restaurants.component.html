@@ -25,6 +25,8 @@
         <option value="">Select</option>
         <option value="priceLowToHigh">Price: Low to High</option>
         <option value="priceHighToLow">Price: High to Low</option>
+        <option value="distanceLowToHigh">Delivery Distance: Low to High</option>
+        <option value="distanceHighToLow">Delivery Distance: High to Low</option>
       </select>
     </div>
   </div>
@@ -46,6 +48,16 @@
           <div class="text-center">
             <h5 class="fw-bolder">{{ restaurant.restaurantName }}</h5>
             <p>{{ restaurant.description }}</p>
+            <p>
+              <i class="bi"></i>
+              <strong>Price per person:</strong>
+              {{ restaurant.pricePerPerson }} €
+            </p>
+            <p>
+              <i class="bi bi-geo-alt"></i>
+              <strong>Delivery distance:</strong>
+              {{ restaurant.deliveryDistance }} km
+            </p>
           </div>
         </div>
         <!-- Actions -->

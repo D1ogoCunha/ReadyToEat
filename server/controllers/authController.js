@@ -127,13 +127,12 @@ authController.createLoginSubmitted = function (req, res, next) {
     userData.phone = req.body.phone;
     userData.pricePerPerson = req.body.pricePerPerson;
     userData.image = req.file ? `/uploads/${req.file.filename}` : null;
+    userData.deliveryDistance = req.body.deliveryDistance;
   }
 
   User.create(userData)
     .then(function (user) {
       if (isRest) {
-        // NÃO gera token JWT
-        // Apenas retorna mensagem de sucesso e dados do usuário
         return res.status(201).json({
           message: "Registration successful",
           user: {
@@ -145,7 +144,6 @@ authController.createLoginSubmitted = function (req, res, next) {
           },
         });
       } else {
-        // regular form submit
         return res.redirect("/login");
       }
     })

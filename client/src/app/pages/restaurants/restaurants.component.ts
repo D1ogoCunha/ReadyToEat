@@ -32,14 +32,18 @@ export class RestaurantsComponent implements OnInit {
   }
 
     applyFilters(): void {
-    let filtered = [...this.restaurants];
-  
-    if (this.selectedSort === 'priceLowToHigh') {
-      filtered.sort((a, b) => Number(a.pricePerPerson) - Number(b.pricePerPerson));
-    } else if (this.selectedSort === 'priceHighToLow') {
-      filtered.sort((a, b) => Number(b.pricePerPerson) - Number(a.pricePerPerson));
+      let filtered = [...this.restaurants];
+    
+      if (this.selectedSort === 'priceLowToHigh') {
+        filtered.sort((a, b) => Number(a.pricePerPerson) - Number(b.pricePerPerson));
+      } else if (this.selectedSort === 'priceHighToLow') {
+        filtered.sort((a, b) => Number(b.pricePerPerson) - Number(a.pricePerPerson));
+      } else if (this.selectedSort === 'distanceLowToHigh') {
+        filtered.sort((a, b) => Number(a.deliveryDistance) - Number(b.deliveryDistance));
+      } else if (this.selectedSort === 'distanceHighToLow') {
+        filtered.sort((a, b) => Number(b.deliveryDistance) - Number(a.deliveryDistance));
+      }
+    
+      this.filteredRestaurants = filtered;
     }
-  
-    this.filteredRestaurants = filtered;
-  }
 }
