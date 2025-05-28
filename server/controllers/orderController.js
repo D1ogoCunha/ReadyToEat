@@ -190,6 +190,27 @@ orderController.createOrder = async (req, res) => {
       return res.status(400).json({ error: "Missing required fields." });
     }
 
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    const cancelledOrders = await Order.find({
+      customerId,
+      status: "Cancelled",
+      date: { $gte: oneMonthAgo },
+    }).sort({ date: 1 });
+
+    if (cancelledOrders.length >= 5) {
+      const fifthCancelDate = cancelledOrders[4].date;
+      const blockedUntil = new Date(fifthCancelDate);
+      blockedUntil.setMonth(blockedUntil.getMonth() + 2);
+
+      if (new Date() < blockedUntil) {
+        return res.status(403).json({
+          error: `You are blocked from ordering until ${blockedUntil.toLocaleDateString()}`,
+        });
+      }
+    }
+
     const order = new Order({
       restaurantId,
       customerId,
@@ -218,6 +239,5 @@ orderController.addReview = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
 
 module.exports = orderController;

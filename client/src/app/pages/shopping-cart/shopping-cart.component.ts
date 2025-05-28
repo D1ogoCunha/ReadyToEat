@@ -36,7 +36,7 @@ export class ShoppingCartComponent implements OnInit {
     private toastr: ToastrService,
     private restaurantService: RestaurantService,
     private sanitizer: DomSanitizer
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const storedCart = localStorage.getItem('cart');
@@ -115,11 +115,11 @@ export class ShoppingCartComponent implements OnInit {
       }
     }
     if (!customerId) {
-      alert('You need to be authenticated to order.');
+      this.toastr.error('You need to be authenticated to order.');
       return;
     }
     if (!this.cartItems.length) {
-      alert('The cart is empty.');
+      this.toastr.error('The cart is empty.');
       return;
     }
 
@@ -131,22 +131,29 @@ export class ShoppingCartComponent implements OnInit {
 
     this.orderService.createOrder(order).subscribe({
       next: () => {
-        alert('Order created successfully!');
+        this.toastr.success('Order created successfully!');
         this.cartService.clearCart();
         this.router.navigate(['/']);
       },
-      error: () => alert('Error creating order!'),
+      error: (err) => {
+        if (err.status === 403 && err.error?.error) {
+          this.toastr.error(err.error.error); // Toast em vez de alert
+        } else {
+          this.toastr.error('Error creating order!');
+        }
+      }
     });
   }
+
   confirmPayment(): void {
     if (this.paymentOption === 'courier' && !this.deliveryAddress) {
-      alert('Please enter a delivery address.');
+      this.toastr.error('Please enter a delivery address.');
       return;
     }
 
     const customerId = this.getCustomerId();
     if (!customerId) {
-      alert('You need to be authenticated to order.');
+      this.toastr.error('You need to be authenticated to order.');
       return;
     }
 
@@ -174,11 +181,16 @@ export class ShoppingCartComponent implements OnInit {
           }
         }
         this.toastr.success('Order created successfully!');
-        //alert('Order created successfully!');
         this.cartService.clearCart();
         this.router.navigate(['/']);
       },
-      error: () => alert('Error creating order!'),
+      error: (err) => {
+        if (err.status === 403 && err.error?.error) {
+          this.toastr.error(err.error.error); 
+        } else {
+          this.toastr.error('Error creating order!');
+        }
+      }
     });
   }
 

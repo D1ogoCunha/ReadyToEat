@@ -26,7 +26,7 @@ export class OrderComponent implements OnInit {
   constructor(
     private orderService: OrderService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -76,7 +76,7 @@ export class OrderComponent implements OnInit {
   }
 
   canCancel(order: any): boolean {
-    return order && order.status !== 'Cancelled';
+    return order && order.status !== 'Cancelled' && order.status !== 'Completed';
   }
 
   cancelOrder(order: any) {
