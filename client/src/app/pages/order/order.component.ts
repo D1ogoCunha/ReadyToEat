@@ -4,6 +4,7 @@ import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 declare var bootstrap: any;
 
@@ -25,7 +26,8 @@ export class OrderComponent implements OnInit {
 
   constructor(
     private orderService: OrderService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -69,7 +71,7 @@ export class OrderComponent implements OnInit {
     }
     this.orderService.submitReview(this.reviewOrderId, formData).subscribe({
       next: () => {
-        alert('Avaliação enviada!');
+        this.toastr.success('Avaliação enviada com sucesso!');
       },
       error: () => alert('Erro ao enviar avaliação!'),
     });
@@ -97,12 +99,12 @@ export class OrderComponent implements OnInit {
     const diffMinutes = (now.getTime() - created.getTime()) / 60000;
 
     if (order.status === 'Preparing') {
-      alert('Cannot cancel: the order is already being prepared.');
+      this.toastr.error('Unable to cancel: order is already being prepared.');
       this.closeCancelModal();
       return;
     }
     if (diffMinutes > 5) {
-      alert('Unable to cancel: more than 5 minutes have passed.');
+      this.toastr.error('Unable to cancel: order can only be cancelled within 5 minutes of creation.');
       this.closeCancelModal();
       return;
     }

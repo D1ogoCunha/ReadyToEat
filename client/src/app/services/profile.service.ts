@@ -11,18 +11,18 @@ export class ProfileService {
   constructor(private http: HttpClient) { }
 
   getProfile(): Observable<any> {
-    return this.http.get<any>(this.apiUrl, { withCredentials: true });
+    return this.http.get<any>(this.apiUrl);
   }
 
   updateProfile(data: any): Observable<any> {
-    return this.http.put<any>(this.apiUrl, data, { withCredentials: true });
+    return this.http.put<any>(this.apiUrl, data);
   }
 
   changePassword(data: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/password`, data, { withCredentials: true });
+    return this.http.put<any>(`${this.apiUrl}/password`, data);
   }
 
   getChart(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/charts`, { withCredentials: true });
+    return this.http.get<any>(`${this.apiUrl}/charts`);
   }
 }

@@ -215,7 +215,6 @@ userController.getRestaurantesById = async (req, res) => {
     if (!restaurant) {
       return res.status(404).send("Restaurant not found.");
     }
-    console.log("Restaurant found:", restaurant);
     res.json(restaurant);
   } catch (error) {
     console.error("Error fetching restaurant:", error);
@@ -230,7 +229,7 @@ userController.getMenusByRestaurantId = async (req, res) => {
     if (!menus) {
       return res.status(404).send("Menus not found.");
     }
-    console.log("Menus found:", menus);
+ 
     res.json(menus);
   } catch (error) {
     console.error("Error fetching menus:", error);

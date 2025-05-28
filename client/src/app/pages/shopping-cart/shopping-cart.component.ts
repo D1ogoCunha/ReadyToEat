@@ -137,7 +137,7 @@ export class ShoppingCartComponent implements OnInit {
       },
       error: (err) => {
         if (err.status === 403 && err.error?.error) {
-          this.toastr.error(err.error.error); // Toast em vez de alert
+          this.toastr.error(err.error.error);
         } else {
           this.toastr.error('Error creating order!');
         }

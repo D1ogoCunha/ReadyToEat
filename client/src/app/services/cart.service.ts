@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class CartService {
   cartCount$ = this.cartCount.asObservable();
   cartItems$ = this.cartItems.asObservable();
 
-  constructor() {
+  constructor(private toastr: ToastrService) {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       this.cart = JSON.parse(savedCart);
@@ -23,7 +24,7 @@ export class CartService {
 
   addToCart(dish: any, restaurantId: string) {
     if (this.cart.length > 0 && this.cart[0].restaurantId !== restaurantId) {
-      alert('You can only add dishes from the same restaurant to the cart.');
+      this.toastr.error('You can only add items from the same restaurant to the cart.');
       return;
     }
 

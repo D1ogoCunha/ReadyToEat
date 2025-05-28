@@ -5,7 +5,8 @@ import { RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CartService } from '../../services/cart.service';
 import { MenusService } from '../../services/menus.service';
-import { FormsModule } from '@angular/forms'; // Import FormsModule if needed
+import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dishes',
@@ -27,7 +28,8 @@ export class DishesComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private menusService: MenusService,
-    private cartService: CartService
+    private cartService: CartService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -83,7 +85,7 @@ export class DishesComponent implements OnInit {
     this.menusService.getMenuById(this.menuId).subscribe({
       next: (menu: any) => {
         this.cartService.addToCart(dish, menu.createdBy); 
-        //alert(`${dish.nome} was successfully added to your cart!`);
+        this.toastr.success(`${dish.nome} was successfully added to your cart!`);
       },
       error: () => alert('An error occurred while retrieving the restaurant for this dish.')
     });

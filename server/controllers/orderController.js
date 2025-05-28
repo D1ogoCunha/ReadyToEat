@@ -190,6 +190,22 @@ orderController.createOrder = async (req, res) => {
       return res.status(400).json({ error: "Missing required fields." });
     }
 
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const ordersToday = await Order.countDocuments({
+      customerId,
+      date: { $gte: startOfDay, $lte: endOfDay },
+    });
+
+    if (ordersToday >= 5) {
+      return res.status(403).json({
+        error: "You have reached the daily limit of 5 orders.",
+      });
+    }
+
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 

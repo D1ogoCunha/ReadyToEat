@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CartService } from '../../services/cart.service';
 import { DishesService } from '../../services/dishes.service';
 import { MenusService } from '../../services/menus.service';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-dish-details',
   standalone: true,
@@ -21,7 +20,8 @@ export class DishDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private dishesService: DishesService,
     private cartService: CartService,
-    private menusService: MenusService
+    private menusService: MenusService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -45,9 +45,9 @@ export class DishDetailsComponent implements OnInit {
       this.menusService.getMenuById(this.dish.menu).subscribe({
         next: (menu: any) => {
           this.cartService.addToCart(this.dish, menu.createdBy); 
-          alert(`${this.dish.nome} was successfully added to your cart!`);
+          this.toastr.success(`${this.dish.nome} was successfully added to your cart!`);
         },
-        //error: () => alert('An error occurred while retrieving the restaurant for this dish.')
+        error: () => alert('An error occurred while retrieving the restaurant for this dish.')
       });
     }
   }
