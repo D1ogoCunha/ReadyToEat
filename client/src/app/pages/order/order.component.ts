@@ -26,7 +26,7 @@ export class OrderComponent implements OnInit {
   constructor(
     private orderService: OrderService,
     private authService: AuthService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -71,16 +71,12 @@ export class OrderComponent implements OnInit {
       next: () => {
         alert('Avaliação enviada!');
       },
-      error: () => alert('Erro ao enviar avaliação!')
+      error: () => alert('Erro ao enviar avaliação!'),
     });
   }
 
   canCancel(order: any): boolean {
-    if (!order || !order.date || order.status === 'Preparing' || order.status === 'Cancelled') return false;
-    const created = new Date(order.date);
-    const now = new Date();
-    const diffMinutes = (now.getTime() - created.getTime()) / 60000;
-    return diffMinutes <= 5;
+    return order && order.status !== 'Cancelled';
   }
 
   cancelOrder(order: any) {
@@ -94,23 +90,41 @@ export class OrderComponent implements OnInit {
 
   confirmCancel() {
     if (!this.selectedOrderToCancel) return;
-    this.orderService.cancelOrder(this.selectedOrderToCancel._id).subscribe({
+
+    const order = this.selectedOrderToCancel;
+    const created = new Date(order.date);
+    const now = new Date();
+    const diffMinutes = (now.getTime() - created.getTime()) / 60000;
+
+    if (order.status === 'Preparing') {
+      alert('Cannot cancel: the order is already being prepared.');
+      this.closeCancelModal();
+      return;
+    }
+    if (diffMinutes > 5) {
+      alert('Unable to cancel: more than 5 minutes have passed.');
+      this.closeCancelModal();
+      return;
+    }
+
+    this.orderService.cancelOrder(order._id).subscribe({
       next: () => {
         this.selectedOrderToCancel.status = 'Cancelled';
-        const modalEl = document.getElementById('cancelModal');
-        if (modalEl) {
-          bootstrap.Modal.getInstance(modalEl)?.hide();
-        }
+        this.closeCancelModal();
         this.selectedOrderToCancel = null;
       },
       error: (err) => {
         alert(err.error?.error || 'Unable to cancel order.');
-        const modalEl = document.getElementById('cancelModal');
-        if (modalEl) {
-          bootstrap.Modal.getInstance(modalEl)?.hide();
-        }
+        this.closeCancelModal();
         this.selectedOrderToCancel = null;
-      }
+      },
     });
+  }
+
+  private closeCancelModal() {
+    const modalEl = document.getElementById('cancelModal');
+    if (modalEl) {
+      bootstrap.Modal.getInstance(modalEl)?.hide();
+    }
   }
 }
