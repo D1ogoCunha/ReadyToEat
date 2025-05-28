@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CartService } from '../../services/cart.service';
+import { RestaurantService } from '../../services/restaurant.service';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -8,6 +9,7 @@ import { RouterLink } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { jwtDecode } from 'jwt-decode';
 import { FormsModule } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 declare var bootstrap: any;
 
@@ -23,13 +25,18 @@ export class ShoppingCartComponent implements OnInit {
   shippingCost: number = 10;
   paymentOption: string = '';
   deliveryAddress: string = '';
+  restaurantName: string = '';
+  deliveryDistance: number = 0;
+  restaurantAddress: string = '';
 
   constructor(
-  private cartService: CartService,
-  private router: Router,
-  private orderService: OrderService,
-  private toastr: ToastrService
-) {}
+    private cartService: CartService,
+    private router: Router,
+    private orderService: OrderService,
+    private toastr: ToastrService,
+    private restaurantService: RestaurantService,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     const storedCart = localStorage.getItem('cart');
@@ -41,6 +48,23 @@ export class ShoppingCartComponent implements OnInit {
 
     this.cartService.cartItems$.subscribe((items) => {
       this.cartItems = items;
+      if (items.length > 0) {
+        const restaurantId = items[0].restaurantId;
+        if (restaurantId) {
+          this.restaurantService.getRestaurantById(restaurantId).subscribe({
+            next: (restaurant: any) => {
+              this.restaurantName = restaurant.restaurantName;
+              this.deliveryDistance = restaurant.deliveryDistance;
+              this.restaurantAddress = restaurant.address; // <-- aqui
+            },
+            error: () => {
+              this.restaurantName = '';
+              this.deliveryDistance = 0;
+              this.restaurantAddress = '';
+            },
+          });
+        }
+      }
     });
   }
 
@@ -177,5 +201,14 @@ export class ShoppingCartComponent implements OnInit {
       }
     }
     return undefined;
+  }
+
+  getRestaurantMapUrl(): SafeResourceUrl {
+    if (!this.restaurantAddress) return '';
+    const url =
+      'https://www.google.com/maps?q=' +
+      encodeURIComponent(this.restaurantAddress) +
+      '&z=15&output=embed';
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }
