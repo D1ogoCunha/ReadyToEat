@@ -51,8 +51,8 @@ body {
 }
 
 .nav-borders .nav-link.active {
-  color: #ff5722;
-  border-bottom-color: #ff5722;
+  color: #212529;
+  border-bottom-color: #212529;
 }
 .nav-borders .nav-link {
   color: #666;
@@ -65,16 +65,4 @@ body {
   padding-right: 0;
   margin-left: 1rem;
   margin-right: 1rem;
-}
-
-.btn {
-  color: #ffffff;
-  background-color: #ff5722;
-  border-color: #ff5722;
-}
-
-.btn:hover {
-  color: #ffffff;
-  background-color: #e64a19;
-  border-color: #e64a19;
 }

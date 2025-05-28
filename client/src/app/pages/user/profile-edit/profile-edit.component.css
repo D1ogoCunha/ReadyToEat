@@ -10,15 +10,6 @@
   z-index: 0;
 }
 
-.img-account-profile {
-  height: 70px;
-  width: 70px;
-}
-
-.rounded-circle {
-  border-radius: 50% !important;
-}
-
 .card {
   box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
   border-radius: 16px;
@@ -36,9 +27,9 @@
 
 .card-header {
   padding: 1rem 1.35rem;
-  color: #333;
+  color: #fff;
   margin-bottom: 0;
-  background-color: rgba(255, 87, 34, 0.1);
+  background-color: #212529;
   border-bottom: 1px solid #ccc;
 }
 
@@ -53,7 +44,7 @@
   color: #333;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid #ccc;
+  border: 1px solid #212529;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -66,8 +57,8 @@
 }
 
 .nav-borders .nav-link.active {
-  color: #ff5722;
-  border-bottom-color: #ff5722;
+  color: #212529;
+  border-bottom-color: #212529;
 }
 .nav-borders .nav-link {
   color: #666;
@@ -81,15 +72,19 @@
   margin-left: 1rem;
   margin-right: 1rem;
 }
-
 .btn {
-  color: #ffffff;
-  background-color: #ff5722;;
-  border-color: #ff5722;
+  color: #212529;
+  border: 1px solid #212529;
+  background-color: transparent;
+  border: 1px solid #212529;
+  font-weight: bold;
+  -webkit-transition: background 0.3s ease;
+  transition: background 0.3s ease;
 }
 
 .btn:hover {
-  color: #ffffff;
-  background-color: #e64a19;
-  border-color: #e64a19;
+  color: #fff;
+  background-color: #212529;
+  border-color: #212529;
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.08);
 }
