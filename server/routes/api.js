@@ -151,9 +151,7 @@ router.get("/logout", authController.logout);
  *   put:
  *     summary: Update user profile
  *     tags: [Api]
- *   put:
- *     summary: Change user password
- *     tags: [Api]
+ * 
  */
 router.get(
   "/profile",
