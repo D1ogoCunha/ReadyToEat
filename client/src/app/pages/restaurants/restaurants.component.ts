@@ -10,7 +10,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
   standalone: true,
   imports: [CommonModule, RouterModule, NavbarComponent, FormsModule],
   templateUrl: './restaurants.component.html',
-  styleUrls: ['./restaurants.component.css']
+  styleUrls: ['./restaurants.component.css'],
 })
 export class RestaurantsComponent implements OnInit {
   restaurants: any[] = [];
@@ -27,23 +27,37 @@ export class RestaurantsComponent implements OnInit {
         this.restaurants = data;
         this.filteredRestaurants = data;
       },
-      error: (err) => console.error('Error loading restaurants:', err)
+      error: (err) => console.error('Error loading restaurants:', err),
     });
   }
 
-    applyFilters(): void {
-      let filtered = [...this.restaurants];
-    
-      if (this.selectedSort === 'priceLowToHigh') {
-        filtered.sort((a, b) => Number(a.pricePerPerson) - Number(b.pricePerPerson));
-      } else if (this.selectedSort === 'priceHighToLow') {
-        filtered.sort((a, b) => Number(b.pricePerPerson) - Number(a.pricePerPerson));
-      } else if (this.selectedSort === 'distanceLowToHigh') {
-        filtered.sort((a, b) => Number(a.deliveryDistance) - Number(b.deliveryDistance));
-      } else if (this.selectedSort === 'distanceHighToLow') {
-        filtered.sort((a, b) => Number(b.deliveryDistance) - Number(a.deliveryDistance));
-      }
-    
-      this.filteredRestaurants = filtered;
+  applyFilters(): void {
+    let filtered = [...this.restaurants];
+
+    if (this.selectedSort === 'priceLowToHigh') {
+      filtered.sort(
+        (a, b) => Number(a.pricePerPerson) - Number(b.pricePerPerson)
+      );
+    } else if (this.selectedSort === 'priceHighToLow') {
+      filtered.sort(
+        (a, b) => Number(b.pricePerPerson) - Number(a.pricePerPerson)
+      );
+    } else if (this.selectedSort === 'distanceLowToHigh') {
+      filtered.sort(
+        (a, b) => Number(a.deliveryDistance) - Number(b.deliveryDistance)
+      );
+    } else if (this.selectedSort === 'distanceHighToLow') {
+      filtered.sort(
+        (a, b) => Number(b.deliveryDistance) - Number(a.deliveryDistance)
+      );
     }
+
+    this.filteredRestaurants = filtered;
+  }
+
+  resetFilters(): void {
+    this.selectedSort = '';
+    this.selectedCategory = '';
+    this.filteredRestaurants = [...this.restaurants];
+  }
 }
