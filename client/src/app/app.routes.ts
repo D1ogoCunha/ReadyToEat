@@ -3,7 +3,7 @@ import { DishesComponent } from './components/dishes/dishes.component';
 import { RestaurantsComponent } from './components/restaurants/restaurants.component';
 import { RestaurantMenusComponent } from './components/restaurant-menus/restaurant-menus.component';
 import { OrderComponent } from './components/order/order.component';
-import { LoginComponent } from './auth/login/login.component';
+import { LoginComponent } from './components/auth/login/login.component';
 import { DishDetailsComponent } from './components/dish-details/dish-details.component';
 import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
 import { ProfileEditComponent } from './components/user/profile-edit/profile-edit.component';
@@ -11,7 +11,7 @@ import { ProfileSecurityComponent } from './components/user/profile-security/pro
 import { ProfileChartComponent } from './components/user/profile-chart/profile-chart.component';
 import { AuthGuard } from './guards/auth.guard';
 import { HomeComponent } from './components/home/home.component';
-import { RegisterComponent } from './auth/register/register.component';
+import { RegisterComponent } from './components/auth/register/register.component';
 
 export const routes: Routes = [
   { path: 'dishes', component: DishesComponent, canActivate: [AuthGuard] },
