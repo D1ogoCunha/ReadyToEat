@@ -216,3 +216,12 @@ img {
 footer{
 margin-top: 40px;
 }
+
+.custom-back-btn {
+  background-color: #e0e0e0; 
+  border: 2px solid #000;   
+  color: #000;              
+}
+.custom-back-btn:hover {
+  background-color: #bdbdbd; 
+}

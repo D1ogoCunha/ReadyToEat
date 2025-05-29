@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { RestaurantService } from '../../services/restaurant.service';
@@ -17,7 +16,7 @@ export class RestaurantMenusComponent implements OnInit {
   menus: any[] = [];
   restaurantId!: string;
 
-  constructor(private route: ActivatedRoute,  private restaurantService : RestaurantService) {}
+  constructor(private route: ActivatedRoute,  private restaurantService : RestaurantService, private location: Location) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -38,5 +37,9 @@ export class RestaurantMenusComponent implements OnInit {
         });
       }
     });
+  }
+
+  goBack() {
+    this.location.back();
   }
 }
