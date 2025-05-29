@@ -60,28 +60,29 @@ export class CartService {
     }
   }
 
-  addToCart(dish: any, restaurantId: string) {
-    if (this.cart.length > 0 && this.cart[0].restaurantId !== restaurantId) {
-      this.toastr.error(
-        'You can only add items from the same restaurant to the cart.'
-      );
-      return;
+    addToCart(dish: any, restaurantId: string): boolean {
+      if (this.cart.length > 0 && this.cart[0].restaurantId !== restaurantId) {
+        this.toastr.error(
+          'You can only add items from the same restaurant to the cart.'
+        );
+        return false;
+      }
+  
+      const existingItem = this.cart.find((item) => item._id === dish._id);
+      if (existingItem) {
+        existingItem.quantity = (existingItem.quantity || 1) + 1;
+      } else {
+        dish.quantity = 1;
+        dish.restaurantId = restaurantId;
+        this.cart.push(dish);
+      }
+      this.updateCartState();
+  
+      if (this.cart.length === 1 && !this.timerSub) {
+        this.startCartTimer();
+      }
+      return true;
     }
-
-    const existingItem = this.cart.find((item) => item._id === dish._id);
-    if (existingItem) {
-      existingItem.quantity = (existingItem.quantity || 1) + 1;
-    } else {
-      dish.quantity = 1;
-      dish.restaurantId = restaurantId;
-      this.cart.push(dish);
-    }
-    this.updateCartState();
-
-    if (this.cart.length === 1 && !this.timerSub) {
-      this.startCartTimer();
-    }
-  }
 
   clearCart() {
     this.cart = [];

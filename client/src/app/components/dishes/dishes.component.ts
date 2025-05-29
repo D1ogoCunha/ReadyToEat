@@ -81,15 +81,19 @@ export class DishesComponent implements OnInit {
     return idx !== -1 ? idx : 0;
   }
 
-  addToCart(dish: any) {
-    this.menusService.getMenuById(this.menuId).subscribe({
-      next: (menu: any) => {
-        this.cartService.addToCart(dish, menu.createdBy); 
-        this.toastr.success(`${dish.nome} was successfully added to your cart!`);
-      },
-      error: () => alert('An error occurred while retrieving the restaurant for this dish.')
-    });
-  }
+
+    addToCart(dish: any) {
+      this.menusService.getMenuById(this.menuId).subscribe({
+        next: (menu: any) => {
+          const added = this.cartService.addToCart(dish, menu.createdBy); 
+          if (added) {
+            this.toastr.success(`${dish.nome} was successfully added to your cart!`);
+          }
+        },
+        error: () => alert('An error occurred while retrieving the restaurant for this dish.')
+      });
+    }
+ 
   
   resetFilters() {
   this.selectedSort = '';

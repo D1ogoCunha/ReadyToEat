@@ -40,15 +40,17 @@ export class DishDetailsComponent implements OnInit {
     });
   }
 
-  addToCart(): void {
-    if (this.dish && this.dish.menu) {
-      this.menusService.getMenuById(this.dish.menu).subscribe({
-        next: (menu: any) => {
-          this.cartService.addToCart(this.dish, menu.createdBy); 
-          this.toastr.success(`${this.dish.nome} was successfully added to your cart!`);
-        },
-        error: () => alert('An error occurred while retrieving the restaurant for this dish.')
-      });
+    addToCart(): void {
+      if (this.dish && this.dish.menu) {
+        this.menusService.getMenuById(this.dish.menu).subscribe({
+          next: (menu: any) => {
+            const added = this.cartService.addToCart(this.dish, menu.createdBy);
+            if (added) {
+              this.toastr.success(`${this.dish.nome} was successfully added to your cart!`);
+            }
+          },
+          error: () => alert('An error occurred while retrieving the restaurant for this dish.')
+        });
+      }
     }
   }
-}
