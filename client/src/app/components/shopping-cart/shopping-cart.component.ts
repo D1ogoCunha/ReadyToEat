@@ -28,6 +28,8 @@ export class ShoppingCartComponent implements OnInit {
   restaurantName: string = '';
   deliveryDistance: number = 0;
   restaurantAddress: string = '';
+  timerValue: number | null = null;
+  restaurantMapUrl: SafeResourceUrl = '';
 
   constructor(
     private cartService: CartService,
@@ -39,7 +41,6 @@ export class ShoppingCartComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cartService.onUserChanged();
     this.cartService.cartItems$.subscribe((items) => {
       this.cartItems = items;
       if (items.length > 0) {
@@ -50,15 +51,26 @@ export class ShoppingCartComponent implements OnInit {
               this.restaurantName = restaurant.restaurantName;
               this.deliveryDistance = restaurant.deliveryDistance;
               this.restaurantAddress = restaurant.address;
+              this.restaurantMapUrl = this.getRestaurantMapUrl();
             },
             error: () => {
               this.restaurantName = '';
               this.deliveryDistance = 0;
               this.restaurantAddress = '';
+              this.restaurantMapUrl = '';
             },
           });
         }
+      } else {
+        this.restaurantName = '';
+        this.deliveryDistance = 0;
+        this.restaurantAddress = '';
+        this.restaurantMapUrl = '';
       }
+    });
+
+    this.cartService.timerValue$.subscribe((value) => {
+      this.timerValue = value;
     });
   }
 
@@ -93,7 +105,7 @@ export class ShoppingCartComponent implements OnInit {
   removeFromCart(item: any): void {
     this.cartService.removeCartItem(item._id);
   }
-  
+
   proceedToCheckout(): void {
     let customerId: string | undefined;
     const token = localStorage.getItem('authToken');

@@ -81,6 +81,7 @@ login(credentials: { email: string, password: string }): Observable<{ token: str
     this.userService.clearUser(); 
     this.cartService.onUserChanged();
     this.router.navigate(['/login']);
+    this.cartService.clearCart();
   }
 
   getToken(): string | null {

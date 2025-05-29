@@ -16,15 +16,17 @@
         <a class="nav-link" href="/orders">Order</a>
       </li>
     </ul>
+    
     <div
       class="cart-btn-container position-absolute end-0 top-0 mt-2 me-2 d-flex align-items-center"
     >
       <a class="btn btn-outline-dark me-3" [routerLink]="'/shopping-cart'">
         <i class="bi-cart-fill me-1"></i>
         Cart
-        <span class="badge bg-dark text-white ms-1 rounded-pill">{{
-          cartCount
-        }}</span>
+        <span class="badge bg-dark text-white ms-1 rounded-pill">{{ cartCount }}</span>
+        <span *ngIf="timerValue !== null" class="ms-2 text-danger fw-bold">
+          <i class="bi bi-clock"></i> {{ timerDisplay }}
+        </span>
       </a>
       <div class="navbar-user dropdown">
         <button
