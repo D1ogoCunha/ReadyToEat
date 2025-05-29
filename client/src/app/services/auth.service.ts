@@ -5,6 +5,7 @@ import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { UserService } from './user.service';
+import { CartService } from './cart.service';
 
 interface DecodedToken {
   email: string;
@@ -26,7 +27,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private userService: UserService  
+    private userService: UserService,  
+    private cartService: CartService
   ) {
     let initialUser: DecodedToken | null = null;
     const token = localStorage.getItem(this.tokenKey);
@@ -50,32 +52,34 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  login(credentials: { email: string, password: string }): Observable<{ token: string, user: any }> {
-    return this.http.post<{ token: string, user: any }>(`${this.serverApiUrl}/login`, {...credentials, rest: true }).pipe(
-      tap(response => {
-        if (response && response.token) {
-          localStorage.setItem(this.tokenKey, response.token);
-          try {
-            const decodedToken = jwtDecode<DecodedToken>(response.token);
-            this.currentUserSubject.next(decodedToken);
-          } catch (e) {
-            console.error("Error decoding token on login:", e);
-            this.currentUserSubject.next(null);
-          }
+login(credentials: { email: string, password: string }): Observable<{ token: string, user: any }> {
+  return this.http.post<{ token: string, user: any }>(`${this.serverApiUrl}/login`, {...credentials, rest: true }).pipe(
+    tap(response => {
+      if (response && response.token) {
+        localStorage.setItem(this.tokenKey, response.token);
+        try {
+          const decodedToken = jwtDecode<DecodedToken>(response.token);
+          this.currentUserSubject.next(decodedToken);
+        } catch (e) {
+          console.error("Error decoding token on login:", e);
+          this.currentUserSubject.next(null);
         }
-        if (response && response.user) {
-          localStorage.setItem('user', JSON.stringify(response.user));
-          this.userService.setUser(response.user); 
-        }
-      })
-    );
-  }
+      }
+      if (response && response.user) {
+        localStorage.setItem('user', JSON.stringify(response.user));
+        this.userService.setUser(response.user); 
+      }
+      this.cartService.onUserChanged();
+    })
+  );
+}
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem('user');
     this.currentUserSubject.next(null);
     this.userService.clearUser(); 
+    this.cartService.onUserChanged();
     this.router.navigate(['/login']);
   }
 

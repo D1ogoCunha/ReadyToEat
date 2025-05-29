@@ -36,16 +36,10 @@ export class ShoppingCartComponent implements OnInit {
     private toastr: ToastrService,
     private restaurantService: RestaurantService,
     private sanitizer: DomSanitizer
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-      this.cartService['cart'] = JSON.parse(storedCart);
-      this.cartService['cartItems'].next(this.cartService['cart']);
-      this.cartService['cartCount'].next(this.cartService['cart'].length);
-    }
-
+    this.cartService.onUserChanged();
     this.cartService.cartItems$.subscribe((items) => {
       this.cartItems = items;
       if (items.length > 0) {
@@ -55,7 +49,7 @@ export class ShoppingCartComponent implements OnInit {
             next: (restaurant: any) => {
               this.restaurantName = restaurant.restaurantName;
               this.deliveryDistance = restaurant.deliveryDistance;
-              this.restaurantAddress = restaurant.address; // <-- aqui
+              this.restaurantAddress = restaurant.address;
             },
             error: () => {
               this.restaurantName = '';
@@ -97,12 +91,9 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   removeFromCart(item: any): void {
-    this.cartItems = this.cartItems.filter(
-      (cartItem) => cartItem._id !== item._id
-    );
     this.cartService.removeCartItem(item._id);
   }
-
+  
   proceedToCheckout(): void {
     let customerId: string | undefined;
     const token = localStorage.getItem('authToken');
@@ -141,7 +132,7 @@ export class ShoppingCartComponent implements OnInit {
         } else {
           this.toastr.error('Error creating order!');
         }
-      }
+      },
     });
   }
 
@@ -186,11 +177,11 @@ export class ShoppingCartComponent implements OnInit {
       },
       error: (err) => {
         if (err.status === 403 && err.error?.error) {
-          this.toastr.error(err.error.error); 
+          this.toastr.error(err.error.error);
         } else {
           this.toastr.error('Error creating order!');
         }
-      }
+      },
     });
   }
 
