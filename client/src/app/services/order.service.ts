@@ -10,14 +10,14 @@ export class OrderService {
   constructor(private http: HttpClient) { }
 
   createOrder(order: any) {
-    return this.http.post('http://localhost:3000/api/orders', order);
+    return this.http.post(this.apiUrl, order);
   }
   getCustomerOrders(customerId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}?customerId=${customerId}`);
   }
 
   submitReview(orderId: string, formData: FormData) {
-    return this.http.post(`http://localhost:3000/api/orders/${orderId}/review`, formData);
+    return this.http.post(`${this.apiUrl}/${orderId}/review`, formData);
   }
 
   cancelOrder(orderId: string) {

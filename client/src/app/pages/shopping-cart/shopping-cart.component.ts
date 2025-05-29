@@ -195,6 +195,10 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   openPaymentModal(): void {
+    if (!this.cartItems.length) {
+      this.toastr.error('The cart is empty.');
+      return;
+    }
     const modalElement = document.getElementById('paymentModal');
     if (modalElement) {
       const modal = new bootstrap.Modal(modalElement);

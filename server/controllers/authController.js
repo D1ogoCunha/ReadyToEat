@@ -148,13 +148,38 @@ authController.createLoginSubmitted = function (req, res, next) {
       }
     })
     .catch(function (err) {
-      if (err.code === 11000 && err.keyPattern && err.keyPattern.email) {
+      if (err.code === 11000 && err.keyPattern) {
+        if (err.keyPattern.email) {
+          if (isRest) {
+            return res.status(409).json({ error: "Email already in use" });
+          } else {
+            return res.render("register", {
+              errorMessage:
+                "This email is already in use. Please use a different email.",
+            });
+          }
+        }
+        if (err.keyPattern.nif) {
+          if (isRest) {
+            return res.status(409).json({ error: "NIF already in use" });
+          } else {
+            return res.render("register", {
+              errorMessage:
+                "This NIF is already in use. Please use a different NIF.",
+            });
+          }
+        }
+      }
+      if (err.name === "ValidationError") {
+        const nifError =
+          err.errors && err.errors.nif
+            ? err.errors.nif.message
+            : "Validation error.";
         if (isRest) {
-          return res.status(409).json({ error: "Email already in use" });
+          return res.status(400).json({ error: nifError });
         } else {
           return res.render("register", {
-            errorMessage:
-              "This email is already in use. Please use a different email.",
+            errorMessage: nifError,
           });
         }
       }

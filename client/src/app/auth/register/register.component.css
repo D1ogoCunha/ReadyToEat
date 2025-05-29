@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 
+body, :host {
+  background-color: #e6e7e7;
+  min-height: 100vh;
+}
 body {
   margin: 0;
   font-family: "Inter", sans-serif;

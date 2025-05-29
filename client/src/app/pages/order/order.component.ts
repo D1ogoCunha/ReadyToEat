@@ -71,10 +71,22 @@ export class OrderComponent implements OnInit {
     }
     this.orderService.submitReview(this.reviewOrderId, formData).subscribe({
       next: () => {
-        this.toastr.success('Avaliação enviada com sucesso!');
+        this.toastr.success('Evaluation submitted successfully!');
+        this.closeReviewModal();
+        const order = this.orders.find(o => o._id === this.reviewOrderId);
+        if (order) {
+          order.reviewed = true;
+        }
       },
-      error: () => alert('Erro ao enviar avaliação!'),
+      error: () => this.toastr.error('Error submitting review. Please try again later.'),
     });
+  }
+  
+  private closeReviewModal() {
+    const modalEl = document.getElementById('reviewModal');
+    if (modalEl) {
+      bootstrap.Modal.getInstance(modalEl)?.hide();
+    }
   }
 
   canCancel(order: any): boolean {
