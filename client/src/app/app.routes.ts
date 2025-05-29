@@ -1,16 +1,16 @@
 import { Routes } from '@angular/router';
-import { DishesComponent } from './pages/dishes/dishes.component';
-import { RestaurantsComponent } from './pages/restaurants/restaurants.component';
-import { RestaurantMenusComponent } from './pages/restaurant-menus/restaurant-menus.component';
-import { OrderComponent } from './pages/order/order.component';
+import { DishesComponent } from './components/dishes/dishes.component';
+import { RestaurantsComponent } from './components/restaurants/restaurants.component';
+import { RestaurantMenusComponent } from './components/restaurant-menus/restaurant-menus.component';
+import { OrderComponent } from './components/order/order.component';
 import { LoginComponent } from './auth/login/login.component';
-import { DishDetailsComponent } from './pages/dish-details/dish-details.component';
-import { ShoppingCartComponent } from './pages/shopping-cart/shopping-cart.component';
-import { ProfileEditComponent } from './pages/user/profile-edit/profile-edit.component';
-import { ProfileSecurityComponent } from './pages/user/profile-security/profile-security.component';
-import { ProfileChartComponent } from './pages/user/profile-chart/profile-chart.component';
+import { DishDetailsComponent } from './components/dish-details/dish-details.component';
+import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
+import { ProfileEditComponent } from './components/user/profile-edit/profile-edit.component';
+import { ProfileSecurityComponent } from './components/user/profile-security/profile-security.component';
+import { ProfileChartComponent } from './components/user/profile-chart/profile-chart.component';
 import { AuthGuard } from './guards/auth.guard';
-import { HomeComponent } from './pages/home/home.component';
+import { HomeComponent } from './components/home/home.component';
 import { RegisterComponent } from './auth/register/register.component';
 
 export const routes: Routes = [

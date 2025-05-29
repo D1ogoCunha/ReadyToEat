@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { NavbarComponent } from '../navbar/navbar.component';
 import { CartService } from '../../services/cart.service';
 import { MenusService } from '../../services/menus.service';
 import { FormsModule } from '@angular/forms';

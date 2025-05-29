@@ -3,7 +3,7 @@ import { RestaurantService } from '../../services/restaurant.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
-import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-restaurants',
@@ -50,6 +50,10 @@ export class RestaurantsComponent implements OnInit {
       filtered.sort(
         (a, b) => Number(b.deliveryDistance) - Number(a.deliveryDistance)
       );
+    } else if (this.selectedSort === 'alphabeticalAZ') {
+      filtered.sort((a, b) => a.restaurantName.localeCompare(b.restaurantName));
+    } else if (this.selectedSort === 'alphabeticalZA') {
+      filtered.sort((a, b) => b.restaurantName.localeCompare(a.restaurantName));
     }
 
     this.filteredRestaurants = filtered;

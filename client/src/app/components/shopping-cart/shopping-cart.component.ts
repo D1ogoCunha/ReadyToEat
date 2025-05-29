@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { NavbarComponent } from '../navbar/navbar.component';
 import { CartService } from '../../services/cart.service';
 import { RestaurantService } from '../../services/restaurant.service';
 import { CommonModule } from '@angular/common';
