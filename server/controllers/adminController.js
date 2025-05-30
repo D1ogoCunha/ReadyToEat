@@ -200,8 +200,11 @@ adminController.postAddNewRestaurant = async (req, res) => {
       restaurantName,
       address,
       phone,
+      deliveryDistance,
       pricePerPerson,
     } = req.body;
+    
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
 
     const newRestaurant = new User({
       firstName,
@@ -213,7 +216,9 @@ adminController.postAddNewRestaurant = async (req, res) => {
       restaurantName,
       address,
       phone,
+      deliveryDistance,
       pricePerPerson,
+      image,
     });
 
     await newRestaurant.save();

@@ -1,7 +1,19 @@
 const express = require("express");
+const multer = require("multer");
+const path = require("path");
 const router = express.Router();
 const adminController = require("../controllers/adminController");
 const authController = require("../controllers/authController");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../public/uploads/"));
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: storage });
 
 router.get("/", authController.verifyAdmin, adminController.getAdminDashboard);
 
@@ -15,7 +27,7 @@ router.post("/restaurants/restaurant/edit", authController.verifyAdmin, adminCon
 
 router.get("/addNewRestaurant", authController.verifyAdmin, adminController.getAddNewRestaurant);
 
-router.post("/addNewRestaurant", authController.verifyAdmin, adminController.postAddNewRestaurant);
+router.post("/addNewRestaurant", authController.verifyAdmin, upload.single("image"), adminController.postAddNewRestaurant);
 
 router.get("/pending", authController.verifyAdmin, adminController.getPendingRestaurants);
 

@@ -237,12 +237,6 @@ authController.verifyLoginUser = function (req, res, next) {
 };
 
 authController.logout = function (req, res, next) {
-  // res.clearCookie("auth-token"); // No longer using cookies for auth token
-  // For stateless JWTs, server-side logout mainly means the client discards the token.
-  // If you had a token blacklist, you'd add the token to it here.
-
-  // If the request is from an API client, just send a success response.
-  // If it's a browser navigating, then redirect.
   if (req.accepts("html") && !req.xhr) {
     res.redirect("/login");
   } else {
