@@ -58,11 +58,9 @@ adminController.deleteRestaurant = async (req, res) => {
   try {
     const restaurantId = req.params.id;
 
-    // Apagar todos os menus do restaurante
     const menus = await Menu.find({ createdBy: restaurantId });
 
     for (const menu of menus) {
-      // Apagar todos os pratos associados a este menu
       const dishes = await Dish.find({ menu: menu._id });
       for (const dish of dishes) {
         if (dish.imagem) {
@@ -84,7 +82,6 @@ adminController.deleteRestaurant = async (req, res) => {
       }
       await Dish.deleteMany({ menu: menu._id });
 
-      // Apagar imagem do menu se existir
       if (menu.image) {
         const menuImagePath = path.join(
           __dirname,
