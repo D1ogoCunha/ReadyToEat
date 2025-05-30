@@ -28,6 +28,7 @@
           <th class="column-header">NIF</th>
           <th class="column-header">Phone</th>
           <th class="column-header">Price per Person</th>
+          <th class="column-header">Delivery Distance</th>
           <th class="column-header">Actions</th>
         </tr>
       </thead>
@@ -41,6 +42,9 @@
           <td class="table-cell"><%= restaurant.phone %></td>
           <td class="table-cell">
             €<%= restaurant.pricePerPerson.toFixed(2) %>
+          </td>
+           <td class="table-cell">
+            <%= restaurant.deliveryDistance ? restaurant.deliveryDistance + ' km' : '-' %>
           </td>
           <td class="table-cell">
             <div class="action-buttons">

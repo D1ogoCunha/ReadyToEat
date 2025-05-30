@@ -166,13 +166,37 @@ adminController.postEditRestaurant = async (req, res) => {
   }
 
   try {
-    await User.findByIdAndUpdate(restaurantId, {
+    const updateData = {
       restaurantName: req.body.restaurantName,
       address: req.body.address,
       nif: req.body.nif,
       phone: req.body.phone,
       pricePerPerson: req.body.pricePerPerson,
-    });
+      deliveryDistance: req.body.deliveryDistance,
+    };
+
+    if (req.file) {
+      const restaurant = await User.findById(restaurantId);
+      if (restaurant && restaurant.image) {
+        const oldImagePath = path.join(
+          __dirname,
+          "..",
+          "public",
+          restaurant.image.replace(/^\//, "")
+        );
+        try {
+          await fs.promises.unlink(oldImagePath);
+          console.log("Old restaurant image deleted:", oldImagePath);
+        } catch (err) {
+          if (err.code !== "ENOENT") {
+            console.error("Error deleting old restaurant image:", err);
+          }
+        }
+      }
+      updateData.image = `/uploads/${req.file.filename}`;
+    }
+
+    await User.findByIdAndUpdate(restaurantId, updateData);
 
     res.redirect("/admin");
   } catch (error) {
@@ -199,7 +223,7 @@ adminController.postAddNewRestaurant = async (req, res) => {
       deliveryDistance,
       pricePerPerson,
     } = req.body;
-    
+
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
     const newRestaurant = new User({

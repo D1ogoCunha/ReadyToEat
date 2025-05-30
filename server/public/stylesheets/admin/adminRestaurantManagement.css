@@ -137,13 +137,12 @@ body {
 }
 
 .table-header {
-  display: flex;
+
   padding: 16px;
   border-bottom: 1px solid #eee;
 }
 
 .column-header {
-  flex: 1;
   font-size: 14px;
   font-weight: 700;
   color: #666;
@@ -151,15 +150,19 @@ body {
 }
 
 .table-row {
-  display: flex;
   padding: 24px 16px;
   border-bottom: 1px solid #eee;
 }
 
 .table-cell {
-  flex: 1;
   font-size: 16px;
   color: #000;
+}
+
+th.column-header, td.table-cell {
+  width: 14%;
+  text-align: left;
+  vertical-align: middle;
 }
 
 .action-buttons {
@@ -315,5 +318,5 @@ body {
   background-color: #f8f9fa; 
   border-radius: 8px; 
   padding: 5px 10px; 
-  transition: background-color 0.3s ease; /
+  transition: background-color 0.3s ease; 
 }

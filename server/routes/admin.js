@@ -25,7 +25,7 @@ router.delete("/restaurants/:id", authController.verifyAdmin, adminController.de
 
 router.get("/restaurants/restaurant/edit", authController.verifyAdmin, adminController.getEditRestaurant);
 
-router.post("/restaurants/restaurant/edit", authController.verifyAdmin, adminController.postEditRestaurant);
+router.post("/restaurants/restaurant/edit", authController.verifyAdmin, upload.single("image"), adminController.postEditRestaurant);
 
 router.get("/addNewRestaurant", authController.verifyAdmin, adminController.getAddNewRestaurant);
 

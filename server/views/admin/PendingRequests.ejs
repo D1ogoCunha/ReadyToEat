@@ -27,7 +27,7 @@
             <span class="icon-toggle"></span>
           </button>
           <!-- Navbar Logo -->
-          <a class="navbar-brand" >
+          <a class="navbar-brand">
             <div class="navbar-logo">
               <img src="/images/onlyRTE_LOGO.png" alt="Logo" />
             </div>
@@ -73,53 +73,56 @@
                 <th class="column-header">NIF</th>
                 <th class="column-header">Phone</th>
                 <th class="column-header">Price per Person</th>
+                <th class="column-header">Delivery Distance</th>
                 <th class="column-header">Actions</th>
               </tr>
             </thead>
             <tbody>
               <% if (pendingRestaurants && pendingRestaurants.length > 0) { %>
-                <% pendingRestaurants.forEach(function(restaurant) { %>
-                  <tr class="table-row" data-id="<%= restaurant._id %>">
-                    <td class="table-cell"><%= restaurant.restaurantName %></td>
-                    <td class="table-cell"><%= restaurant.address %></td>
-                    <td class="table-cell"><%= restaurant.nif %></td>
-                    <td class="table-cell"><%= restaurant.phone %></td>
-                    <td class="table-cell"><%= restaurant.pricePerPerson %></td>
-                    <td class="table-cell">
-                      <div style="display: flex; gap: 8px;">
-                        <form
-                          action="/admin/validate/restaurant"
-                          method="POST"
-                          style="display: inline"
-                        >
-                          <input
-                            type="hidden"
-                            name="restaurantId"
-                            value="<%= restaurant._id %>"
-                          />
-                          <button type="submit" class="btn btn-edit">
-                            Validate
-                          </button>
-                        </form>
-                        <form
-                          action="/admin/reject/restaurant/<%= restaurant._id %>"
-                          method="POST"
-                          style="display: inline"
-                          class="reject-form"
-                          data-id="<%= restaurant._id %>"
-                        >
-                          <button type="submit" class="btn btn-delete">
-                            Reject
-                          </button>
-                        </form>
-                      </div>
-                    </td>
-                  </tr>
-                <% }); %>
-              <% } else { %>
-                <tr>
-                  <td colspan="5" class="table-cell">No pending requests found.</td>
-                </tr>
+              <% pendingRestaurants.forEach(function(restaurant) { %>
+              <tr class="table-row" data-id="<%= restaurant._id %>">
+                <td class="table-cell"><%= restaurant.restaurantName %></td>
+                <td class="table-cell"><%= restaurant.address %></td>
+                <td class="table-cell"><%= restaurant.nif %></td>
+                <td class="table-cell"><%= restaurant.phone %></td>
+                <td class="table-cell"><%= restaurant.pricePerPerson %></td>
+                <td class="table-cell"><%= restaurant.deliveryDistance %></td>
+                <td class="table-cell">
+                  <div style="display: flex; gap: 8px">
+                    <form
+                      action="/admin/validate/restaurant"
+                      method="POST"
+                      style="display: inline"
+                    >
+                      <input
+                        type="hidden"
+                        name="restaurantId"
+                        value="<%= restaurant._id %>"
+                      />
+                      <button type="submit" class="btn btn-edit">
+                        Validate
+                      </button>
+                    </form>
+                    <form
+                      action="/admin/reject/restaurant/<%= restaurant._id %>"
+                      method="POST"
+                      style="display: inline"
+                      class="reject-form"
+                      data-id="<%= restaurant._id %>"
+                    >
+                      <button type="submit" class="btn btn-delete">
+                        Reject
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              <% }); %> <% } else { %>
+              <tr>
+                <td colspan="7" class="table-cell">
+                  No pending requests found.
+                </td>
+              </tr>
               <% } %>
             </tbody>
           </table>
@@ -138,15 +141,19 @@
         <div class="modal-content">
           <p id="reject-message" class="modal-message"></p>
           <div class="modal-actions">
-            <button id="confirm-reject" class="btn btn-confirmDelete">Confirm</button>
-            <button id="cancel-reject" class="btn btn-cancelDelete">Cancel</button>
+            <button id="confirm-reject" class="btn btn-confirmDelete">
+              Confirm
+            </button>
+            <button id="cancel-reject" class="btn btn-cancelDelete">
+              Cancel
+            </button>
           </div>
         </div>
       </div>
     </main>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/javascripts/adminDashboard.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/javascripts/adminDashboard.js"></script>
 </html>

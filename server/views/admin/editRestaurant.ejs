@@ -13,13 +13,17 @@
 
     <div class="registration-container">
       <div class="registration-wrapper">
-
         <form
-        action="/admin/restaurants/restaurant/edit"
+          action="/admin/restaurants/restaurant/edit"
           method="POST"
           class="registration-form"
+          enctype="multipart/form-data"
         >
-        <input type="hidden" name="restaurantId" value="<%= restaurant._id %>" />
+          <input
+            type="hidden"
+            name="restaurantId"
+            value="<%= restaurant._id %>"
+          />
           <div class="form-group">
             <label class="form-label">Restaurant Name*</label>
             <input
@@ -72,6 +76,36 @@
             <p id="price-display">
               Selected Price: €<%= restaurant.pricePerPerson %>
             </p>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Delivery Distance (km)*</label>
+            <input
+              type="number"
+              class="form-input"
+              name="deliveryDistance"
+              min="1"
+              value="<%= restaurant.deliveryDistance %>"
+              placeholder="Enter delivery distance in km"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Image*</label>
+            <input
+              type="file"
+              class="form-input"
+              name="image"
+              accept="image/*"
+            />
+            <% if (restaurant.image) { %>
+            <div style="margin-top: 10px">
+              <img
+                src="<%= restaurant.image %>"
+                alt="Restaurant Image"
+                style="max-width: 200px; max-height: 120px"
+              />
+            </div>
+            <% } %>
           </div>
           <div class="form-actions">
             <button type="submit" class="next-button">Save Changes</button>
