@@ -25,4 +25,8 @@ export class ProfileService {
   getChart(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/charts`);
   }
+
+  getGlobalChart(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/globalCharts`);
+  }
 }

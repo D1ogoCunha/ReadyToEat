@@ -13,12 +13,12 @@ orderController.getOrderHistory = async (req, res) => {
     if (req.user.role === "restaurant") {
       populatedOrders = await Order.find({ restaurantId: req.user._id })
         .populate("customerId", "firstName lastName nif")
-        .populate("dishes")
+        .populate("dishes.dish") 
         .sort({ date: 1 });
     } else if (req.user.role === "customer") {
       populatedOrders = await Order.find({ customerId: req.user._id })
         .populate("restaurantId", "restaurantName")
-        .populate("dishes")
+        .populate("dishes.dish")
         .sort({ date: 1 });
     }
 
@@ -168,7 +168,7 @@ orderController.getOrders = async (req, res) => {
       customerId: new mongoose.Types.ObjectId(customerId),
     })
       .populate("restaurantId")
-      .populate("dishes");
+      .populate("dishes.dish");
     res.json(orders);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -188,6 +188,19 @@ orderController.createOrder = async (req, res) => {
 
     if (!restaurantId || !customerId || !amount || !dishes || !dishes.length) {
       return res.status(400).json({ error: "Missing required fields." });
+    }
+
+    for (const d of dishes) {
+      if (
+        !d.dish ||
+        !mongoose.Types.ObjectId.isValid(d.dish) ||
+        typeof d.quantity !== "number" ||
+        d.quantity < 1
+      ) {
+        return res.status(400).json({
+          error: "Each dish must have a valid id and quantity >= 1.",
+        });
+      }
     }
 
     const startOfDay = new Date();

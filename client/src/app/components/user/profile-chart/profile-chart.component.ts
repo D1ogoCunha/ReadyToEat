@@ -12,10 +12,13 @@ import Chart from 'chart.js/auto';
   standalone: true,
   imports: [CommonModule, RouterModule, NavbarComponent]
 })
+// ...existing code...
 export class ProfileChartComponent implements OnInit {
   chartData: any;
+  globalChartData: any;
   errorMessage = '';
   chart: any;
+  globalChart: any;
 
   constructor(private profileService: ProfileService) {}
 
@@ -29,39 +32,80 @@ export class ProfileChartComponent implements OnInit {
         this.errorMessage = 'Erro ao carregar estatísticas.';
       }
     });
-  }
 
-createChart() {
-  if (this.chart) {
-    this.chart.destroy();
-  }
-
-  const labels = this.chartData.map((item: any) => item.name);
-  const values = this.chartData.map((item: any) => item.count);
-
-  const ctx = document.getElementById('mostOrderedDishesChart') as HTMLCanvasElement;
-  if (ctx) {
-    this.chart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Pedidos',
-          data: values,
-          backgroundColor: 'rgba(54, 162, 235, 0.5)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
-        }]
+    this.profileService.getGlobalChart().subscribe({
+      next: (data) => {
+        this.globalChartData = data;
+        this.createGlobalChart();
       },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
+      error: () => {
+        this.errorMessage = 'Erro ao carregar estatísticas globais.';
       }
     });
   }
+
+  createChart() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
+    const labels = this.chartData.map((item: any) => item.name);
+    const values = this.chartData.map((item: any) => item.count);
+    const ctx = document.getElementById('mostOrderedDishesChart') as HTMLCanvasElement;
+    if (ctx) {
+      this.chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Orders (You)',
+            data: values,
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+  }
+
+  createGlobalChart() {
+    if (this.globalChart) {
+      this.globalChart.destroy();
+    }
+    const labels = this.globalChartData.map((item: any) => item.name);
+    const values = this.globalChartData.map((item: any) => item.count);
+    const ctx = document.getElementById('mostOrderedDishesGlobalChart') as HTMLCanvasElement;
+    if (ctx) {
+      this.globalChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Orders (Website)',
+            data: values,
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+  }
 }
-}
+// ...existing code...

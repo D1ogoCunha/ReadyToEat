@@ -43,10 +43,17 @@ router.get(
   authController.verifyLoginUser,
   userController.renderChartPage
 );
+
 router.post(
   "/profile/chart",
   authController.verifyLoginUser,
   userController.getMostOrderedDishes
+);
+
+router.post(
+  "/profile/chart/restaurant",
+  authController.verifyLoginUser,
+  userController.getMostOrderedDishesByRestaurant
 );
 
 /**

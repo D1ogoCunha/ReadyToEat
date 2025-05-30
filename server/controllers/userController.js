@@ -164,8 +164,8 @@ userController.getMostOrderedDishes = async (req, res) => {
       { $unwind: "$dishes" },
       {
         $group: {
-          _id: "$dishes",
-          count: { $sum: 1 },
+          _id: "$dishes.dish",
+          count: { $sum: "$dishes.quantity" }
         },
       },
       { $sort: { count: -1 } },
@@ -192,6 +192,88 @@ userController.getMostOrderedDishes = async (req, res) => {
     res.json(chartData);
   } catch (error) {
     console.error("Error fetching most ordered dishes:", error);
+    res.status(500).send("Failed to load chart data.");
+  }
+};
+
+userController.getMostOrderedDishesByUser = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const dishes = await Order.aggregate([
+      { $match: { customerId: new mongoose.Types.ObjectId(userId) } },
+      { $unwind: "$dishes" },
+      {
+        $group: {
+          _id: "$dishes.dish",
+          count: { $sum: "$dishes.quantity" }
+        }
+      },
+      { $sort: { count: -1 } },
+      { $limit: 5 }
+    ]);
+
+    const dishDetails = await Dish.find({
+      _id: { $in: dishes.map((d) => d._id) },
+    });
+
+    const chartData = dishes
+      .map((dish) => {
+        const dishDetail = dishDetails.find((d) => d._id.equals(dish._id));
+        if (dishDetail) {
+          return {
+            name: dishDetail.nome,
+            count: dish.count,
+          };
+        }
+        return null;
+      })
+      .filter((dish) => dish !== null);
+
+    res.json(chartData);
+  } catch (error) {
+    console.error("Error fetching most ordered dishes:", error);
+    res.status(500).send("Failed to load chart data.");
+  }
+};
+
+userController.getMostOrderedDishesByRestaurant = async (req, res) => {
+  try {
+    const restaurantId = req.user._id;
+
+    const dishes = await Order.aggregate([
+      { $match: { restaurantId: new mongoose.Types.ObjectId(restaurantId) } },
+      { $unwind: "$dishes" },
+      {
+        $group: {
+          _id: "$dishes.dish",
+          count: { $sum: "$dishes.quantity" }
+        }
+      },
+      { $sort: { count: -1 } },
+      { $limit: 5 }
+    ]);
+
+    const dishDetails = await Dish.find({
+      _id: { $in: dishes.map((d) => d._id) },
+    });
+
+    const chartData = dishes
+      .map((dish) => {
+        const dishDetail = dishDetails.find((d) => d._id.equals(dish._id));
+        if (dishDetail) {
+          return {
+            name: dishDetail.nome,
+            count: dish.count,
+          };
+        }
+        return null;
+      })
+      .filter((dish) => dish !== null);
+
+    res.json(chartData);
+  } catch (error) {
+    console.error("Error fetching most ordered dishes by restaurant:", error);
     res.status(500).send("Failed to load chart data.");
   }
 };

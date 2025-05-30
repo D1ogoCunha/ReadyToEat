@@ -222,8 +222,16 @@ router.put(
 router.get(
   "/profile/charts",
   authController.verifyLoginUser,
+  userController.getMostOrderedDishesByUser
+);
+
+router.get(
+  "/profile/globalCharts",
+  authController.verifyLoginUser,
   userController.getMostOrderedDishes
 );
+
+
 
 /**
  * @swagger

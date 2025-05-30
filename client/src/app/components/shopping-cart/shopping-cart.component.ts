@@ -127,7 +127,10 @@ export class ShoppingCartComponent implements OnInit {
     }
 
     const restaurantId = this.cartItems[0].restaurantId;
-    const dishes = this.cartItems.map((item) => item._id);
+    const dishes = this.cartItems.map((item) => ({
+      dish: item._id,
+      quantity: item.quantity || 1,
+    }));
     const amount = this.calculateSubtotal();
 
     const order = { restaurantId, customerId, amount, dishes };
@@ -161,7 +164,10 @@ export class ShoppingCartComponent implements OnInit {
     }
 
     const restaurantId = this.cartItems[0].restaurantId;
-    const dishes = this.cartItems.map((item) => item._id);
+    const dishes = this.cartItems.map((item) => ({
+      dish: item._id,
+      quantity: item.quantity || 1,
+    }));
     const amount = this.calculateSubtotal();
 
     const order = {

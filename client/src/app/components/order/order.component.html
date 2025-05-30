@@ -35,9 +35,8 @@
           <td>
             <ul class="mb-0">
               <li *ngFor="let dish of order.dishes">
-                {{ dish.nome || "Unnamed dish" }} - €{{
-                  dish.preco?.toFixed(2) || "0.00"
-                }}
+                {{ dish.dish?.nome || "Unnamed dish" }} - €{{ dish.dish?.preco?.toFixed(2) || "0.00" }}
+                <span *ngIf="dish.quantity">x{{ dish.quantity }}</span>
               </li>
             </ul>
           </td>

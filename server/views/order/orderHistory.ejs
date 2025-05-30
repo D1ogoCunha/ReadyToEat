@@ -77,7 +77,9 @@
                           <ul>
                             <% order.dishes.forEach(dish => { %>
                               <li>
-                                <%= dish.nome || 'Unnamed dish' %> - €<%= dish.preco ? dish.preco.toFixed(2) : '0.00' %>
+                                <%= dish.dish && dish.dish.nome ? dish.dish.nome : 'Unnamed dish' %>
+                                - €<%= dish.dish && dish.dish.preco ? dish.dish.preco.toFixed(2) : '0.00' %>
+                                <% if (dish.quantity) { %> x<%= dish.quantity %><% } %>
                               </li>
                             <% }) %>
                           </ul>
@@ -102,7 +104,9 @@
                           <ul>
                             <% order.dishes.forEach(dish => { %>
                               <li>
-                                <%= dish.nome || 'Unnamed dish' %> - €<%= dish.preco ? dish.preco.toFixed(2) : '0.00' %>
+                                <%= dish.dish && dish.dish.nome ? dish.dish.nome : 'Unnamed dish' %>
+                                - €<%= dish.dish && dish.dish.preco ? dish.dish.preco.toFixed(2) : '0.00' %>
+                                <% if (dish.quantity) { %> x<%= dish.quantity %><% } %>
                               </li>
                             <% }) %>
                           </ul>

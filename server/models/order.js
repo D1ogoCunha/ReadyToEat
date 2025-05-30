@@ -7,7 +7,10 @@ const OrderSchema = new mongoose.Schema({
   status: { type: String, enum: ['Pending', 'Paid', 'Preparing', 'Completed', 'Cancelled'], 
   default: 'Pending' 
 },
-  dishes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Dish', required: true }],
+  dishes: [{
+  dish: { type: mongoose.Schema.Types.ObjectId, ref: 'Dish', required: true },
+  quantity: { type: Number, required: true }
+}],
   date: { type: Date, default: Date.now },
   paymentOption: { type: String, enum: ['restaurant', 'courier'], required: false },
   deliveryAddress: { type: String, required: false },
