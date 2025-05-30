@@ -256,3 +256,25 @@ p a {
   max-width: 100px;
   height: auto;
 }
+
+.back-button-container1 {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 100;
+}
+
+.back-button1 {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.back-button1:hover {
+  background-color: #e64a19;
+  transform: scale(1.05);
+}

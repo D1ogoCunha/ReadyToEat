@@ -5,11 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pending Requests</title>
     <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
       rel="stylesheet"
       href="/stylesheets/admin/adminRestaurantManagement.css"
     />
   </head>
   <body>
+    <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+      <div class="container bootstrap snippets bootdey">
+        <!-- Navbar Toggle Button for Mobile -->
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-toggle"></span>
+          </button>
+          <!-- Navbar Logo -->
+          <a class="navbar-brand" >
+            <div class="navbar-logo">
+              <img src="/images/onlyRTE_LOGO.png" alt="Logo" />
+            </div>
+          </a>
+        </div>
+        <!-- Navbar Links -->
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a
+                class="dropdown-toggle"
+                role="button"
+                data-toggle="dropdown"
+                href="#"
+              >
+                <i class="glyphicon glyphicon-user"></i> Admin
+                <span class="caret"></span
+              ></a>
+              <ul id="g-account-menu" class="dropdown-menu" role="menu">
+                <li>
+                  <a href="/logout"
+                    ><i class="glyphicon glyphicon-lock"></i> Logout</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <main class="page-container1">
       <header class="page-header1">
         <h1 class="page-title1">Pending Restaurant Requests</h1>
@@ -38,20 +86,33 @@
                     <td class="table-cell"><%= restaurant.phone %></td>
                     <td class="table-cell"><%= restaurant.pricePerPerson %></td>
                     <td class="table-cell">
-                      <form
-                        action="/admin/validate/restaurant"
-                        method="POST"
-                        style="display: inline"
-                      >
-                        <input
-                          type="hidden"
-                          name="restaurantId"
-                          value="<%= restaurant._id %>"
-                        />
-                        <button type="submit" class="btn btn-primary">
-                          Validate
-                        </button>
-                      </form>
+                      <div style="display: flex; gap: 8px;">
+                        <form
+                          action="/admin/validate/restaurant"
+                          method="POST"
+                          style="display: inline"
+                        >
+                          <input
+                            type="hidden"
+                            name="restaurantId"
+                            value="<%= restaurant._id %>"
+                          />
+                          <button type="submit" class="btn btn-edit">
+                            Validate
+                          </button>
+                        </form>
+                        <form
+                          action="/admin/reject/restaurant/<%= restaurant._id %>"
+                          method="POST"
+                          style="display: inline"
+                          class="reject-form"
+                          data-id="<%= restaurant._id %>"
+                        >
+                          <button type="submit" class="btn btn-delete">
+                            Reject
+                          </button>
+                        </form>
+                      </div>
                     </td>
                   </tr>
                 <% }); %>
@@ -73,6 +134,19 @@
           Back
         </button>
       </div>
+      <div id="reject-modal" class="modal hidden">
+        <div class="modal-content">
+          <p id="reject-message" class="modal-message"></p>
+          <div class="modal-actions">
+            <button id="confirm-reject" class="btn btn-confirmDelete">Confirm</button>
+            <button id="cancel-reject" class="btn btn-cancelDelete">Cancel</button>
+          </div>
+        </div>
+      </div>
     </main>
   </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/javascripts/adminDashboard.js"></script>
 </html>

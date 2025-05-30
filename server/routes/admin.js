@@ -19,6 +19,8 @@ router.get("/", authController.verifyAdmin, adminController.getAdminDashboard);
 
 router.get("/restaurantManagement", authController.verifyLoginUser, adminController.getRestaurantManagement);
 
+router.post('/reject/restaurant/:id', authController.verifyAdmin, adminController.deleteRestaurant);
+
 router.delete("/restaurants/:id", authController.verifyAdmin, adminController.deleteRestaurant);
 
 router.get("/restaurants/restaurant/edit", authController.verifyAdmin, adminController.getEditRestaurant);

@@ -170,3 +170,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const rejectModal = document.getElementById("reject-modal");
+  const rejectMessage = document.getElementById("reject-message");
+  const confirmReject = document.getElementById("confirm-reject");
+  const cancelReject = document.getElementById("cancel-reject");
+  let formToSubmit = null;
+
+  if (rejectModal) {
+    document.querySelectorAll(".reject-form").forEach((form) => {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        formToSubmit = form;
+        const row = form.closest(".table-row");
+        const name = row ? row.querySelector(".table-cell").textContent : "";
+        rejectMessage.textContent = `Are you sure you want to reject and delete the "${name}" restaurant?`;
+        rejectModal.classList.remove("hidden");
+      });
+    });
+
+    confirmReject.addEventListener("click", function () {
+      if (formToSubmit) {
+        formToSubmit.submit();
+      }
+    });
+
+    cancelReject.addEventListener("click", function () {
+      rejectModal.classList.add("hidden");
+      formToSubmit = null;
+    });
+  }
+});
