@@ -1,5 +1,9 @@
+const fs = require("fs");
+const path = require("path");
 const User = require("../models/user");
 const Order = require("../models/order");
+const Menu = require("../models/menu");
+const Dish = require("../models/dish");
 const adminController = {};
 
 adminController.getAdminDashboard = async (req, res) => {
@@ -53,8 +57,80 @@ adminController.validateRestaurant = async (req, res) => {
 adminController.deleteRestaurant = async (req, res) => {
   try {
     const restaurantId = req.params.id;
+
+    // Apagar todos os menus do restaurante
+    const menus = await Menu.find({ createdBy: restaurantId });
+
+    for (const menu of menus) {
+      // Apagar todos os pratos associados a este menu
+      const dishes = await Dish.find({ menu: menu._id });
+      for (const dish of dishes) {
+        if (dish.imagem) {
+          const imagePath = path.join(
+            __dirname,
+            "..",
+            "public",
+            dish.imagem.replace(/^\//, "")
+          );
+          try {
+            await fs.promises.unlink(imagePath);
+            console.log("Dish image deleted successfully:", imagePath);
+          } catch (err) {
+            if (err.code !== "ENOENT") {
+              console.error("Error deleting dish image:", err);
+            }
+          }
+        }
+      }
+      await Dish.deleteMany({ menu: menu._id });
+
+      // Apagar imagem do menu se existir
+      if (menu.image) {
+        const menuImagePath = path.join(
+          __dirname,
+          "..",
+          "public",
+          menu.image.replace(/^\//, "")
+        );
+        try {
+          await fs.promises.unlink(menuImagePath);
+          console.log("Menu image deleted successfully:", menuImagePath);
+        } catch (err) {
+          if (err.code !== "ENOENT") {
+            console.error("Error deleting menu image:", err);
+          }
+        }
+      }
+    }
+    await Menu.deleteMany({ createdBy: restaurantId });
+
+    const restaurant = await User.findById(restaurantId);
+    if (restaurant && restaurant.image) {
+      const restaurantImagePath = path.join(
+        __dirname,
+        "..",
+        "public",
+        restaurant.image.replace(/^\//, "")
+      );
+      try {
+        await fs.promises.unlink(restaurantImagePath);
+        console.log(
+          "Restaurant image deleted successfully:",
+          restaurantImagePath
+        );
+      } catch (err) {
+        if (err.code !== "ENOENT") {
+          console.error("Error deleting restaurant image:", err);
+        }
+      }
+    }
     await User.findByIdAndDelete(restaurantId);
-    res.status(200).send("Restaurant deleted successfully.");
+
+    res
+      .status(200)
+      .send(
+        "Restaurant and all associated menus and dishes deleted successfully."
+      );
   } catch (err) {
     console.error("Error deleting restaurant:", err);
     res.status(500).send("Failed to delete restaurant.");
@@ -62,50 +138,53 @@ adminController.deleteRestaurant = async (req, res) => {
 };
 
 adminController.getEditRestaurant = async (req, res) => {
-  const restaurantId = req.query.restaurantId || req.cookies.restaurantId; 
+  const restaurantId = req.query.restaurantId || req.cookies.restaurantId;
 
   if (req.query.restaurantId) {
-      res.cookie("restaurantId", req.query.restaurantId, { httpOnly: true, secure: false });
-      return res.redirect("/admin/restaurants/restaurant/edit");
+    res.cookie("restaurantId", req.query.restaurantId, {
+      httpOnly: true,
+      secure: false,
+    });
+    return res.redirect("/admin/restaurants/restaurant/edit");
   }
 
   if (!restaurantId) {
-      return res.status(400).send("Restaurant ID is required.");
+    return res.status(400).send("Restaurant ID is required.");
   }
 
   try {
-      const restaurant = await User.findById(restaurantId);
-      if (!restaurant) {
-          return res.status(404).send("Restaurant not found.");
-      }
+    const restaurant = await User.findById(restaurantId);
+    if (!restaurant) {
+      return res.status(404).send("Restaurant not found.");
+    }
 
-      res.render("admin/editRestaurant", { restaurant });
+    res.render("admin/editRestaurant", { restaurant });
   } catch (error) {
-      console.error("Error fetching restaurant:", error);
-      res.status(500).send("Error fetching restaurant.");
+    console.error("Error fetching restaurant:", error);
+    res.status(500).send("Error fetching restaurant.");
   }
 };
 
 adminController.postEditRestaurant = async (req, res) => {
-  const restaurantId = req.cookies.restaurantId || req.body.restaurantId; 
+  const restaurantId = req.cookies.restaurantId || req.body.restaurantId;
 
   if (!restaurantId) {
-      return res.status(400).send("Restaurant ID is required.");
+    return res.status(400).send("Restaurant ID is required.");
   }
 
   try {
-      await User.findByIdAndUpdate(restaurantId, {
-          restaurantName: req.body.restaurantName,
-          address: req.body.address,
-          nif: req.body.nif,
-          phone: req.body.phone,
-          pricePerPerson: req.body.pricePerPerson,
-      });
+    await User.findByIdAndUpdate(restaurantId, {
+      restaurantName: req.body.restaurantName,
+      address: req.body.address,
+      nif: req.body.nif,
+      phone: req.body.phone,
+      pricePerPerson: req.body.pricePerPerson,
+    });
 
-      res.redirect("/admin");
+    res.redirect("/admin");
   } catch (error) {
-      console.error("Error updating restaurant:", error);
-      res.status(500).send("Error updating restaurant.");
+    console.error("Error updating restaurant:", error);
+    res.status(500).send("Error updating restaurant.");
   }
 };
 
