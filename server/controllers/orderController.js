@@ -13,7 +13,7 @@ orderController.getOrderHistory = async (req, res) => {
     if (req.user.role === "restaurant") {
       populatedOrders = await Order.find({ restaurantId: req.user._id })
         .populate("customerId", "firstName lastName nif")
-        .populate("dishes.dish") 
+        .populate("dishes.dish")
         .sort({ date: 1 });
     } else if (req.user.role === "customer") {
       populatedOrders = await Order.find({ customerId: req.user._id })
@@ -77,7 +77,14 @@ orderController.createPhoneOrder = async (req, res) => {
 
     const dishIds = Array.isArray(selectedDishes)
       ? selectedDishes
-      : [selectedDishes];
+      : selectedDishes
+      ? [selectedDishes]
+      : [];
+
+    const dishesArray = dishIds.map((id) => ({
+      dish: id,
+      quantity: 1,
+    }));
 
     if (dishIds.length === 0) {
       return res.status(400).send("No dishes selected for the order.");
@@ -100,10 +107,10 @@ orderController.createPhoneOrder = async (req, res) => {
       date: new Date(),
       amount: totalAmount,
       status: "Pending",
-      dishes: dishIds,
+      dishes: dishesArray,
     });
 
-    order.save();
+    await order.save();
     res.redirect("/order");
   } catch (error) {
     console.error("Error creating phone order:", error.stack);

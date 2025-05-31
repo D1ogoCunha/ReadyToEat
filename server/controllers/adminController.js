@@ -122,8 +122,7 @@ adminController.deleteRestaurant = async (req, res) => {
       }
     }
     await User.findByIdAndDelete(restaurantId);
-
-    res.redirect("/admin/pending");
+    res.json({ success: true });
   } catch (err) {
     console.error("Error deleting restaurant:", err);
     res.status(500).send("Failed to delete restaurant.");
