@@ -23,9 +23,17 @@ export class RestaurantsComponent implements OnInit {
   ngOnInit(): void {
     this.restaurantService.getRestaurants().subscribe({
       next: (data) => {
-        console.log('Restaurants received:', data);
-        this.restaurants = data;
-        this.filteredRestaurants = data;
+        const menuRequests = data.map((restaurant) =>
+          this.restaurantService.getMenusByRestaurantId(restaurant._id).toPromise().then(menus => ({
+            ...restaurant,
+            menus
+          }))
+        );
+  
+        Promise.all(menuRequests).then(restaurantsWithMenus => {
+          this.restaurants = restaurantsWithMenus.filter(r => r.menus && r.menus.length > 0);
+          this.filteredRestaurants = [...this.restaurants];
+        });
       },
       error: (err) => console.error('Error loading restaurants:', err),
     });
