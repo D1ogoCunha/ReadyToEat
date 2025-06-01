@@ -1,5 +1,5 @@
 const pratosLista = document.getElementById("pratos-lista");
-const menuId = pratosLista.dataset.menuId; // Obtém o ID do menu
+const menuId = pratosLista.dataset.menuId;
 const sortSelect = document.getElementById("sort");
 const categorySelect = document.getElementById("category");
 
@@ -16,7 +16,7 @@ function loadDishes(sort, category) {
       return response.json();
     })
     .then((data) => {
-      pratosLista.innerHTML = ""; // Clear existing dishes
+      pratosLista.innerHTML = ""; 
       data.pratos.forEach((prato) => {
         const listItem = document.createElement("li");
         listItem.className = "prato-item";

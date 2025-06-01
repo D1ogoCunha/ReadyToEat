@@ -209,6 +209,8 @@ adminController.getAddNewRestaurant = (req, res) => {
 };
 
 adminController.postAddNewRestaurant = async (req, res) => {
+  const image = req.file ? `/uploads/${req.file.filename}` : null;
+
   try {
     const {
       firstName,
@@ -224,6 +226,45 @@ adminController.postAddNewRestaurant = async (req, res) => {
     } = req.body;
 
     const image = req.file ? `/uploads/${req.file.filename}` : null;
+    
+    const emailExists = await User.findOne({ email });
+    if (emailExists) {
+      if (req.file) {
+        fs.unlinkSync(
+          path.join(__dirname, "..", "public", "uploads", req.file.filename)
+        );
+      }
+      return res.render("admin/addNewRestaurant", {
+        error: "Email already exists.",
+        formData: req.body,
+      });
+    }
+    
+    const nifExists = await User.findOne({ nif });
+    if (nifExists) {
+      if (req.file) {
+        fs.unlinkSync(
+          path.join(__dirname, "..", "public", "uploads", req.file.filename)
+        );
+      }
+      return res.render("admin/addNewRestaurant", {
+        error: "NIF already exists.",
+        formData: req.body,
+      });
+    }
+    
+    const nameExists = await User.findOne({ restaurantName });
+    if (nameExists) {
+      if (req.file) {
+        fs.unlinkSync(
+          path.join(__dirname, "..", "public", "uploads", req.file.filename)
+        );
+      }
+      return res.render("admin/addNewRestaurant", {
+        error: "Restaurant name already exists.",
+        formData: req.body,
+      });
+    }
 
     const newRestaurant = new User({
       firstName,
@@ -244,7 +285,10 @@ adminController.postAddNewRestaurant = async (req, res) => {
     res.redirect("/admin");
   } catch (err) {
     console.error("Error creating new restaurant:", err);
-    res.status(500).send("Failed to create new restaurant.");
+    res.render("admin/addNewRestaurant", {
+      error: "Failed to create new restaurant.",
+      formData: req.body,
+    });
   }
 };
 

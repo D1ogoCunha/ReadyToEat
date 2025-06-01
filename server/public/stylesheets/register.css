@@ -8,7 +8,7 @@ body {
   height: 100vh;
   margin: 0;
   font-family: "Inter", sans-serif;
-  background-color: #e6e7e7;
+  background-color: #e6e7e7 !important;
 }
 
 p {
@@ -100,17 +100,17 @@ p a {
 }
 
 .progress-bar {
-  display: flex;
-  align-items: center;
-  padding-bottom: 1.5rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #ccc;
+  display: flex !important;
+  align-items: center !important;
+  padding-bottom: 1.5rem !important;
+  margin-bottom: 2rem !important;
+  border-bottom: 1px solid #ccc !important;
 }
 
 .progress-step {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
 }
 
 .hidden {
@@ -277,4 +277,36 @@ p a {
 .back-button1:hover {
   background-color: #e64a19;
   transform: scale(1.05);
+}
+
+/* Bootstrap Toast minimal styles */
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1060;
+}
+.toast {
+  max-width: 350px;
+  background-color: #dc3545;
+  color: #fff;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+  opacity: 0;
+  transition: opacity 0.15s linear;
+  display: block;
+}
+.toast.show {
+  opacity: 1;
+}
+.toast .toast-body {
+  padding: 0.75rem 1.25rem;
+}
+.toast .btn-close {
+  filter: invert(1);
+}
+.toast .d-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
