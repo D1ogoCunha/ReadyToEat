@@ -10,7 +10,7 @@ const options = {
       description: 'Documentação da API ReadyToEat',
     },
   },
-  apis: ['./routes/*.js'],
+ apis: ['./routes/*.js', './models/*.js'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

@@ -1,4 +1,63 @@
 var mongoose = require('mongoose');
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - firstName
+ *         - lastName
+ *         - email
+ *         - nif
+ *         - password
+ *         - role
+ *       properties:
+ *         firstName:
+ *           type: string
+ *           description: User's first name
+ *         lastName:
+ *           type: string
+ *           description: User's last name
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: User's unique email address
+ *         nif:
+ *           type: integer
+ *           description: 9-digit unique identifier (NIF)
+ *         password:
+ *           type: string
+ *           format: password
+ *           description: User's password
+ *         role:
+ *           type: string
+ *           enum: [restaurant, customer, admin]
+ *           description: User's role in the system
+ *         restaurantName:
+ *           type: string
+ *           description: Restaurant name (required if role is restaurant)
+ *         address:
+ *           type: string
+ *           description: Restaurant address (required if role is restaurant)
+ *         phone:
+ *           type: string
+ *           description: Restaurant phone number (required if role is restaurant)
+ *         pricePerPerson:
+ *           type: number
+ *           description: Average price per person (required if role is restaurant)
+ *         image:
+ *           type: string
+ *           description: Restaurant image URL (required if role is restaurant)
+ *         status:
+ *           type: string
+ *           enum: [in validation, valid]
+ *           description: Restaurant status (default is 'in validation' for restaurants)
+ *         deliveryDistance:
+ *           type: number
+ *           minimum: 1
+ *           description: Maximum delivery distance in km (required if role is restaurant)
+ */
 
 var UserSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
