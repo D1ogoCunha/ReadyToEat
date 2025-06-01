@@ -1,4 +1,4 @@
-let currentStep = 1; // Define o passo inicial como 1
+let currentStep = 1;
 const steps = document.querySelectorAll(".form-step");
 const indicators = document.querySelectorAll(".step-indicator");
 
@@ -121,12 +121,12 @@ function goBackToUserType() {
   document.getElementById("user-type-selection").classList.remove("hidden");
   document.getElementById("restaurant-form").classList.add("hidden");
   document.getElementById("customer-form").classList.add("hidden");
-  currentStep = 1; // Reset para o primeiro passo
+  currentStep = 1;
   showStep(currentStep);
 }
 
 document.getElementById("register-form").addEventListener("submit", async function (event) {
-  event.preventDefault(); // Impede o envio padrão do formulário
+  event.preventDefault();
 
   const form = event.target;
   const formData = new FormData(form);
@@ -134,16 +134,15 @@ document.getElementById("register-form").addEventListener("submit", async functi
   try {
     const response = await fetch(form.action, {
       method: "POST",
-      body: formData, // NÃO definir headers, o browser trata do multipart/form-data
+      body: formData, 
     });
 
     if (!response.ok) {
       const data = await response.json();
       if (data.message) {
-        alert(data.message); // Exibe o alerta com a mensagem de erro
+        alert(data.message);
       }
     } else {
-      // Redireciona para a página de login em caso de sucesso
       window.location.href = "/login";
     }
   } catch (error) {

@@ -29,7 +29,7 @@ export class ProfileSecurityComponent {
         '',
         [
           Validators.required,
-          Validators.pattern(/^\d{6}$/), // exatamente 6 dígitos numéricos
+          Validators.pattern(/^\d{6}$/), 
         ],
       ],
       confirmPassword: ['', Validators.required],

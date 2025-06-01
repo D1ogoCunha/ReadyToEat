@@ -1,13 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/user");
-const Menu = require("../models/menu");
-const Dish = require("../models/dish");
-const Order = require("../models/order");
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("../jwt_secret/config");
 const authController = require("../controllers/authController");
 const userController = require("../controllers/userController");
 const menuController = require("../controllers/menuController");
@@ -31,6 +23,101 @@ const upload = multer({ storage });
  *   - name: Api
  *     description: API routes for the angular food delivery application.
  */
+
+/**
+ * @swagger
+ * /api/restaurants:
+ *   get:
+ *     summary: Retrieve all valid restaurants
+ *     tags: [Api]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of restaurants
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       401:
+ *         description: Unauthorized access
+ */
+
+router.get(
+  "/restaurants",
+  authController.verifyLoginUser,
+  userController.getRestaurants
+);
+
+/**
+ * @swagger
+ * /api/restaurants/{restaurantId}:
+ *   get:
+ *     summary: Retrieve details of a specific restaurant by ID
+ *     tags: [Api]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: restaurantId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique identifier of the restaurant
+ *     responses:
+ *       200:
+ *         description: Restaurant details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       401:
+ *         description: Unauthorized access
+ *       404:
+ *         description: Restaurant not found
+ */
+router.get(
+  "/restaurants/:restaurantId",
+  authController.verifyLoginUser,
+  userController.getRestaurantesById
+);
+
+/**
+ * @swagger
+ * /api/restaurants/{restaurantId}/menus:
+ *   get:
+ *     summary: Retrieve all menus for a specific restaurant
+ *     tags: [Api]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: restaurantId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique identifier of the restaurant
+ *     responses:
+ *       200:
+ *         description: A list of menus for the restaurant
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       401:
+ *         description: Unauthorized access
+ *       404:
+ *         description: Menus not found
+ */
+router.get(
+  "/restaurants/:restaurantId/menus",
+  authController.verifyLoginUser,
+  userController.getMenusByRestaurantId
+);
 
 /**
  * @swagger
@@ -216,8 +303,15 @@ router.put(
  * @swagger
  * /api/profile/charts:
  *   get:
- *     summary: Get most ordered dishes
+ *     summary: Get most ordered dishes by the logged-in user
  *     tags: [Api]
+ *     responses:
+ *       200:
+ *         description: List of most ordered dishes by the user
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
 router.get(
   "/profile/charts",
@@ -225,13 +319,26 @@ router.get(
   userController.getMostOrderedDishesByUser
 );
 
+
+/**
+ * @swagger
+ * /api/profile/globalCharts:
+ *   get:
+ *     summary: Get most ordered dishes globally
+ *     tags: [Api]
+ *     responses:
+ *       200:
+ *         description: List of most ordered dishes globally
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
 router.get(
   "/profile/globalCharts",
   authController.verifyLoginUser,
   userController.getMostOrderedDishes
 );
-
-
 
 /**
  * @swagger

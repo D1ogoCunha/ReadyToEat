@@ -12,7 +12,7 @@ import Chart from 'chart.js/auto';
   standalone: true,
   imports: [CommonModule, RouterModule, NavbarComponent]
 })
-// ...existing code...
+
 export class ProfileChartComponent implements OnInit {
   chartData: any;
   globalChartData: any;
@@ -108,4 +108,3 @@ export class ProfileChartComponent implements OnInit {
     }
   }
 }
-// ...existing code...
