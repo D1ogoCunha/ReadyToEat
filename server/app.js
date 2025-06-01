@@ -79,4 +79,21 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-module.exports = app;
+
+const http = require('http').createServer(app);
+const io = require('socket.io')(http, {
+  cors: { origin: '*' }
+});
+
+const restauranteSockets = {};
+
+io.on('connection', (socket) => {
+  socket.on('registerRestaurante', (restauranteId) => {
+    restauranteSockets[restauranteId] = socket;
+  });
+});
+
+app.set('io', io);
+app.set('restauranteSockets', restauranteSockets);
+
+module.exports = { app, http };

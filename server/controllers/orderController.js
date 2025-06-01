@@ -257,6 +257,17 @@ orderController.createOrder = async (req, res) => {
     });
 
     await order.save();
+
+    const io = req.app.get('io');
+    const restauranteSockets = req.app.get('restauranteSockets');
+    const restauranteIdStr = String(restaurantId);
+    if (restauranteSockets && restauranteSockets[restauranteIdStr]) {
+      restauranteSockets[restauranteIdStr].emit('nova-encomenda', {
+        message: 'New order received!',
+        orderId: order._id
+      });
+    }
+
     res.status(201).json(order);
   } catch (err) {
     res.status(500).json({ error: err.message });
